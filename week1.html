@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 — Core Python and Data Structures</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; line-height: 1.7; }
+  @media (prefers-color-scheme: dark) { body { background: #141414; color: #e8e6e0; } }
+
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { width: 230px; flex-shrink: 0; border-right: 1px solid #eee; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; }
+  @media (prefers-color-scheme: dark) { .sidebar { background: #1a1a1a; border-color: #2a2a2a; } }
+  @media (max-width: 768px) { .sidebar { display: none; } }
+
+  .sidebar-top { padding: 20px 16px 14px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .sidebar-top { border-color: #2a2a2a; } }
+  .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #888; cursor: pointer; text-decoration: none; margin-bottom: 10px; transition: color 0.15s; }
+  .back-link:hover { color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .back-link:hover { color: #e8e6e0; } }
+  .sidebar-title { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .sidebar-title { color: #e8e6e0; } }
+  .sidebar-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .nav-group { padding: 10px 0 4px; }
+  .nav-group-label { font-size: 10px; font-weight: 500; color: #bbb; text-transform: uppercase; letter-spacing: 0.08em; padding: 0 16px 4px; }
+  .nav-link { display: block; font-size: 12px; color: #666; padding: 5px 16px; cursor: pointer; transition: all 0.12s; border-left: 2px solid transparent; text-decoration: none; }
+  @media (prefers-color-scheme: dark) { .nav-link { color: #888; } }
+  .nav-link:hover { color: #1a1a1a; background: #f0f0f0; }
+  @media (prefers-color-scheme: dark) { .nav-link:hover { color: #e8e6e0; background: #222; } }
+  .nav-link.active { color: #1a1a1a; background: #f0f0f0; border-left-color: #1a1a1a; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .nav-link.active { color: #e8e6e0; background: #222; border-left-color: #e8e6e0; } }
+
+  /* ── MAIN ── */
+  .main { flex: 1; overflow-y: auto; padding: 40px 48px; scroll-behavior: smooth; }
+  @media (max-width: 768px) { .main { padding: 24px 20px; } }
+
+  /* ── TYPOGRAPHY ── */
+  .week-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 20px; background: #E6F1FB; color: #185FA5; margin-bottom: 12px; }
+  h1 { font-size: 26px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
+  .subtitle { font-size: 15px; color: #777; margin-bottom: 28px; }
+  @media (prefers-color-scheme: dark) { .subtitle { color: #888; } }
+  .meta-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+  .meta-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid #ddd; color: #666; }
+  @media (prefers-color-scheme: dark) { .meta-pill { border-color: #333; color: #888; } }
+  h2 { font-size: 19px; font-weight: 500; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #eee; scroll-margin-top: 32px; }
+  @media (prefers-color-scheme: dark) { h2 { border-color: #2a2a2a; } }
+  h3 { font-size: 15px; font-weight: 500; margin: 22px 0 8px; }
+  h4 { font-size: 13px; font-weight: 500; margin: 16px 0 6px; color: #555; }
+  @media (prefers-color-scheme: dark) { h4 { color: #aaa; } }
+  p { font-size: 14px; margin-bottom: 12px; line-height: 1.75; }
+  ul, ol { padding-left: 20px; margin-bottom: 14px; }
+  li { font-size: 14px; margin-bottom: 5px; line-height: 1.6; }
+  .section { margin-bottom: 52px; scroll-margin-top: 28px; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 40px 0; }
+  @media (prefers-color-scheme: dark) { .divider { border-color: #2a2a2a; } }
+
+  /* ── CODE ── */
+  pre { background: #f6f6f4; border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin: 14px 0; font-size: 13px; line-height: 1.65; border: 1px solid #eee; font-family: 'SF Mono','Fira Code','Consolas',monospace; }
+  @media (prefers-color-scheme: dark) { pre { background: #1e1e1e; border-color: #2a2a2a; color: #e8e6e0; } }
+  code { font-family: 'SF Mono','Fira Code','Consolas',monospace; }
+  p code, li code { background: #f0efe8; padding: 2px 6px; border-radius: 4px; font-size: 12.5px; }
+  @media (prefers-color-scheme: dark) { p code, li code { background: #252525; } }
+
+  /* ── AI CALLOUT ── */
+  .ai-callout { background: #E1F5EE; border-left: 3px solid #1D9E75; border-radius: 0 8px 8px 0; padding: 14px 16px; margin: 20px 0; }
+  @media (prefers-color-scheme: dark) { .ai-callout { background: #0a2a20; } }
+  .ai-callout-label { font-size: 10px; font-weight: 500; color: #0F6E56; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  @media (prefers-color-scheme: dark) { .ai-callout-label { color: #5DCAA5; } }
+  .ai-callout p { font-size: 13.5px; color: #1a1a1a; margin: 0; line-height: 1.7; }
+  @media (prefers-color-scheme: dark) { .ai-callout p { color: #e8e6e0; } }
+
+  /* ── TERM GRID ── */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  @media (max-width: 600px) { .term-grid { grid-template-columns: 1fr; } }
+  .term-card { border: 1px solid #eee; border-radius: 8px; padding: 12px 14px; }
+  @media (prefers-color-scheme: dark) { .term-card { border-color: #2a2a2a; } }
+  .term-name { font-size: 12.5px; font-weight: 500; color: #185FA5; margin-bottom: 4px; }
+  @media (prefers-color-scheme: dark) { .term-name { color: #85B7EB; } }
+  .term-def { font-size: 12.5px; color: #555; line-height: 1.55; }
+  @media (prefers-color-scheme: dark) { .term-def { color: #aaa; } }
+
+  /* ── PRACTICE CARDS ── */
+  .practice-block { border: 1px solid #eee; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { .practice-block { border-color: #2a2a2a; } }
+  .practice-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #fafafa; cursor: pointer; user-select: none; }
+  @media (prefers-color-scheme: dark) { .practice-header { background: #1e1e1e; } }
+  .practice-header:hover { background: #f4f4f4; }
+  @media (prefers-color-scheme: dark) { .practice-header:hover { background: #222; } }
+  .practice-num { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .guided-tag { background: #E6F1FB; color: #185FA5; }
+  .challenge-tag { background: #FAEEDA; color: #854F0B; }
+  .practice-title { font-size: 13px; font-weight: 500; flex: 1; }
+  .pchevron { font-size: 10px; color: #aaa; transition: transform 0.2s; }
+  .practice-body { padding: 16px; border-top: 1px solid #eee; display: none; }
+  @media (prefers-color-scheme: dark) { .practice-body { border-color: #2a2a2a; } }
+  .practice-body.open { display: block; }
+  .practice-body p { font-size: 13.5px; }
+  .step-label { display: inline-block; font-size: 11px; font-weight: 500; background: #1a1a1a; color: #fff; padding: 2px 8px; border-radius: 4px; margin: 12px 0 6px; }
+  @media (prefers-color-scheme: dark) { .step-label { background: #e8e6e0; color: #1a1a1a; } }
+  .hint { background: #FAEEDA; border-radius: 6px; padding: 10px 12px; margin-top: 12px; font-size: 13px; color: #633806; line-height: 1.6; }
+  @media (prefers-color-scheme: dark) { .hint { background: #2a1a06; color: #FAC775; } }
+
+  /* ── MILESTONE ── */
+  .milestone-box { border: 2px solid #1D9E75; border-radius: 12px; padding: 22px; margin-top: 10px; }
+  .milestone-box h3 { color: #0F6E56; margin-top: 0; font-size: 17px; }
+  @media (prefers-color-scheme: dark) { .milestone-box h3 { color: #5DCAA5; } }
+  .pass-criteria { margin-top: 16px; }
+  .pass-criteria li { font-size: 13.5px; margin-bottom: 6px; }
+  .pass-criteria li::marker { color: #1D9E75; }
+
+  /* ── SUBMISSION ── */
+  .submission-form { border: 2px solid #1D9E75; border-radius: 10px; padding: 20px; margin-top: 20px; }
+  .submission-form h4 { font-size: 14px; font-weight: 500; color: #0F6E56; margin-bottom: 14px; }
+  @media (prefers-color-scheme: dark) { .submission-form h4 { color: #5DCAA5; } }
+  .form-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+  .form-field label { font-size: 11px; color: #666; font-weight: 500; }
+  .form-field textarea { font-size: 12.5px; padding: 9px 11px; border: 1px solid #ddd; border-radius: 6px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; resize: vertical; transition: border-color 0.15s; }
+  @media (prefers-color-scheme: dark) { .form-field textarea { background: #1e1e1e; color: #e8e6e0; border-color: #333; } }
+  .form-field textarea:focus { border-color: #888; }
+  .code-area { font-family: 'SF Mono','Fira Code','Consolas',monospace !important; font-size: 12px !important; min-height: 200px; }
+  .output-area { min-height: 120px; }
+  .btn { font-size: 12px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity 0.15s; }
+  .btn-primary { background: #1a1a1a; color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn-primary { background: #e8e6e0; color: #1a1a1a; } }
+  .btn-primary:hover { opacity: 0.82; }
+  .btn-row { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+  @media (prefers-color-scheme: dark) { .toast { background: #e8e6e0; color: #1a1a1a; } }
+  .toast.show { opacity: 1; }
+
+  .cheat-sheet { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 14px 16px; margin: 14px 0; }
+  @media (prefers-color-scheme: dark) { .cheat-sheet { background: #1e1e1e; border-color: #2a2a2a; } }
+  .cheat-sheet h4 { font-size: 12px; font-weight: 500; color: #888; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .cheat-row { display: flex; gap: 12px; align-items: baseline; margin-bottom: 4px; }
+  .cheat-code { font-family: 'SF Mono','Fira Code','Consolas',monospace; font-size: 12px; color: #185FA5; min-width: 80px; flex-shrink: 0; }
+  @media (prefers-color-scheme: dark) { .cheat-code { color: #85B7EB; } }
+  .cheat-desc { font-size: 12px; color: #666; }
+  @media (prefers-color-scheme: dark) { .cheat-desc { color: #aaa; } }
+
+  .progress-note { font-size: 12px; color: #aaa; text-align: center; padding: 20px; border: 1px dashed #ddd; border-radius: 8px; margin-top: 32px; }
+  @media (prefers-color-scheme: dark) { .progress-note { border-color: #333; } }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar">
+  <div class="sidebar-top">
+    <a class="back-link" href="index.html">← Back to Hub</a>
+    <div class="sidebar-title">Week 1 Module</div>
+    <div class="sidebar-sub">Phase 1 · Mar 27 – Apr 3</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Overview</div>
+    <a class="nav-link" onclick="navTo('overview')">Introduction</a>
+    <a class="nav-link" onclick="navTo('keyterms')">Key Terms</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Concepts</div>
+    <a class="nav-link" onclick="navTo('c1')">1 · Variables and Data Types</a>
+    <a class="nav-link" onclick="navTo('c2')">2 · String Formatting</a>
+    <a class="nav-link" onclick="navTo('c3')">3 · Lists</a>
+    <a class="nav-link" onclick="navTo('c4')">4 · Dictionaries</a>
+    <a class="nav-link" onclick="navTo('c5')">5 · Control Flow</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Practice</div>
+    <a class="nav-link" onclick="navTo('guided')">Guided Practice Pt 1</a>
+    <a class="nav-link" onclick="navTo('guided-submit')">↳ Save Pt 1 Work</a>
+    <a class="nav-link" onclick="navTo('challenges')">Guided Practice Pt 2</a>
+    <a class="nav-link" onclick="navTo('challenge-submit')">↳ Save Pt 2 Work</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Deliverable</div>
+    <a class="nav-link" onclick="navTo('milestone')">Milestone Brief</a>
+    <a class="nav-link" onclick="navTo('submit')">Submit Work</a>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="main-scroll">
+
+  <!-- OVERVIEW -->
+  <div class="section" id="overview">
+    <span class="week-badge">Phase 1 &nbsp;·&nbsp; Week 1</span>
+    <h1>Core Python and Data Structures</h1>
+    <p class="subtitle">Variables, strings, lists, dictionaries, and control flow — the foundation everything else is built on.</p>
+    <div class="meta-pills">
+      <span class="meta-pill">Mar 27 – Apr 3</span>
+      <span class="meta-pill">~30 hours</span>
+      <span class="meta-pill">5 concepts</span>
+      <span class="meta-pill">4 guided exercises</span>
+      <span class="meta-pill">1 milestone deliverable</span>
+    </div>
+    <p>This week is the foundation. Every script you write going forward — every API call, every AI automation, every report generator — is built from the concepts covered here. Don't rush through it. By the end you should be able to write loops and dictionaries from memory without looking anything up.</p>
+    <p>The data in all exercises this week is modeled directly on finance operations work — consulting time entries, invoice amounts, client records. Nothing is abstract for the sake of it. Every exercise is something you could realistically encounter in a real workflow.</p>
+    <p>The goal isn't just to understand these concepts. It's to internalize them deeply enough that when you start building real automations against real systems, the Python itself is never the bottleneck. You want your mental energy going toward the problem you're solving, not the syntax of how to solve it.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- KEY TERMS -->
+  <div class="section" id="keyterms">
+    <h2>Key Terms</h2>
+    <p>Every term you'll encounter this week, defined in plain language. Come back here whenever something feels fuzzy. These aren't just vocabulary — they're the mental models that make everything else click.</p>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">Variable</div><div class="term-def">A labeled box that stores a value. <code>total = 24500</code> creates a box called <code>total</code> holding 24500. Use the name anywhere after that to retrieve the value.</div></div>
+      <div class="term-card"><div class="term-name">Data type</div><div class="term-def">The kind of thing stored in a variable. Python handles strings, integers, floats, and booleans differently. The type determines what operations are valid.</div></div>
+      <div class="term-card"><div class="term-name">String</div><div class="term-def">Any text value wrapped in quotes. <code>"Accenture"</code> is a string. <code>"24500"</code> is also a string — quotes make it text, not a number you can do math with.</div></div>
+      <div class="term-card"><div class="term-name">Integer</div><div class="term-def">A whole number with no decimal point. <code>24500</code> is an integer. You can add, subtract, multiply, and divide integers freely.</div></div>
+      <div class="term-card"><div class="term-name">Float</div><div class="term-def">A number with a decimal point. <code>24500.50</code> is a float. The name comes from "floating point" — how computers represent decimal numbers internally.</div></div>
+      <div class="term-card"><div class="term-name">Boolean</div><div class="term-def">Either <code>True</code> or <code>False</code> and nothing else. Used constantly in conditions. <code>is_approved = True</code> is a boolean. Case-sensitive — must be capitalized.</div></div>
+      <div class="term-card"><div class="term-name">F-string</div><div class="term-def">A string prefixed with <code>f</code> that lets you embed variables directly. <code>f"Total: ${total:,.2f}"</code> replaces <code>{total}</code> with the actual value, formatted with commas and 2 decimal places.</div></div>
+      <div class="term-card"><div class="term-name">List</div><div class="term-def">An ordered collection of items in square brackets. <code>["Accenture", "Deloitte"]</code>. Items have positions starting at 0. You can add, remove, and loop through items.</div></div>
+      <div class="term-card"><div class="term-name">Index</div><div class="term-def">The position of an item in a list. Starts at 0. In <code>["A", "B", "C"]</code>, "A" is at index 0, "B" at index 1, "C" at index 2. Negative indexes count from the end.</div></div>
+      <div class="term-card"><div class="term-name">Dictionary</div><div class="term-def">A collection of key-value pairs in curly braces. <code>{"client": "Accenture", "amount": 24500}</code>. Look up values by key name, not by position. This is how API responses are structured.</div></div>
+      <div class="term-card"><div class="term-name">Key</div><div class="term-def">The label on the left side of a colon in a dictionary. Used to retrieve its paired value. Keys must be unique within a dictionary.</div></div>
+      <div class="term-card"><div class="term-name">Value</div><div class="term-def">The data on the right side of a colon in a dictionary. What you get back when you look up a key. Values can be any data type — strings, numbers, lists, even other dictionaries.</div></div>
+      <div class="term-card"><div class="term-name">Loop</div><div class="term-def">Code that repeats. A <code>for</code> loop runs a block of code once for each item in a collection. A <code>while</code> loop runs until a condition becomes false.</div></div>
+      <div class="term-card"><div class="term-name">Iteration</div><div class="term-def">One pass through a loop. Looping through 15 time entries performs 15 iterations — one per entry. The variable in the loop holds the current item during each iteration.</div></div>
+      <div class="term-card"><div class="term-name">Conditional</div><div class="term-def">Code that only runs if a condition is true. <code>if</code>, <code>elif</code>, and <code>else</code> are conditionals. They let your program make decisions and take different paths.</div></div>
+      <div class="term-card"><div class="term-name">Operator</div><div class="term-def">A symbol that performs an operation. <code>+</code> adds, <code>-</code> subtracts, <code>*</code> multiplies, <code>/</code> divides, <code>%</code> gives the remainder, <code>==</code> checks equality, <code>!=</code> checks inequality.</div></div>
+      <div class="term-card"><div class="term-name">Modulo</div><div class="term-def">The <code>%</code> operator. Returns the remainder after division. <code>10 % 3</code> equals <code>1</code>. Used to check divisibility: <code>n % 2 == 0</code> means n is even.</div></div>
+      <div class="term-card"><div class="term-name">List comprehension</div><div class="term-def">A compact one-line way to build a list from another list. <code>[x * 2 for x in numbers]</code> creates a new list with every item doubled. Can include a filter condition too.</div></div>
+      <div class="term-card"><div class="term-name">Append</div><div class="term-def">A list method that adds one item to the end. <code>my_list.append("new item")</code> — the list grows by one. Called with dot notation on the list variable.</div></div>
+      <div class="term-card"><div class="term-name">Method</div><div class="term-def">A function that belongs to a specific type of object, called with dot notation. <code>list.append()</code> and <code>string.split()</code> are methods. The dot means "call this on this object."</div></div>
+      <div class="term-card"><div class="term-name">Type conversion</div><div class="term-def">Changing a value from one data type to another. <code>int("24500")</code> converts the string "24500" to the number 24500. Essential when reading data from files or APIs where numbers arrive as text.</div></div>
+      <div class="term-card"><div class="term-name">The grouping pattern</div><div class="term-def">A dictionary technique for summarizing data by category. Start with an empty dict, loop through data, check if the key exists, accumulate values. The most important pattern in this entire course.</div></div>
+      <div class="term-card"><div class="term-name">Syntax</div><div class="term-def">The rules of how Python code must be written. A syntax error means Python couldn't parse your code — like a grammar error in a sentence. The error message tells you exactly which line.</div></div>
+      <div class="term-card"><div class="term-name">Comment</div><div class="term-def">A line starting with <code>#</code> that Python ignores. Used to explain what code does. Write comments generously — code is read far more than it is written.</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONCEPT 1 -->
+  <div class="section" id="c1">
+    <h2>Concept 1 — Variables and Data Types</h2>
+
+    <h3>What they are and why they exist</h3>
+    <p>Every program you will ever write needs to store information temporarily while it does its work. Variables are how you do that.</p>
+    <p>When Python runs <code>total = 319150</code>, it allocates a small piece of memory, stores the number 319150 there, and attaches the label <code>total</code> to it. Every time you write <code>total</code> anywhere after that, Python retrieves what's stored there.</p>
+    <p>This matters because your code needs to work with values it doesn't know in advance. You won't hardcode every invoice amount — you'll pull them from an API and store them in variables to work with. The variable name is how you refer to a piece of data throughout your code without having to repeat the value every time.</p>
+
+<pre><code># Variables store data with a meaningful label
+client_name    = "Accenture"    # string — text in quotes
+invoice_amount = 24500          # integer — whole number
+tax_rate       = 0.08           # float — decimal number
+is_approved    = True           # boolean — True or False
+
+# You can update what's in a variable
+invoice_amount = 26000          # now it holds 26000
+
+# You can do math with number variables
+tax       = invoice_amount * tax_rate    # 2080.0
+total_due = invoice_amount + tax         # 28080.0
+
+# You can build new values from existing ones
+label = client_name + " invoice"    # "Accenture invoice"</code></pre>
+
+    <h3>Why data types matter</h3>
+    <p>Python behaves differently depending on the type of data it's working with. <code>"24500"</code> and <code>24500</code> look almost identical but are completely different things — one is text, one is a number. Trying to do math on text causes an error.</p>
+
+<pre><code># This works — adding two numbers
+result = 24500 + 500          # 25000
+
+# This crashes — can't add a string and a number
+result = "24500" + 500        # TypeError: can only concatenate str (not "int") to str
+
+# This works but is probably not what you want
+result = "245" + "00"         # "24500" — string concatenation, not addition
+
+# Type conversion — switching between types
+amount_string = "24500"
+amount_int    = int(amount_string)      # 24500 — now you can do math
+amount_float  = float("24500.50")      # 24500.5
+back_to_str   = str(24500)             # "24500" — back to text</code></pre>
+
+    <p>When you pull data from a CSV file or an API, numbers almost always come in as strings. Converting them before doing math is one of the most common things you'll do in real scripts. Getting this wrong silently is one of the most common bugs beginners hit.</p>
+
+    <h3>Naming variables well</h3>
+    <p>Variable names should be descriptive enough that someone reading your code understands what the variable holds without needing a comment. Use lowercase with underscores for multiple words — this is the Python standard.</p>
+
+<pre><code># Good names
+invoice_amount  = 24500
+consultant_name = "Sarah Chen"
+is_approved     = True
+total_hours     = 47.5
+
+# Bad names — too vague or too cryptic
+x  = 24500
+n  = "Sarah Chen"
+t  = True
+th = 47.5</code></pre>
+
+    <div class="ai-callout">
+      <div class="ai-callout-label">Why this matters for AI automation</div>
+      <p>Every piece of data you send to an AI model or receive back passes through variables. When you call the Claude API and get a response, you store it in a variable. When you build a prompt from real invoice data, you pull values out of variables and embed them in a string. The entire automation pipeline — pull data from a source system, process it, send to an AI model, receive the response, write output somewhere useful — is a series of variables passing data from one step to the next. Variables aren't a beginner concept you'll outgrow. They're the connective tissue of every automation you'll ever build.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONCEPT 2 -->
+  <div class="section" id="c2">
+    <h2>Concept 2 — String Formatting with F-Strings</h2>
+
+    <h3>What they are and why they exist</h3>
+    <p>Raw data is ugly. <code>24500</code> means nothing to someone reading a report. <code>$24,500.00</code> means something. F-strings are how you turn raw data into readable output — and more importantly, they're how you build dynamic prompts for AI models.</p>
+    <p>Put an <code>f</code> before the opening quote of any string and you can embed variable names directly inside it using curly braces. Python replaces the <code>{variable_name}</code> with the actual value when the line runs.</p>
+
+<pre><code>client = "Accenture"
+amount = 24500
+hours  = 47.5
+
+# Basic embedding — variable replaces the placeholder
+print(f"Client: {client}")
+# Output: Client: Accenture
+
+# Format a number with commas and 2 decimal places
+print(f"Invoice amount: ${amount:,.2f}")
+# Output: Invoice amount: $24,500.00
+
+# Do math directly inside the f-string
+print(f"With 8% tax: ${amount * 1.08:,.2f}")
+# Output: With 8% tax: $26,460.00
+
+# Round a number to 1 decimal place
+print(f"Hours logged: {hours:.1f}")
+# Output: Hours logged: 47.5</code></pre>
+
+    <h3>Column alignment for reports</h3>
+    <p>When printing multiple rows of data you often want things to line up in columns. F-strings handle this with alignment codes.</p>
+
+<pre><code># Left-align in a field 18 chars wide, right-align in 12 chars
+print(f"{'Client':<18} {'Amount':>12}")
+print(f"{'Accenture':<18} ${'24500':>11,.2f}")
+print(f"{'Deloitte':<18} ${'18750':>11,.2f}")
+# Output:
+# Client              Amount
+# Accenture            $24,500.00
+# Deloitte             $18,750.00</code></pre>
+
+    <div class="cheat-sheet">
+      <h4>Format codes cheat sheet</h4>
+      <div class="cheat-row"><span class="cheat-code">:,.2f</span><span class="cheat-desc">Comma separator, 2 decimal places (dollars)</span></div>
+      <div class="cheat-row"><span class="cheat-code">:.1f</span><span class="cheat-desc">1 decimal place, no comma (hours, percentages)</span></div>
+      <div class="cheat-row"><span class="cheat-code">:d</span><span class="cheat-desc">Integer, no decimal point</span></div>
+      <div class="cheat-row"><span class="cheat-code">:<15</span><span class="cheat-desc">Left-align in a field 15 characters wide</span></div>
+      <div class="cheat-row"><span class="cheat-code">:>12</span><span class="cheat-desc">Right-align in a field 12 characters wide</span></div>
+      <div class="cheat-row"><span class="cheat-code">:^10</span><span class="cheat-desc">Center in a field 10 characters wide</span></div>
+    </div>
+
+    <div class="ai-callout">
+      <div class="ai-callout-label">Why this matters for AI automation</div>
+      <p>When you build prompts for an AI model, you construct them as strings with real data embedded inside. The quality of the AI output depends directly on the quality of the prompt, and a well-structured prompt almost always involves injecting real data values into a template. Every AI automation you build will use a pattern like this:</p>
+      <pre style="margin:10px 0 0;background:#0a2a20;border-color:#1D9E75"><code style="color:#9FE1CB">consultant = "Sarah Chen"
+hours      = 47.5
+threshold  = 45
+
+prompt = f"""
+You are reviewing time entry data for a consulting firm.
+{consultant} logged {hours} hours this month, which exceeds
+the standard threshold of {threshold} hours.
+Write a brief professional summary flagging this for review.
+"""</code></pre>
+      <p style="margin-top:10px">That's an f-string. Learning to format strings well isn't just about making reports readable — it's how you communicate with AI models effectively.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONCEPT 3 -->
+  <div class="section" id="c3">
+    <h2>Concept 3 — Lists</h2>
+
+    <h3>What they are and why they exist</h3>
+    <p>Most real data isn't a single value — it's a collection. A month of invoices. A roster of consultants. A set of time entries pulled from an API. Lists let you store ordered collections and process every item using loops, rather than writing separate code for each one.</p>
+
+<pre><code># Creating a list — square brackets, comma-separated
+consultants = ["Sarah Chen", "Marcus Williams", "Jordan Lee", "Priya Patel"]
+amounts     = [24500, 18750, 31200, 9800, 42100]
+
+# Accessing items by index — STARTS AT ZERO
+print(consultants[0])     # "Sarah Chen"
+print(consultants[1])     # "Marcus Williams"
+print(consultants[-1])    # "Priya Patel" — negative indexes from the end
+print(amounts[-2])        # 9800
+
+# Slicing — get a portion of the list
+first_three = amounts[0:3]    # [24500, 18750, 31200]
+last_two    = amounts[-2:]    # [9800, 42100]
+middle      = amounts[1:4]    # [18750, 31200, 9800]
+
+# Useful built-in functions on lists
+print(len(amounts))     # 5 — number of items
+print(sum(amounts))     # 126350 — total
+print(min(amounts))     # 9800
+print(max(amounts))     # 42100
+
+# Checking membership
+print("Sarah Chen" in consultants)     # True
+print("Bob Smith"  in consultants)     # False
+
+# Adding to a list
+consultants.append("Ryan Torres")
+print(len(consultants))    # now 5</code></pre>
+
+    <h3>Looping through a list</h3>
+    <p>The real power of lists is that you can process every item with a loop. This is how you handle datasets of any size — whether 5 entries or 5000, the code is the same.</p>
+
+<pre><code>amounts = [24500, 18750, 31200, 9800, 42100]
+
+# Basic loop — run once for each item
+for amount in amounts:
+    print(f"  ${amount:,.2f}")
+
+# Loop with index — when you need the position too
+for i, amount in enumerate(amounts):
+    print(f"  Invoice {i+1}: ${amount:,.2f}")
+
+# Loop and accumulate
+total = 0
+for amount in amounts:
+    total = total + amount
+    # shorthand: total += amount
+print(f"Total: ${total:,.2f}")    # $126,350.00
+
+# Loop with a condition — only process some items
+for amount in amounts:
+    if amount > 20000:
+        print(f"  Large invoice: ${amount:,.2f}")</code></pre>
+
+    <h3>List comprehensions</h3>
+    <p>A more compact way to build a new list from an existing one. The pattern is: <code>[expression for item in list]</code> — optionally with a condition at the end. Takes some getting used to but becomes second nature quickly.</p>
+
+<pre><code>amounts = [24500, 18750, 31200, 9800, 42100]
+
+# Long way — build a new list with a regular loop
+doubled = []
+for amount in amounts:
+    doubled.append(amount * 2)
+
+# Short way — list comprehension does the exact same thing
+doubled = [amount * 2 for amount in amounts]
+
+# With a filter condition
+large = [amount for amount in amounts if amount > 20000]
+# [24500, 31200, 42100]
+
+# Transforming and filtering together
+large_doubled = [amount * 2 for amount in amounts if amount > 20000]
+# [49000, 62400, 84200]
+
+# Pulling a specific field from a list of dictionaries
+invoices = [{"client":"Accenture","amount":24500},{"client":"Deloitte","amount":18750}]
+clients  = [inv["client"] for inv in invoices]
+# ["Accenture", "Deloitte"]</code></pre>
+
+    <div class="ai-callout">
+      <div class="ai-callout-label">Why this matters for AI automation</div>
+      <p>API responses from source systems like Salesforce and Kantata come back as lists — specifically lists of dictionaries, one per record. Every time you pull time entries or invoice records from an API, you get back a list. You loop through it, filter it, and process each item. List comprehensions are how you filter large datasets down to just the records you care about before sending them to an AI model. This matters for two reasons: sending only relevant data makes the AI output more accurate, and it significantly reduces cost since AI models charge by the amount of text you send. Clean, filtered input produces better and cheaper AI output every time.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONCEPT 4 -->
+  <div class="section" id="c4">
+    <h2>Concept 4 — Dictionaries</h2>
+
+    <h3>What they are and why they exist</h3>
+    <p>A list is good when you have a collection of items in a specific order. A dictionary is good when you need to look something up by name rather than position. The distinction matters: a list gives you item number 3, a dictionary gives you the <code>"amount"</code> field.</p>
+    <p>When a system API returns data about an invoice, it doesn't hand you a list of raw values in some order you have to memorize. It gives you labeled data: <code>"invoice_id": "INV-001"</code>, <code>"client": "Accenture"</code>, <code>"amount": 24500</code>. That labeled structure is a dictionary — and it's the native format of virtually all API data.</p>
+
+<pre><code># Creating a dictionary — curly braces, key: value pairs
+invoice = {
+    "invoice_id": "INV-001",
+    "client":     "Accenture",
+    "amount":     24500,
+    "approved":   False
+}
+
+# Accessing values by key name
+print(invoice["client"])      # "Accenture"
+print(invoice["amount"])      # 24500
+
+# Adding a new key-value pair
+invoice["due_date"] = "2026-04-30"
+
+# Updating an existing value
+invoice["approved"] = True
+
+# Checking if a key exists before accessing it
+if "amount" in invoice:
+    print(f"Amount: ${invoice['amount']:,.2f}")
+
+# Getting all keys, all values, or both
+print(list(invoice.keys()))     # ['invoice_id', 'client', 'amount', ...]
+print(list(invoice.values()))   # ['INV-001', 'Accenture', 24500, ...]
+
+# Looping through key-value pairs
+for key, value in invoice.items():
+    print(f"  {key}: {value}")</code></pre>
+
+    <h3>Lists of dictionaries — the most important structure</h3>
+    <p>This is the data structure you'll encounter most in real work. Every API response, every CSV row, every database record comes back as a list of dictionaries — one dictionary per record, each with the same set of labeled fields.</p>
+
+<pre><code># This is what real API data looks like
+time_entries = [
+    {"id": "TE-001", "consultant": "Sarah Chen",  "hours": 8.0,  "approved": True},
+    {"id": "TE-002", "consultant": "Dana Kim",    "hours": 6.5,  "approved": True},
+    {"id": "TE-003", "consultant": "Sarah Chen",  "hours": 11.5, "approved": False},
+    {"id": "TE-004", "consultant": "Marcus Blake","hours": 7.0,  "approved": True},
+]
+
+# Access fields by name — not by position
+for entry in time_entries:
+    status = "approved" if entry["approved"] else "PENDING"
+    print(f"  {entry['id']} | {entry['consultant']:<15} | {entry['hours']} hrs | {status}")
+
+# Filter with a list comprehension
+unapproved = [e for e in time_entries if not e["approved"]]
+over_10    = [e for e in time_entries if e["hours"] > 10]</code></pre>
+
+    <h3>The grouping pattern — memorize this</h3>
+    <p>This is the most important pattern in this entire course. Any time you want to summarize data by category — total revenue by client, hours by consultant, invoice count by project — this is the approach. Four steps, every time.</p>
+
+<pre><code>time_entries = [
+    {"consultant": "Sarah Chen",   "hours": 8.0},
+    {"consultant": "Dana Kim",     "hours": 6.5},
+    {"consultant": "Sarah Chen",   "hours": 7.5},
+    {"consultant": "Marcus Blake", "hours": 9.0},
+    {"consultant": "Dana Kim",     "hours": 11.0},
+]
+
+# Step 1 — start with an empty dictionary
+hours_by_consultant = {}
+
+# Step 2 — loop through every record
+for entry in time_entries:
+    name = entry["consultant"]
+
+    # Step 3 — if this key doesn't exist yet, create it at zero
+    if name not in hours_by_consultant:
+        hours_by_consultant[name] = 0
+
+    # Step 4 — add the current value to the running total
+    hours_by_consultant[name] = hours_by_consultant[name] + entry["hours"]
+
+# Print results
+print("Hours by consultant:")
+for name, total in hours_by_consultant.items():
+    print(f"  {name:<18} {total:.1f} hrs")</code></pre>
+
+    <p>The pattern works for any grouping: replace <code>"consultant"</code> with <code>"project"</code>, <code>"client"</code>, <code>"month"</code> — whatever field you want to group by. Replace <code>"hours"</code> with <code>"amount"</code>, <code>"count"</code>, or any other value you want to accumulate. Same four steps every time.</p>
+
+    <div class="ai-callout">
+      <div class="ai-callout-label">Why this matters for AI automation</div>
+      <p>Source system API responses are dictionaries — every single one. When you call an API for time entries or invoice records, you get back a dictionary containing a list of dictionaries, one per record, each with labeled fields. The grouping pattern is how you summarize those records before passing them to an AI model. Instead of sending 200 raw time entries to Claude and asking it to figure out the totals, you group by consultant in Python first, then send a clean summary. This produces dramatically better AI output, costs a fraction of the price, and runs significantly faster. The grouping pattern also shows up in report generation, anomaly detection, and data reconciliation — the core workflows in any finance operations automation. This isn't just a Python skill. It's the fundamental building block of everything you'll build.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CONCEPT 5 -->
+  <div class="section" id="c5">
+    <h2>Concept 5 — Control Flow</h2>
+
+    <h3>If / elif / else — making decisions</h3>
+    <p>Code that takes different paths depending on whether conditions are true or false. This is how your automations make decisions without a human involved.</p>
+
+<pre><code>hours = 47.5
+
+# Basic if/elif/else
+if hours > 45:
+    print("Over capacity — flag for review")
+elif hours < 20:
+    print("Under capacity — check in with consultant")
+else:
+    print("Normal range — no action needed")
+
+# Combining multiple conditions
+amount = 35000
+client = "Accenture"
+
+if amount > 30000 and client == "Accenture":
+    print("Large Accenture invoice — requires director approval")
+
+if amount > 50000 or not approved:
+    print("High priority — escalate immediately")
+
+# Checking multiple values
+status = "pending"
+if status in ["pending", "draft", "on-hold"]:
+    print("Invoice requires attention")</code></pre>
+
+    <h3>For loops — processing every item</h3>
+
+<pre><code>consultants = ["Sarah Chen", "Dana Kim", "Marcus Blake"]
+
+# Loop through a list
+for consultant in consultants:
+    print(f"Processing entries for {consultant}")
+
+# range() generates a sequence of numbers
+for i in range(5):            # 0, 1, 2, 3, 4
+    print(i)
+
+for i in range(1, 6):         # 1, 2, 3, 4, 5
+    print(i)
+
+for i in range(0, 100, 10):   # 0, 10, 20, 30 ... 90
+    print(i)
+
+# Loop through both index and value simultaneously
+for i, consultant in enumerate(consultants):
+    print(f"{i+1}. {consultant}")</code></pre>
+
+    <h3>While loops — running until a condition changes</h3>
+
+<pre><code># Keep retrying until success — common pattern in API calls
+attempts = 0
+success  = False
+
+while not success and attempts < 3:
+    try:
+        # attempt the API call here
+        success = True
+    except:
+        attempts += 1
+        print(f"Attempt {attempts} failed, retrying...")
+
+# Basic counter
+count = 0
+while count < 5:
+    print(f"Count: {count}")
+    count += 1    # shorthand for count = count + 1</code></pre>
+
+    <h3>Break and continue — controlling loop flow</h3>
+
+<pre><code>entries = [8.0, 6.5, 11.5, 7.0, 14.0, 9.0]
+
+# break — stop the loop immediately when condition is met
+for hours in entries:
+    if hours > 13:
+        print(f"Found extreme entry: {hours} hrs — stopping search")
+        break    # exits the loop entirely
+
+# continue — skip this iteration, move to the next
+for hours in entries:
+    if hours < 7:
+        continue    # skip entries under 7 hours
+    print(f"Processing: {hours} hrs")</code></pre>
+
+    <div class="ai-callout">
+      <div class="ai-callout-label">Why this matters for AI automation</div>
+      <p>Control flow is what transforms a script into an automation. Without it, your code does the same thing every time regardless of the data. With it, your code makes decisions: Is this time entry unusual enough to flag? Should this record be sent to the AI model for analysis or can it be skipped? If the API returns an error, should the script retry or fail gracefully? Every one of those decisions is an if statement. The loops are how you process every record in a dataset — a monthly export might have 300 time entries, and you need the same logic applied to every one without writing separate code for each. When you combine loops, conditions, and dictionaries, you have everything you need to build real automations that handle real data at real scale.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- GUIDED PRACTICE -->
+  <div class="section" id="guided">
+    <h2>Guided Practice — Part 1</h2>
+    <p>Work through this in VS Code. Type everything yourself — no copy-pasting. The muscle memory matters as much as the understanding. If you get an error, read it carefully before asking for help — Python's error messages tell you exactly which line went wrong and why.</p>
+
+    <div class="practice-block">
+      <div class="practice-header" onclick="togglePractice(this)">
+        <span class="practice-num guided-tag">Exercise 1.1</span>
+        <span class="practice-title">Invoice Stats — Walked Through Step by Step</span>
+        <span class="pchevron">▼</span>
+      </div>
+      <div class="practice-body open">
+        <p>Create a new file called <code>week1_practice.py</code>. Work through each step in order, running the file after each one to confirm it works before moving on.</p>
+
+        <div class="step-label">Step 1 — Type your data</div>
+        <p>This is a list of dictionaries — the structure you'll work with constantly. Each dictionary is one invoice with labeled fields.</p>
+<pre><code>invoices = [
+    {"id": "INV-001", "client": "Northgate",  "amount": 18500, "paid": True},
+    {"id": "INV-002", "client": "Bluewater",  "amount": 42750, "paid": False},
+    {"id": "INV-003", "client": "Northgate",  "amount": 9800,  "paid": True},
+    {"id": "INV-004", "client": "Redstone",   "amount": 61200, "paid": False},
+    {"id": "INV-005", "client": "Bluewater",  "amount": 15300, "paid": True},
+    {"id": "INV-006", "client": "Redstone",   "amount": 28900, "paid": True},
+    {"id": "INV-007", "client": "Northgate",  "amount": 33400, "paid": False},
+    {"id": "INV-008", "client": "Clearfield", "amount": 7200,  "paid": True},
+]</code></pre>
+
+        <div class="step-label">Step 2 — Extract amounts into a plain list</div>
+        <p>A list comprehension pulls one field out of every dictionary and collects them into a simple list. The result is <code>[18500, 42750, 9800, ...]</code> — just the numbers, no labels. This lets you use <code>sum()</code>, <code>min()</code>, and <code>max()</code> directly.</p>
+<pre><code>amounts = [inv["amount"] for inv in invoices]</code></pre>
+
+        <div class="step-label">Step 3 — Calculate and print summary stats</div>
+        <p>Python's built-in functions handle the math. The f-string format codes make it readable.</p>
+<pre><code>total   = sum(amounts)
+average = total / len(amounts)
+minimum = min(amounts)
+maximum = max(amounts)
+
+print("=" * 45)
+print("INVOICE SUMMARY")
+print("=" * 45)
+print(f"{'Total invoices:':<22} {len(invoices)}")
+print(f"{'Total revenue:':<22} ${total:,.2f}")
+print(f"{'Average invoice:':<22} ${average:,.2f}")
+print(f"{'Smallest:':<22} ${minimum:,.2f}")
+print(f"{'Largest:':<22} ${maximum:,.2f}")</code></pre>
+        <p>Run it now. You should see a clean formatted summary. If you get an error, read the message — it tells you the line number and what went wrong.</p>
+
+        <div class="step-label">Step 4 — Paid vs unpaid breakdown</div>
+        <p>A loop with a conditional. For each invoice we check the <code>"paid"</code> field and add the amount to the right running total.</p>
+<pre><code>paid_total   = 0
+unpaid_total = 0
+
+for inv in invoices:
+    if inv["paid"] == True:
+        paid_total   = paid_total   + inv["amount"]
+    else:
+        unpaid_total = unpaid_total + inv["amount"]
+
+print()
+print(f"{'Paid:':<22} ${paid_total:,.2f}")
+print(f"{'Outstanding:':<22} ${unpaid_total:,.2f}")</code></pre>
+
+        <div class="step-label">Step 5 — Revenue by client using the grouping pattern</div>
+        <p>This is the most important pattern in the course. Four steps: empty dict, loop, check key, accumulate. The result is a dictionary where each client name maps to their total revenue.</p>
+<pre><code>client_totals = {}
+
+for inv in invoices:
+    client = inv["client"]
+    if client not in client_totals:
+        client_totals[client] = 0
+    client_totals[client] = client_totals[client] + inv["amount"]
+
+print()
+print("REVENUE BY CLIENT")
+print("-" * 30)
+for client, total in client_totals.items():
+    print(f"  {client:<14} ${total:,.2f}")</code></pre>
+        <p>Run the complete file. You should see all three sections printing cleanly. If anything breaks, paste the error in chat and we'll fix it together.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="submission-form" id="guided-submit" style="margin-top:20px;scroll-margin-top:28px">
+    <h4>Save Your Exercise 1.1 Work</h4>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Paste your final completed script from all 5 steps combined. This saves permanently to your hub so you can reference it later.</p>
+    <div class="form-field">
+      <label>Your completed script — all steps together</label>
+      <textarea class="code-area" id="guided-code" placeholder="Paste your complete week1_practice.py here..."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Terminal output</label>
+      <textarea class="code-area output-area" id="guided-output" placeholder="Paste what printed when you ran it..."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Notes — anything that tripped you up or clicked for you</label>
+      <textarea id="guided-notes" style="min-height:60px" placeholder="Optional"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitSection('Exercise 1.1 — Guided Practice', 'guided-code', 'guided-output', 'guided-notes')">Save Work</button>
+      <span style="font-size:12px;color:#aaa">Saved to your hub submissions</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CHALLENGES -->
+  <div class="section" id="challenges">
+    <h2>Guided Practice — Part 2 (Hints, You Think)</h2>
+    <p>Extend what you built in Exercise 1.1. Each challenge requires you to figure out the approach — I'll give you a hint pointing you in the right direction, but the logic is yours to work out. Spend at least 10 minutes genuinely trying before reading the hint.</p>
+
+    <div class="practice-block">
+      <div class="practice-header" onclick="togglePractice(this)">
+        <span class="practice-num challenge-tag">Challenge 2.1</span>
+        <span class="practice-title">Overdue High-Value Invoices</span>
+        <span class="pchevron">▼</span>
+      </div>
+      <div class="practice-body">
+        <p>Find and print every invoice that is <strong>unpaid AND over $20,000</strong>. Print a header "OVERDUE HIGH VALUE" followed by the invoice ID, client name, and amount for each one. If there are none, print "None found."</p>
+        <div class="hint"><strong>Hint:</strong> You need a loop, a condition that checks two things at once using <code>and</code>, and f-string formatting. You've used all three of these already in this module. The tricky part is checking both conditions in the same if statement.</div>
+      </div>
+    </div>
+
+    <div class="practice-block">
+      <div class="practice-header" onclick="togglePractice(this)">
+        <span class="practice-num challenge-tag">Challenge 2.2</span>
+        <span class="practice-title">Outstanding Percentage</span>
+        <span class="pchevron">▼</span>
+      </div>
+      <div class="practice-body">
+        <p>Calculate what percentage of total revenue is currently unpaid. Print it formatted to one decimal place followed by a percent sign. For example: <code>Outstanding: 49.3% of total revenue</code></p>
+        <div class="hint"><strong>Hint:</strong> Percentage = (unpaid_total / total) × 100. You already have both of those numbers from Step 3 and Step 4 of Exercise 1.1. Use <code>round(number, 1)</code> to round to one decimal place, or use the <code>:.1f</code> format code in your f-string.</div>
+      </div>
+    </div>
+
+    <div class="practice-block">
+      <div class="practice-header" onclick="togglePractice(this)">
+        <span class="practice-num challenge-tag">Challenge 2.3</span>
+        <span class="practice-title">Top Client by Revenue</span>
+        <span class="pchevron">▼</span>
+      </div>
+      <div class="practice-body">
+        <p>Find which client has the highest total revenue across all their invoices combined and print their name and total. Your code must work even if the data changes — no hardcoding the answer.</p>
+        <div class="hint"><strong>Hint:</strong> You already have <code>client_totals</code> built from Step 5. Now you need to find the key with the highest value. One approach: start with <code>top_client = None</code> and <code>top_total = 0</code>, then loop through <code>client_totals.items()</code> and update your tracking variables whenever you find a higher total. Same concept as finding the max in a list, just applied to a dictionary.</div>
+      </div>
+    </div>
+
+    <div class="practice-block">
+      <div class="practice-header" onclick="togglePractice(this)">
+        <span class="practice-num challenge-tag">Challenge 2.4</span>
+        <span class="practice-title">Sorted Invoice Report</span>
+        <span class="pchevron">▼</span>
+      </div>
+      <div class="practice-body">
+        <p>Print all invoices sorted from largest to smallest amount. For each, print the invoice ID, client name, formatted amount, and whether it's paid or unpaid. Include a numbered rank on each line.</p>
+        <div class="hint"><strong>Hint:</strong> Look up Python's <code>sorted()</code> function. It takes a list and a <code>key</code> argument that tells it what to sort by. <code>sorted(invoices, key=lambda x: x["amount"], reverse=True)</code> — the <code>lambda</code> is just a shorthand way of saying "for each item x, sort by x's amount field." Don't worry about fully understanding lambda yet — treat it as a recipe you can adapt.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="submission-form" id="challenge-submit" style="margin-top:20px;scroll-margin-top:28px">
+    <h4>Save Your Challenge Work</h4>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Paste your final script with all four challenges completed. Save it here so your work is documented before moving to the milestone.</p>
+    <div class="form-field">
+      <label>Your completed challenge script — all four challenges</label>
+      <textarea class="code-area" id="challenge-code" placeholder="Paste your script with all four challenges here..."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Terminal output</label>
+      <textarea class="code-area output-area" id="challenge-output" placeholder="Paste what printed when you ran it..."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Notes — which ones were hardest, what you had to look up</label>
+      <textarea id="challenge-notes" style="min-height:60px" placeholder="Optional"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitSection('Challenges 2.1–2.4 — Guided Practice Part 2', 'challenge-code', 'challenge-output', 'challenge-notes')">Save Work</button>
+      <span style="font-size:12px;color:#aaa">Saved to your hub submissions</span>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- MILESTONE -->
+  <div class="section" id="milestone">
+    <h2>Week 1 Milestone Deliverable</h2>
+    <p>This is your pass/fail checkpoint for Week 1. Build it from a blank file with no reference material — no notes, no previous scripts, no looking things up mid-build. If you do look something up, note what it was. The goal is an honest picture of where you are, not a perfect score.</p>
+    <p>The milestone uses a dataset modeled directly on the kind of work you'll be automating — consulting time entries with hours, billing rates, consultant names, projects, and approval status. Revenue is calculated as hours times rate, and only approved entries count toward billable revenue.</p>
+
+    <div class="milestone-box">
+      <h3>The Brief — Monthly PS&O Revenue Report</h3>
+      <p style="font-size:14px;color:#555;margin:8px 0 16px">Build a complete monthly revenue report from the following raw time entry data.</p>
+
+<pre><code>time_entries = [
+    {"id":"TE-001","consultant":"Alex Rivera",  "project":"Horizon","hours":8.5, "rate":225,"approved":True},
+    {"id":"TE-002","consultant":"Dana Kim",     "project":"Vertex", "hours":6.0, "rate":195,"approved":True},
+    {"id":"TE-003","consultant":"Alex Rivera",  "project":"Vertex", "hours":9.0, "rate":225,"approved":False},
+    {"id":"TE-004","consultant":"Morgan Blake", "project":"Horizon","hours":7.5, "rate":210,"approved":True},
+    {"id":"TE-005","consultant":"Dana Kim",     "project":"Cascade","hours":11.0,"rate":195,"approved":True},
+    {"id":"TE-006","consultant":"Alex Rivera",  "project":"Cascade","hours":8.0, "rate":225,"approved":True},
+    {"id":"TE-007","consultant":"Jordan Reyes", "project":"Horizon","hours":6.5, "rate":180,"approved":True},
+    {"id":"TE-008","consultant":"Morgan Blake", "project":"Vertex", "hours":10.5,"rate":210,"approved":False},
+    {"id":"TE-009","consultant":"Dana Kim",     "project":"Horizon","hours":7.0, "rate":195,"approved":True},
+    {"id":"TE-010","consultant":"Jordan Reyes", "project":"Cascade","hours":8.5, "rate":180,"approved":True},
+    {"id":"TE-011","consultant":"Alex Rivera",  "project":"Horizon","hours":7.5, "rate":225,"approved":True},
+    {"id":"TE-012","consultant":"Morgan Blake", "project":"Cascade","hours":9.0, "rate":210,"approved":True},
+    {"id":"TE-013","consultant":"Jordan Reyes", "project":"Vertex", "hours":6.0, "rate":180,"approved":True},
+    {"id":"TE-014","consultant":"Dana Kim",     "project":"Vertex", "hours":8.0, "rate":195,"approved":True},
+    {"id":"TE-015","consultant":"Morgan Blake", "project":"Horizon","hours":7.0, "rate":210,"approved":True},
+]</code></pre>
+
+      <p style="font-size:13.5px;margin:12px 0">Revenue per entry = <code>hours × rate</code>. Only approved entries count toward billable revenue.</p>
+
+      <h4 style="margin-top:18px;font-size:14px">Your report must include all five sections:</h4>
+      <ol style="font-size:13.5px;line-height:2;margin-top:8px">
+        <li><strong>Overall summary</strong> — total entries, total hours, total approved hours, total approved revenue, revenue lost to unapproved entries</li>
+        <li><strong>By consultant</strong> — total hours, approved hours, and approved revenue per consultant. Sorted by revenue highest to lowest.</li>
+        <li><strong>By project</strong> — total hours and approved revenue for each project</li>
+        <li><strong>Flags</strong> — any single entry over 10 hours (print ID, consultant, project, and hours) and any consultant whose total hours across all entries exceed 30</li>
+        <li><strong>One insight</strong> — one sentence a finance manager would actually care about, drawn from the data. You decide what's most interesting. Make it specific — a number, a name, a comparison.</li>
+      </ol>
+
+      <div class="pass-criteria">
+        <h4 style="margin-top:18px;font-size:14px">Pass criteria — all of the following must be true:</h4>
+        <ul class="pass-criteria">
+          <li>All five sections present with correct numbers</li>
+          <li>The grouping pattern used at least once</li>
+          <li>A list comprehension used at least once</li>
+          <li>No hardcoded answers — code must produce correct output even if the data changes</li>
+          <li>Output formatted so a non-technical person could read and understand it</li>
+        </ul>
+      </div>
+
+      <p style="font-size:13px;color:#888;margin-top:16px">Paste your complete script and terminal output in the submission field below. It will be reviewed and you'll get specific feedback before moving to Week 2.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SUBMIT -->
+  <div class="section" id="submit">
+    <h2>Submit Your Work</h2>
+    <p>Paste your completed script and terminal output below. This saves to your hub permanently so you can reference it later. Share your hub URL in chat when ready for review.</p>
+
+    <div class="submission-form">
+      <h4>Week 1 Milestone Submission</h4>
+      <div class="form-field">
+        <label>Your Python script</label>
+        <textarea class="code-area" id="sub-code" placeholder="Paste your complete Python script here..."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Terminal output — what printed when you ran it</label>
+        <textarea class="code-area output-area" id="sub-output" placeholder="Paste the output from your terminal here..."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Notes — anything you looked up or found difficult</label>
+        <textarea id="sub-notes" style="min-height:80px" placeholder="Optional but useful for the review"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="submitWork()">Submit for Review</button>
+        <span style="font-size:12px;color:#aaa">Saves to your hub automatically</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-note">Complete the milestone and submit above. Share your hub URL in chat to get reviewed before moving to Week 2.</div>
+
+</div><!-- end .main -->
+</div><!-- end .app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUBMIT_BIN = '69c6d3bcb7ec241ddcae225c';
+const API_KEY    = '$2a$10$76FBJXGqFrFTplqqEofln.iCs9sAaBZtsOTu6tp73cB8j/QmWUZym';
+const BASE       = 'https://api.jsonbin.io/v3/b';
+
+async function submitSection(type, codeId, outputId, notesId) {
+  const code   = document.getElementById(codeId).value.trim();
+  const output = document.getElementById(outputId).value.trim();
+  const notes  = document.getElementById(notesId).value.trim();
+  if (!code || !output) { showToast('Paste your script and output before saving.'); return; }
+
+  let submitData = { submissions: [] };
+  try {
+    const r = await fetch(`${BASE}/${SUBMIT_BIN}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+    const j = await r.json();
+    if (j.record) submitData = j.record;
+  } catch(e) {
+    try { const s = localStorage.getItem('hub-submit'); if(s) submitData = JSON.parse(s); } catch(e2){}
+  }
+
+  submitData.submissions.unshift({
+    id: Date.now(),
+    type,
+    date: new Date().toISOString().split('T')[0],
+    code, output, notes
+  });
+
+  try { localStorage.setItem('hub-submit', JSON.stringify(submitData)); } catch(e){}
+
+  try {
+    await fetch(`${BASE}/${SUBMIT_BIN}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(submitData)
+    });
+    document.getElementById(codeId).value   = '';
+    document.getElementById(outputId).value = '';
+    document.getElementById(notesId).value  = '';
+    showToast('Work saved to your hub.');
+  } catch(e) {
+    showToast('Saved locally — sync failed, check connection.');
+  }
+}
+
+async function submitWork() {
+  const code   = document.getElementById('sub-code').value.trim();
+  const output = document.getElementById('sub-output').value.trim();
+  const notes  = document.getElementById('sub-notes').value.trim();
+  if (!code || !output) { showToast('Paste your script and output before submitting.'); return; }
+
+  let submitData = { submissions: [] };
+  try {
+    const r = await fetch(`${BASE}/${SUBMIT_BIN}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+    const j = await r.json();
+    if (j.record) submitData = j.record;
+  } catch(e) {
+    try { const s = localStorage.getItem('hub-submit'); if(s) submitData = JSON.parse(s); } catch(e2){}
+  }
+
+  submitData.submissions.unshift({
+    id: Date.now(),
+    type: 'Week 1 Milestone',
+    date: new Date().toISOString().split('T')[0],
+    code, output, notes
+  });
+
+  try { localStorage.setItem('hub-submit', JSON.stringify(submitData)); } catch(e){}
+
+  try {
+    await fetch(`${BASE}/${SUBMIT_BIN}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(submitData)
+    });
+    document.getElementById('sub-code').value   = '';
+    document.getElementById('sub-output').value = '';
+    document.getElementById('sub-notes').value  = '';
+    showToast('Submitted. Share your hub URL in chat for review.');
+  } catch(e) {
+    showToast('Saved locally — sync failed, check connection.');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function navTo(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    document.getElementById('main-scroll').scrollTo({ top: el.offsetTop - 28, behavior: 'smooth' });
+  }
+}
+
+function togglePractice(header) {
+  const body    = header.nextElementSibling;
+  const chevron = header.querySelector('.pchevron');
+  const isOpen  = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+const SECTIONS = ['overview','keyterms','c1','c2','c3','c4','c5','guided','guided-submit','challenges','challenge-submit','milestone','submit'];
+const mainEl   = document.getElementById('main-scroll');
+
+mainEl.addEventListener('scroll', () => {
+  let current = SECTIONS[0];
+  SECTIONS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop - 60 <= mainEl.scrollTop) current = id;
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.remove('active');
+    const fn = link.getAttribute('onclick') || '';
+    if (fn.includes(`'${current}'`)) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nick Leach — Python Learning Hub</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; line-height: 1.7; }
+  @media (prefers-color-scheme: dark) { body { background: #141414; color: #e8e6e0; } }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar { width: 220px; flex-shrink: 0; border-right: 1px solid #eee; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; }
+  @media (prefers-color-scheme: dark) { .sidebar { background: #1a1a1a; border-color: #2a2a2a; } }
+  .content { flex: 1; overflow-y: auto; padding: 36px 44px; max-width: 860px; }
+  @media (max-width: 700px) { .sidebar { display: none; } .content { padding: 20px; } }
+
+  /* ── SIDEBAR ── */
+  .sidebar-logo { padding: 20px 16px 12px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .sidebar-logo { border-color: #2a2a2a; } }
+  .sidebar-logo h2 { font-size: 13px; font-weight: 500; }
+  .sidebar-logo p { font-size: 11px; color: #888; margin-top: 2px; }
+  .sync-status { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; padding: 8px 16px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .sync-status { border-color: #2a2a2a; } }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; flex-shrink: 0; }
+  .sync-dot.synced { background: #1D9E75; }
+  .sync-dot.syncing { background: #EF9F27; }
+  .sync-dot.error { background: #E24B4A; }
+  .nav-group { padding: 12px 0 4px; }
+  .nav-group-label { font-size: 10px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; padding: 0 16px 4px; }
+  .nav-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; padding: 6px 16px; cursor: pointer; transition: all 0.12s; border-left: 2px solid transparent; }
+  @media (prefers-color-scheme: dark) { .nav-item { color: #aaa; } }
+  .nav-item:hover { background: #f0f0f0; color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .nav-item:hover { background: #222; color: #e8e6e0; } }
+  .nav-item.active { background: #f0f0f0; color: #1a1a1a; border-left-color: #1a1a1a; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .nav-item.active { background: #222; color: #e8e6e0; border-left-color: #e8e6e0; } }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .overall-bar-wrap { padding: 12px 16px; border-top: 1px solid #eee; margin-top: auto; }
+  @media (prefers-color-scheme: dark) { .overall-bar-wrap { border-color: #2a2a2a; } }
+  .overall-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 5px; }
+  .overall-bar-bg { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { .overall-bar-bg { background: #2a2a2a; } }
+  .overall-bar-fill { height: 100%; background: #1D9E75; border-radius: 3px; transition: width 0.4s; }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── SHARED COMPONENTS ── */
+  .page-title { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  .page-sub { font-size: 14px; color: #888; margin-bottom: 24px; }
+  .section-label { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 12px; }
+  .p1-label { background: #E6F1FB; color: #185FA5; }
+  .p2-label { background: #EAF3DE; color: #3B6D11; }
+  .p3-label { background: #FAEEDA; color: #854F0B; }
+  .p4-label { background: #E1F5EE; color: #0F6E56; }
+  .p5-label { background: #EEEDFE; color: #534AB7; }
+  @media (prefers-color-scheme: dark) {
+    .p1-label { background:#0C447C;color:#B5D4F4; } .p2-label { background:#27500A;color:#C0DD97; }
+    .p3-label { background:#633806;color:#FAC775; } .p4-label { background:#085041;color:#9FE1CB; }
+    .p5-label { background:#3C3489;color:#CECBF6; }
+  }
+  .card { border: 1px solid #eee; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  @media (prefers-color-scheme: dark) { .card { border-color: #2a2a2a; } }
+  .card-header { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #fafafa; cursor: pointer; user-select: none; }
+  @media (prefers-color-scheme: dark) { .card-header { background: #1e1e1e; } }
+  .card-header:hover { background: #f4f4f4; }
+  @media (prefers-color-scheme: dark) { .card-header:hover { background: #222; } }
+  .card-title { font-size: 13px; font-weight: 500; flex: 1; }
+  .card-meta { font-size: 11px; color: #aaa; }
+  .chevron { font-size: 10px; color: #aaa; transition: transform 0.2s; }
+  .card-body { padding: 16px; border-top: 1px solid #eee; display: none; }
+  @media (prefers-color-scheme: dark) { .card-body { border-color: #2a2a2a; } }
+  .card-body.open { display: block; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 32px 0; }
+  @media (prefers-color-scheme: dark) { .divider { border-color: #2a2a2a; } }
+  h2 { font-size: 18px; font-weight: 500; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { h2 { border-color: #2a2a2a; } }
+  h3 { font-size: 15px; font-weight: 500; margin: 20px 0 8px; }
+  p { font-size: 14px; margin-bottom: 12px; }
+  pre { background: #f6f6f4; border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin: 10px 0; font-size: 12.5px; line-height: 1.6; border: 1px solid #eee; font-family: 'SF Mono','Fira Code','Consolas',monospace; }
+  @media (prefers-color-scheme: dark) { pre { background: #1e1e1e; border-color: #2a2a2a; color: #e8e6e0; } }
+  code { font-family: 'SF Mono','Fira Code','Consolas',monospace; }
+  p code, li code { background: #f0efe8; padding: 2px 5px; border-radius: 4px; font-size: 12px; }
+  @media (prefers-color-scheme: dark) { p code, li code { background: #252525; } }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { font-size: 14px; margin-bottom: 4px; }
+
+  /* ── FORMS ── */
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .form-field { display: flex; flex-direction: column; gap: 4px; }
+  .form-field label { font-size: 11px; color: #666; font-weight: 500; }
+  .form-field input, .form-field select, .form-field textarea { font-size: 13px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; transition: border-color 0.15s; }
+  @media (prefers-color-scheme: dark) { .form-field input, .form-field select, .form-field textarea { background: #1e1e1e; color: #e8e6e0; border-color: #333; } }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #888; }
+  .form-field textarea { resize: vertical; min-height: 60px; }
+  .form-full { grid-column: 1 / -1; }
+  .code-area { font-family: 'SF Mono','Fira Code','Consolas',monospace !important; font-size: 12px !important; min-height: 180px; }
+  .btn { font-size: 12px; padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; font-family: inherit; font-weight: 500; transition: opacity 0.15s; }
+  .btn-primary { background: #1a1a1a; color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn-primary { background: #e8e6e0; color: #1a1a1a; } }
+  .btn-primary:hover { opacity: 0.82; }
+  .btn-secondary { background: transparent; border: 1px solid #ddd; color: #555; }
+  @media (prefers-color-scheme: dark) { .btn-secondary { border-color: #333; color: #aaa; } }
+  .btn-secondary:hover { border-color: #999; color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .btn-secondary:hover { color: #e8e6e0; } }
+  .btn-danger { background: transparent; border: 1px solid #ddd; color: #aaa; font-size: 11px; padding: 3px 8px; }
+  .btn-danger:hover { border-color: #E24B4A; color: #E24B4A; }
+  .btn-row { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+
+  /* ── STATS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+  .stat-card { padding: 14px; border: 1px solid #eee; border-radius: 10px; text-align: center; }
+  @media (prefers-color-scheme: dark) { .stat-card { border-color: #2a2a2a; } }
+  .stat-num { font-size: 26px; font-weight: 500; }
+  .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+  /* ── CONCEPTS ── */
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .concept-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid #eee; border-radius: 7px; cursor: pointer; transition: all 0.12s; }
+  @media (prefers-color-scheme: dark) { .concept-item { border-color: #2a2a2a; } }
+  .concept-item:hover { border-color: #bbb; background: #fafafa; }
+  @media (prefers-color-scheme: dark) { .concept-item:hover { background: #222; border-color: #444; } }
+  .concept-item.done { background: #fafafa; border-color: #ddd; }
+  @media (prefers-color-scheme: dark) { .concept-item.done { background: #1e1e1e; } }
+  .concept-item.done .concept-name { color: #aaa; text-decoration: line-through; }
+  .chk { width: 16px; height: 16px; border: 1.5px solid #ccc; border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+  .concept-item.done .chk { background: #1D9E75; border-color: #1D9E75; }
+  .chk-svg { width: 8px; height: 8px; display: none; }
+  .concept-item.done .chk-svg { display: block; }
+  .concept-name { font-size: 12px; line-height: 1.4; }
+
+  /* ── LOG ── */
+  .log-form { border: 1px solid #eee; border-radius: 10px; padding: 16px; margin-bottom: 18px; }
+  @media (prefers-color-scheme: dark) { .log-form { border-color: #2a2a2a; } }
+  .log-form h3 { font-size: 13px; font-weight: 500; margin: 0 0 14px; }
+  .log-entry { border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+  @media (prefers-color-scheme: dark) { .log-entry { border-color: #2a2a2a; } }
+  .log-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .log-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+  .badge-date { background: #f4f4f4; color: #555; }
+  @media (prefers-color-scheme: dark) { .badge-date { background: #252525; color: #aaa; } }
+  .log-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .log-notes { font-size: 12px; color: #888; line-height: 1.5; }
+  .empty-state { text-align: center; padding: 32px; color: #bbb; font-size: 13px; }
+
+  /* ── MILESTONES ── */
+  .milestone-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: all 0.12s; }
+  @media (prefers-color-scheme: dark) { .milestone-item { border-color: #2a2a2a; } }
+  .milestone-item:hover { border-color: #bbb; }
+  .milestone-item.done { background: #fafafa; }
+  @media (prefers-color-scheme: dark) { .milestone-item.done { background: #1e1e1e; } }
+  .milestone-item.done .milestone-title { text-decoration: line-through; color: #aaa; }
+  .ms-check { width: 20px; height: 20px; border: 1.5px solid #ccc; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.12s; }
+  .milestone-item.done .ms-check { background: #1D9E75; border-color: #1D9E75; }
+  .ms-check-mark { font-size: 10px; color: #fff; display: none; }
+  .milestone-item.done .ms-check-mark { display: block; }
+  .milestone-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .milestone-sub { font-size: 12px; color: #888; }
+  .milestone-week { font-size: 11px; color: #bbb; margin-top: 3px; }
+
+  /* ── SYLLABUS ── */
+  .syl-phase { margin-bottom: 24px; }
+  .syl-phase-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+  @media (prefers-color-scheme: dark) { .syl-phase-hdr { border-color: #2a2a2a; } }
+  .syl-phase-title { font-size: 14px; font-weight: 500; }
+  .syl-phase-dates { font-size: 12px; color: #888; margin-left: auto; }
+  .syl-day-row { display: grid; grid-template-columns: 88px 1fr; gap: 8px; margin-bottom: 6px; align-items: start; }
+  .syl-day-label { font-size: 11px; font-weight: 500; color: #aaa; padding-top: 2px; }
+  .syl-day-tasks { font-size: 13px; line-height: 1.6; }
+  .syl-goal { font-size: 12px; color: #888; font-style: italic; margin-bottom: 12px; }
+  .syl-why { margin-top: 12px; padding: 8px 10px; border-left: 2px solid #ddd; font-size: 12px; color: #888; border-radius: 0 4px 4px 0; line-height: 1.6; }
+  @media (prefers-color-scheme: dark) { .syl-why { border-color: #333; } }
+  .syl-why strong { color: #1a1a1a; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .syl-why strong { color: #e8e6e0; } }
+  .syl-ms { display: inline-flex; font-size: 11px; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+  /* ── AI CALLOUT ── */
+  .ai-box { background: #E1F5EE; border-left: 3px solid #1D9E75; border-radius: 0 8px 8px 0; padding: 12px 14px; margin: 16px 0; }
+  @media (prefers-color-scheme: dark) { .ai-box { background: #0a2a20; } }
+  .ai-box-label { font-size: 10px; font-weight: 500; color: #0F6E56; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
+  @media (prefers-color-scheme: dark) { .ai-box-label { color: #5DCAA5; } }
+  .ai-box p { font-size: 13px; color: #1a1a1a; margin: 0; }
+  @media (prefers-color-scheme: dark) { .ai-box p { color: #e8e6e0; } }
+
+  /* ── HINT ── */
+  .hint { background: #FAEEDA; border-radius: 6px; padding: 9px 12px; margin-top: 10px; font-size: 13px; color: #633806; }
+  @media (prefers-color-scheme: dark) { .hint { background: #2a1a06; color: #FAC775; } }
+
+  /* ── SUBMISSION ── */
+  .submission-form { border: 2px solid #1D9E75; border-radius: 10px; padding: 20px; margin-top: 16px; }
+  .submission-form h4 { font-size: 14px; font-weight: 500; color: #0F6E56; margin-bottom: 14px; }
+  @media (prefers-color-scheme: dark) { .submission-form h4 { color: #5DCAA5; } }
+  .submission-item { border: 1px solid #eee; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  @media (prefers-color-scheme: dark) { .submission-item { border-color: #2a2a2a; } }
+  .submission-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .submission-item-title { font-size: 13px; font-weight: 500; }
+  .submission-item-date { font-size: 11px; color: #aaa; }
+  .submission-code { background: #f6f6f4; border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 11.5px; white-space: pre-wrap; max-height: 200px; overflow-y: auto; border: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .submission-code { background: #1e1e1e; border-color: #2a2a2a; color: #e8e6e0; } }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+  @media (prefers-color-scheme: dark) { .toast { background: #e8e6e0; color: #1a1a1a; } }
+  .toast.show { opacity: 1; }
+
+  /* ── TERM GRID ── */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  @media (max-width: 600px) { .term-grid { grid-template-columns: 1fr; } }
+  .term-card { border: 1px solid #eee; border-radius: 7px; padding: 10px 12px; }
+  @media (prefers-color-scheme: dark) { .term-card { border-color: #2a2a2a; } }
+  .term-name { font-size: 12px; font-weight: 500; color: #185FA5; margin-bottom: 3px; }
+  @media (prefers-color-scheme: dark) { .term-name { color: #85B7EB; } }
+  .term-def { font-size: 12px; color: #555; line-height: 1.5; }
+  @media (prefers-color-scheme: dark) { .term-def { color: #aaa; } }
+
+  .step-label { display: inline-block; font-size: 11px; font-weight: 500; background: #1a1a1a; color: #fff; padding: 2px 8px; border-radius: 4px; margin: 10px 0 6px; }
+  @media (prefers-color-scheme: dark) { .step-label { background: #e8e6e0; color: #1a1a1a; } }
+  .milestone-box { border: 2px solid #1D9E75; border-radius: 10px; padding: 20px; margin-top: 8px; }
+  .pass-list li { font-size: 13px; margin-bottom: 5px; }
+  .pass-list li::marker { color: #1D9E75; }
+  .meta-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .meta-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid #ddd; color: #666; }
+  @media (prefers-color-scheme: dark) { .meta-pill { border-color: #333; color: #888; } }
+</style>
+</head>
+<body>
+
+<div class="app">
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Learning Hub</h2>
+    <p>Nick Leach · 2026</p>
+  </div>
+  <div class="sync-status">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Connecting...</span>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Overview</div>
+    <div class="nav-item active" onclick="navTo('dashboard')"><div class="nav-dot" style="background:#1D9E75"></div>Dashboard</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Track</div>
+    <div class="nav-item" onclick="navTo('concepts')"><div class="nav-dot" style="background:#378ADD"></div>Concepts</div>
+    <div class="nav-item" onclick="navTo('log')"><div class="nav-dot" style="background:#BA7517"></div>Daily Log</div>
+    <div class="nav-item" onclick="navTo('milestones')"><div class="nav-dot" style="background:#639922"></div>Milestones</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Learn</div>
+    <div class="nav-item" onclick="navTo('syllabus')"><div class="nav-dot" style="background:#7F77DD"></div>Syllabus</div>
+    <div class="nav-item" onclick="navTo('week1')"><div class="nav-dot" style="background:#185FA5"></div>Week 1 Module</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Submit</div>
+    <div class="nav-item" onclick="navTo('submissions')"><div class="nav-dot" style="background:#993556"></div>My Submissions</div>
+  </div>
+  <div class="overall-bar-wrap">
+    <div class="overall-bar-label"><span>Concepts</span><span id="overall-pct">0%</span></div>
+    <div class="overall-bar-bg"><div class="overall-bar-fill" id="overall-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ══ CONTENT ══ -->
+<div class="content">
+
+<!-- DASHBOARD -->
+<div class="panel active" id="panel-dashboard">
+  <div class="page-title">Good to have you back.</div>
+  <p class="page-sub">Everything syncs automatically across your Mac and work computer.</p>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" id="d-concepts">0</div><div class="stat-label">Concepts checked off</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-hours">0</div><div class="stat-label">Hours logged</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-milestones">0</div><div class="stat-label">Milestones hit</div></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" id="d-days">0</div><div class="stat-label">Days logged</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-streak">0</div><div class="stat-label">Current streak</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-submissions">0</div><div class="stat-label">Submissions made</div></div>
+  </div>
+  <h2>Where you left off</h2>
+  <div id="d-recent-log"><p style="color:#aaa;font-size:13px">No log entries yet.</p></div>
+</div>
+
+<!-- CONCEPTS -->
+<div class="panel" id="panel-concepts">
+  <div class="page-title">Concepts</div>
+  <p class="page-sub">Click a concept to check it off. Don't check it until you can do it without looking it up.</p>
+  <div id="concept-sections"></div>
+</div>
+
+<!-- LOG -->
+<div class="panel" id="panel-log">
+  <div class="page-title">Daily Log</div>
+  <p class="page-sub">Log every session. This is your proof of work.</p>
+  <div class="log-form">
+    <h3>Log a session</h3>
+    <div class="form-row">
+      <div class="form-field"><label>Date</label><input type="date" id="log-date"></div>
+      <div class="form-field"><label>Hours</label><input type="number" id="log-hours" min="0.5" max="12" step="0.5" placeholder="e.g. 6"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Week</label>
+        <select id="log-week">
+          <option value="Week 1">Week 1 — Core Python</option>
+          <option value="Week 2">Week 2 — Functions</option>
+          <option value="Week 3">Week 3 — Files</option>
+          <option value="Week 4">Week 4 — Pandas</option>
+          <option value="Week 5">Week 5 — HTTP + APIs</option>
+          <option value="Week 6">Week 6 — Salesforce API</option>
+          <option value="Week 7">Week 7 — Claude API</option>
+          <option value="Week 8">Week 8 — AI Workflows</option>
+          <option value="Week 9">Week 9 — Scheduling</option>
+          <option value="Week 10">Week 10 — Portfolio</option>
+        </select>
+      </div>
+      <div class="form-field"><label>What I worked on</label><input type="text" id="log-title" placeholder="e.g. Built invoice summary script"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field form-full"><label>Notes</label><textarea id="log-notes" placeholder="What clicked, what was hard, what to revisit"></textarea></div>
+    </div>
+    <button class="btn btn-primary" onclick="addLog()">Add entry</button>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" id="stat-days">0</div><div class="stat-label">Days logged</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-hours">0</div><div class="stat-label">Total hours</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-streak">0</div><div class="stat-label">Current streak</div></div>
+  </div>
+  <div id="log-list"><div class="empty-state">No entries yet.</div></div>
+</div>
+
+<!-- MILESTONES -->
+<div class="panel" id="panel-milestones">
+  <div class="page-title">Milestones</div>
+  <p class="page-sub">Check these off only when you genuinely hit them. They're the gate to the next week.</p>
+  <div id="milestone-list"></div>
+</div>
+
+<!-- SYLLABUS -->
+<div class="panel" id="panel-syllabus">
+  <div class="page-title">Syllabus</div>
+  <p class="page-sub">10 weeks · Mar 27 – Jun 5, 2026 · 30 hrs/week</p>
+  <div class="meta-pills">
+    <span class="meta-pill">Start: Fri Mar 27, 2026</span>
+    <span class="meta-pill">30 hrs/week Mon–Fri</span>
+    <span class="meta-pill">6 hrs/day</span>
+    <span class="meta-pill">10 weeks to AI automation</span>
+  </div>
+  <div id="syllabus-content"></div>
+</div>
+
+<!-- WEEK 1 MODULE -->
+<div class="panel" id="panel-week1">
+  <span class="section-label p1-label">Phase 1 · Week 1</span>
+  <div class="page-title">Core Python and Data Structures</div>
+  <p class="page-sub">Variables, strings, lists, dictionaries, and control flow — the foundation everything else is built on.</p>
+  <div class="meta-pills">
+    <span class="meta-pill">Mar 27 – Apr 3</span>
+    <span class="meta-pill">~30 hours</span>
+    <span class="meta-pill">5 concepts</span>
+    <span class="meta-pill">4 guided exercises</span>
+    <span class="meta-pill">1 milestone deliverable</span>
+  </div>
+
+  <h2>Key Terms</h2>
+  <div class="term-grid">
+    <div class="term-card"><div class="term-name">Variable</div><div class="term-def">A labeled box that stores a value. <code>total = 24500</code> creates a box called <code>total</code> holding 24500.</div></div>
+    <div class="term-card"><div class="term-name">Data type</div><div class="term-def">The kind of thing stored in a variable. Python handles strings, integers, floats, and booleans differently.</div></div>
+    <div class="term-card"><div class="term-name">String</div><div class="term-def">Any text value wrapped in quotes. <code>"Accenture"</code> is a string. <code>"24500"</code> is also a string — quotes make it text, not a number.</div></div>
+    <div class="term-card"><div class="term-name">Integer</div><div class="term-def">A whole number with no decimal. <code>24500</code> is an integer. You can do math with it.</div></div>
+    <div class="term-card"><div class="term-name">Float</div><div class="term-def">A number with a decimal point. <code>24500.50</code> is a float. From "floating point" — how computers handle decimals.</div></div>
+    <div class="term-card"><div class="term-name">Boolean</div><div class="term-def">Either <code>True</code> or <code>False</code>. Used constantly in conditions. <code>is_paid = True</code> is a boolean variable.</div></div>
+    <div class="term-card"><div class="term-name">F-string</div><div class="term-def">A string prefixed with <code>f</code> that embeds variables directly. <code>f"Total: ${total:,.2f}"</code> replaces <code>{total}</code> with the actual value.</div></div>
+    <div class="term-card"><div class="term-name">List</div><div class="term-def">An ordered collection in square brackets. <code>["Accenture", "Deloitte"]</code>. Items have positions starting at 0.</div></div>
+    <div class="term-card"><div class="term-name">Index</div><div class="term-def">The position of an item in a list. Starts at 0. In <code>["A","B","C"]</code>, "A" is at index 0, "B" at index 1.</div></div>
+    <div class="term-card"><div class="term-name">Dictionary</div><div class="term-def">Key-value pairs in curly braces. <code>{"client":"Accenture","amount":24500}</code>. Look up values by key name, not position.</div></div>
+    <div class="term-card"><div class="term-name">Loop</div><div class="term-def">Code that repeats. A <code>for</code> loop runs once per item. A <code>while</code> loop runs until a condition is false.</div></div>
+    <div class="term-card"><div class="term-name">List comprehension</div><div class="term-def">A one-line way to build a list. <code>[x*2 for x in nums]</code> creates a new list with every item doubled.</div></div>
+    <div class="term-card"><div class="term-name">Modulo</div><div class="term-def">The <code>%</code> operator. Returns the remainder after division. <code>10 % 3 = 1</code>. Used to check divisibility.</div></div>
+    <div class="term-card"><div class="term-name">The grouping pattern</div><div class="term-def">Empty dict → loop → check if key exists → accumulate. Used any time you want totals by client, hours by consultant, etc.</div></div>
+    <div class="term-card"><div class="term-name">Type conversion</div><div class="term-def">Changing between data types. <code>int("24500")</code> converts text to a number. Common when reading from files or APIs.</div></div>
+    <div class="term-card"><div class="term-name">Syntax</div><div class="term-def">The rules of how Python must be written. A syntax error means Python couldn't parse your code — like a grammar error.</div></div>
+  </div>
+
+  <hr class="divider">
+  <h2>Concept 1 — Variables and Data Types</h2>
+  <p>Every program needs to store information temporarily. Variables are how you do that. When Python runs <code>total = 319150</code> it stores that number in memory and attaches the label <code>total</code> to it. Every time you use that name later, Python retrieves it.</p>
+<pre><code>client_name    = "Accenture"   # string
+invoice_amount = 24500         # integer
+tax_rate       = 0.08          # float
+is_paid        = True          # boolean
+
+# Math with number variables
+tax       = invoice_amount * tax_rate   # 1960.0
+total_due = invoice_amount + tax        # 26460.0
+
+# Type conversion — numbers from APIs often arrive as strings
+amount_str = "24500"
+amount_int = int(amount_str)    # now you can do math
+amount_flt = float("24500.50")  # decimal version</code></pre>
+  <div class="ai-box"><div class="ai-box-label">Why this matters for AI</div><p>Every piece of data you send to Claude or receive back passes through variables. When you build a prompt from real invoice data, you pull values out of variables and embed them in a string. The entire automation pipeline — pull from Kantata, process, send to Claude, write output — is a chain of variables passing data from step to step.</p></div>
+
+  <hr class="divider">
+  <h2>Concept 2 — String Formatting with F-Strings</h2>
+  <p>Raw data is ugly. <code>24500</code> means nothing to a manager. <code>$24,500.00</code> means something. F-strings turn raw data into readable output — and they're how you build prompts for AI models.</p>
+<pre><code>client = "Accenture"
+amount = 24500
+
+print(f"Client: {client}")
+# Output: Client: Accenture
+
+print(f"Amount: ${amount:,.2f}")
+# Output: Amount: $24,500.00
+
+# Column alignment for reports
+print(f"{'Client':<15} {'Amount':>12}")
+print(f"{client:<15} ${amount:>11,.2f}")
+# Client              Amount
+# Accenture       $24,500.00</code></pre>
+  <div class="ai-box"><div class="ai-box-label">Why this matters for AI</div><p>Every prompt you send to Claude is a string you build with real data embedded inside it. <code>prompt = f"Consultant {name} logged {hours} hours. Flag any concerns."</code> — that's an f-string. The quality of your AI output depends directly on how well you construct these strings. This isn't just formatting — it's how you talk to AI models.</p></div>
+
+  <hr class="divider">
+  <h2>Concept 3 — Lists</h2>
+  <p>Most real data is a collection. A month of invoices. A roster of consultants. Lists let you store ordered collections and process every item with a loop.</p>
+<pre><code>amounts = [24500, 18750, 31200, 9800, 42100]
+
+# Indexing — starts at 0
+print(amounts[0])     # 24500
+print(amounts[-1])    # 42100 (from the end)
+
+# Slicing
+print(amounts[0:3])   # [24500, 18750, 31200]
+
+# Loop and accumulate
+total = 0
+for amount in amounts:
+    total = total + amount
+
+# List comprehension — compact and powerful
+large = [a for a in amounts if a > 20000]
+# [24500, 31200, 42100]</code></pre>
+  <div class="ai-box"><div class="ai-box-label">Why this matters for AI</div><p>Every API response from Salesforce, Kantata, and Claude returns data as lists. You'll loop through them, filter them, and process each item. List comprehensions let you filter a dataset down to just the flagged entries before sending to Claude — smaller, cleaner input means better and cheaper AI output.</p></div>
+
+  <hr class="divider">
+  <h2>Concept 4 — Dictionaries</h2>
+  <p>A dictionary stores labeled data — key-value pairs. When an API returns invoice data, it doesn't give you a list of raw values, it gives you <code>"invoice_id": "INV-001"</code>, <code>"client": "Accenture"</code>, <code>"amount": 24500</code>. That's a dictionary.</p>
+<pre><code>invoice = {"invoice_id":"INV-001","client":"Accenture","amount":24500,"paid":False}
+
+print(invoice["client"])    # "Accenture"
+print(invoice["amount"])    # 24500
+
+# The grouping pattern — memorize this
+invoices = [
+    {"client":"Accenture","amount":24500},
+    {"client":"Deloitte", "amount":18750},
+    {"client":"Accenture","amount":15600},
+]
+
+client_totals = {}
+for inv in invoices:
+    client = inv["client"]
+    if client not in client_totals:
+        client_totals[client] = 0
+    client_totals[client] = client_totals[client] + inv["amount"]
+
+for client, total in client_totals.items():
+    print(f"{client:<15} ${total:,.2f}")</code></pre>
+  <div class="ai-box"><div class="ai-box-label">Why this matters for AI</div><p>Salesforce and Kantata API responses are dictionaries — every single one. The grouping pattern is how you'll summarize records before sending them to Claude. Instead of passing 200 raw entries, you group by consultant, calculate totals, and send a clean summary. This makes AI output dramatically better and dramatically cheaper. Dictionaries are the prerequisite for everything in Phase 3 and beyond.</p></div>
+
+  <hr class="divider">
+  <h2>Concept 5 — Control Flow</h2>
+  <p>If/elif/else makes decisions. For loops process every item. Together they're how your automations work without you.</p>
+<pre><code># Decisions
+hours = 47.5
+if hours > 45:
+    print("Over capacity — flag for review")
+elif hours < 20:
+    print("Under capacity — check in")
+else:
+    print("Normal range")
+
+# Combining conditions
+if amount > 30000 and client == "Accenture":
+    print("Needs director approval")
+
+# For loop with range
+for i in range(1, 6):     # 1, 2, 3, 4, 5
+    print(i)
+
+# Break and continue
+for amount in amounts:
+    if amount < 10000:
+        continue          # skip small invoices
+    if amount > 60000:
+        print("Unusually large")
+        break             # stop after first hit</code></pre>
+  <div class="ai-box"><div class="ai-box-label">Why this matters for AI</div><p>Control flow is how your automations make decisions without you. Is this time entry unusual enough to flag? Should it go to Claude for analysis or be skipped? Should the script retry on an API error? Every one of those decisions is an if statement. Loops are how you process every record in a dataset — you can't write separate code for each of the 500 entries in a monthly export.</p></div>
+
+  <hr class="divider">
+  <h2>Guided Practice — Part 1</h2>
+  <p>Work through this in VS Code. Type everything yourself — no copy-pasting.</p>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="section-label p1-label" style="margin:0">Exercise 1.1</span>
+      <span class="card-title">Invoice Stats — Walked Through Step by Step</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body open">
+      <p>Create <code>week1_practice.py</code> in VS Code and build this step by step.</p>
+      <div class="step-label">Step 1 — Your data</div>
+<pre><code>invoices = [
+    {"id":"INV-001","client":"Northgate", "amount":18500,"paid":True},
+    {"id":"INV-002","client":"Bluewater", "amount":42750,"paid":False},
+    {"id":"INV-003","client":"Northgate", "amount":9800, "paid":True},
+    {"id":"INV-004","client":"Redstone",  "amount":61200,"paid":False},
+    {"id":"INV-005","client":"Bluewater", "amount":15300,"paid":True},
+    {"id":"INV-006","client":"Redstone",  "amount":28900,"paid":True},
+    {"id":"INV-007","client":"Northgate", "amount":33400,"paid":False},
+    {"id":"INV-008","client":"Clearfield","amount":7200, "paid":True},
+]</code></pre>
+      <div class="step-label">Step 2 — Pull amounts into a list</div>
+<pre><code>amounts = [inv["amount"] for inv in invoices]</code></pre>
+      <div class="step-label">Step 3 — Summary stats</div>
+<pre><code>total   = sum(amounts)
+average = total / len(amounts)
+minimum = min(amounts)
+maximum = max(amounts)
+
+print("=" * 45)
+print("INVOICE SUMMARY")
+print("=" * 45)
+print(f"{'Total invoices:':<20} {len(invoices)}")
+print(f"{'Total revenue:':<20} ${total:,.2f}")
+print(f"{'Average:':<20} ${average:,.2f}")
+print(f"{'Smallest:':<20} ${minimum:,.2f}")
+print(f"{'Largest:':<20} ${maximum:,.2f}")</code></pre>
+      <div class="step-label">Step 4 — Paid vs unpaid</div>
+<pre><code>paid_total = 0
+unpaid_total = 0
+for inv in invoices:
+    if inv["paid"]:
+        paid_total   += inv["amount"]
+    else:
+        unpaid_total += inv["amount"]
+
+print(f"\n{'Paid:':<20} ${paid_total:,.2f}")
+print(f"{'Outstanding:':<20} ${unpaid_total:,.2f}")</code></pre>
+      <div class="step-label">Step 5 — Revenue by client</div>
+<pre><code>client_totals = {}
+for inv in invoices:
+    client = inv["client"]
+    if client not in client_totals:
+        client_totals[client] = 0
+    client_totals[client] += inv["amount"]
+
+print("\nREVENUE BY CLIENT")
+print("-" * 30)
+for client, total in client_totals.items():
+    print(f"{client:<15} ${total:,.2f}")</code></pre>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h2>Guided Practice — Part 2 (Hints, You Think)</h2>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="section-label" style="background:#FAEEDA;color:#854F0B;margin:0">Challenge 2.1</span>
+      <span class="card-title">Overdue High Value Invoices</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p>Find every invoice that is <strong>unpaid AND over $20,000</strong>. Print the ID, client, and amount under a header "OVERDUE HIGH VALUE".</p>
+      <div class="hint"><strong>Hint:</strong> Loop through invoices, check two conditions with <code>and</code>, print with f-strings. You've seen all three already.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="section-label" style="background:#FAEEDA;color:#854F0B;margin:0">Challenge 2.2</span>
+      <span class="card-title">Outstanding Percentage</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p>Calculate what percentage of total revenue is currently unpaid. Print it rounded to one decimal place.</p>
+      <div class="hint"><strong>Hint:</strong> Percentage = (unpaid / total) × 100. You already have both numbers. Use <code>round(number, 1)</code>.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="section-label" style="background:#FAEEDA;color:#854F0B;margin:0">Challenge 2.3</span>
+      <span class="card-title">Top Client by Revenue</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p>Find which client has the highest total revenue. Print their name and total. Don't hardcode the answer.</p>
+      <div class="hint"><strong>Hint:</strong> You already built <code>client_totals</code>. Loop through it tracking the highest value seen so far. Start with <code>top_client = None</code> and <code>top_total = 0</code>.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="section-label" style="background:#FAEEDA;color:#854F0B;margin:0">Challenge 2.4</span>
+      <span class="card-title">Sorted Invoice List</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-body">
+      <p>Print all invoices sorted largest to smallest. Show ID, client, amount, and paid status.</p>
+      <div class="hint"><strong>Hint:</strong> Use <code>sorted(invoices, key=lambda x: x["amount"], reverse=True)</code>. The lambda just means "sort by the amount field."</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h2>Week 1 Milestone Deliverable</h2>
+  <p>Build this from a blank file — no notes, no previous scripts. Note anything you looked up. Paste your completed script and output in the submission field below.</p>
+
+  <div class="milestone-box">
+    <p style="font-size:14px;font-weight:500;color:#0F6E56;margin-bottom:12px">The Brief — Monthly Consulting Revenue Report</p>
+<pre><code>time_entries = [
+    {"id":"TE-001","consultant":"Alex Rivera", "project":"Horizon","hours":8.5, "rate":225,"approved":True},
+    {"id":"TE-002","consultant":"Dana Kim",    "project":"Vertex", "hours":6.0, "rate":195,"approved":True},
+    {"id":"TE-003","consultant":"Alex Rivera", "project":"Vertex", "hours":9.0, "rate":225,"approved":False},
+    {"id":"TE-004","consultant":"Morgan Blake","project":"Horizon","hours":7.5, "rate":210,"approved":True},
+    {"id":"TE-005","consultant":"Dana Kim",    "project":"Cascade","hours":11.0,"rate":195,"approved":True},
+    {"id":"TE-006","consultant":"Alex Rivera", "project":"Cascade","hours":8.0, "rate":225,"approved":True},
+    {"id":"TE-007","consultant":"Jordan Reyes","project":"Horizon","hours":6.5, "rate":180,"approved":True},
+    {"id":"TE-008","consultant":"Morgan Blake","project":"Vertex", "hours":10.5,"rate":210,"approved":False},
+    {"id":"TE-009","consultant":"Dana Kim",    "project":"Horizon","hours":7.0, "rate":195,"approved":True},
+    {"id":"TE-010","consultant":"Jordan Reyes","project":"Cascade","hours":8.5, "rate":180,"approved":True},
+    {"id":"TE-011","consultant":"Alex Rivera", "project":"Horizon","hours":7.5, "rate":225,"approved":True},
+    {"id":"TE-012","consultant":"Morgan Blake","project":"Cascade","hours":9.0, "rate":210,"approved":True},
+    {"id":"TE-013","consultant":"Jordan Reyes","project":"Vertex", "hours":6.0, "rate":180,"approved":True},
+    {"id":"TE-014","consultant":"Dana Kim",    "project":"Vertex", "hours":8.0, "rate":195,"approved":True},
+    {"id":"TE-015","consultant":"Morgan Blake","project":"Horizon","hours":7.0, "rate":210,"approved":True},
+]</code></pre>
+    <p style="font-size:13px;margin-top:10px">Revenue = hours × rate. Only approved entries count toward billable revenue.</p>
+    <p style="font-size:13px;font-weight:500;margin-top:14px">Your report must include:</p>
+    <ol style="font-size:13px;line-height:1.9;margin-top:6px">
+      <li><strong>Overall summary</strong> — total entries, hours, approved hours, approved revenue, revenue lost to unapproved</li>
+      <li><strong>By consultant</strong> — hours, approved hours, approved revenue. Sorted by revenue highest to lowest.</li>
+      <li><strong>By project</strong> — total hours and approved revenue</li>
+      <li><strong>Flags</strong> — any entry over 10 hours, any consultant over 30 total hours</li>
+      <li><strong>One insight</strong> — one sentence your manager would care about, from the data</li>
+    </ol>
+    <ul class="pass-list" style="margin-top:14px">
+      <li>All five sections with correct numbers</li>
+      <li>Grouping pattern used at least once</li>
+      <li>List comprehension used at least once</li>
+      <li>No hardcoded answers</li>
+      <li>Formatted so a non-technical person can read it</li>
+    </ul>
+  </div>
+
+  <div class="submission-form">
+    <h4>Submit Your Week 1 Milestone</h4>
+    <div class="form-row">
+      <div class="form-field form-full">
+        <label>Your Python script</label>
+        <textarea class="code-area" id="sub-code" placeholder="Paste your complete Python script here..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field form-full">
+        <label>Your output (what printed when you ran it)</label>
+        <textarea class="code-area" id="sub-output" placeholder="Paste the terminal output here..."></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field form-full">
+        <label>Notes — anything you looked up, anything that was hard</label>
+        <textarea id="sub-notes" placeholder="Optional but useful for the review"></textarea>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitMilestone()">Submit for Review</button>
+      <span style="font-size:12px;color:#888">Saves to your hub. Paste the link in chat for review.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMISSIONS -->
+<div class="panel" id="panel-submissions">
+  <div class="page-title">My Submissions</div>
+  <p class="page-sub">All your milestone and exercise submissions in one place.</p>
+  <div id="submission-list"><div class="empty-state">No submissions yet.</div></div>
+</div>
+
+</div><!-- end .content -->
+</div><!-- end .app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TRACKER_BIN = '69c6d376c3097a1dd56915c6';
+const SUBMIT_BIN  = '69c6d3bcb7ec241ddcae225c';
+const API_KEY     = '$2a$10$76FBJXGqFrFTplqqEofln.iCs9sAaBZtsOTu6tp73cB8j/QmWUZym';
+const BASE        = 'https://api.jsonbin.io/v3/b';
+
+const CONCEPTS = {
+  p1:['Variables and data types','f-strings and formatting','Basic math and modulo','Lists — indexing and slicing','List append and looping','List comprehensions','Dictionaries — creating and accessing','Dictionary key checking','The grouping pattern','If/elif/else chains','Boolean logic and operators','For loops and range()','While loops','Break and continue','Nested loops','Defining functions with def','Parameters and return values','Functions calling functions','Default parameter values','Tuples vs lists','Sets and deduplication','Nested data structures'],
+  p2:['Reading text files','Writing text files','Absolute vs relative file paths','CSV module — reading','CSV module — writing','JSON reading and writing','Try/except error handling','Catching specific error types','Graceful failure patterns','Pandas DataFrames basics','Filtering and selecting columns','Boolean indexing in pandas','GroupBy and aggregations','Sorting and ranking','Merging DataFrames','Exporting to CSV and Excel'],
+  p3:['What an API is','GET vs POST requests','Status codes and headers','The requests library','Parsing JSON responses','API authentication and tokens','Salesforce REST API basics','SOQL queries from Python','Handling API errors','Rate limit management','Pagination through results','Intacct API basics','Cross-system data reconciliation'],
+  p4:['Anthropic Python SDK setup','First Claude API call','Tokens and cost awareness','Prompt engineering — role and context','Prompt engineering — structured output','Parsing JSON from Claude','Building prompts dynamically','Chaining multiple AI calls','Chunking large datasets','Invoice narrative generation','Email delivery from Python','Production script packaging'],
+  p5:['Cron job scheduling on Mac','Logging script runs to file','Environment variables for credentials','Workato conceptual understanding','Workato recipe mapping','Portfolio documentation','Time savings quantification','90-day roadmap building','August conversation prep']
+};
+
+const PHASE_LABELS = {p1:'Phase 1 — Foundations',p2:'Phase 2 — Files and Data',p3:'Phase 3 — APIs',p4:'Phase 4 — AI Integration',p5:'Phase 5 — Automation'};
+const PHASE_COLORS = {p1:'p1-label',p2:'p2-label',p3:'p3-label',p4:'p4-label',p5:'p5-label'};
+
+const MILESTONES = [
+  {id:'m1',week:'Week 1',title:'Rebuild time entry report from scratch',sub:'No notes, no reference — pure memory'},
+  {id:'m2',week:'Week 2',title:'Reusable reporting engine',sub:'Handles any time entry dataset with functions'},
+  {id:'m3',week:'Week 3',title:'CSV pipeline with validation',sub:'Validates, filters, exports to multiple output files'},
+  {id:'m4',week:'Week 4',title:'Automated Excel report generator',sub:'Raw CSV in → formatted Excel report out'},
+  {id:'m5',week:'Week 5',title:'Live Kantata time entry report',sub:'Pulls from API, produces summary automatically'},
+  {id:'m6',week:'Week 6',title:'First documented automation',sub:'Real data, real output, time savings quantified'},
+  {id:'m7',week:'Week 7',title:'AI-powered anomaly detection report',sub:'Live Kantata data processed by Claude'},
+  {id:'m8',week:'Week 8',title:'Self-running AI report with email',sub:'Pulls data, generates commentary, emails itself'},
+  {id:'m9',week:'Week 9',title:'Scheduled automation with logging',sub:'Runs on its own, zero manual involvement'},
+  {id:'m10',week:'Week 10',title:'August portfolio complete',sub:'Business case written, roadmap built, Jack conversation had'}
+];
+
+const WEEK_BG = {'Week 1':'#E6F1FB','Week 2':'#E6F1FB','Week 3':'#EAF3DE','Week 4':'#EAF3DE','Week 5':'#FAEEDA','Week 6':'#FAEEDA','Week 7':'#E1F5EE','Week 8':'#E1F5EE','Week 9':'#EEEDFE','Week 10':'#EEEDFE'};
+const WEEK_TC = {'Week 1':'#185FA5','Week 2':'#185FA5','Week 3':'#3B6D11','Week 4':'#3B6D11','Week 5':'#854F0B','Week 6':'#854F0B','Week 7':'#0F6E56','Week 8':'#0F6E56','Week 9':'#534AB7','Week 10':'#534AB7'};
+
+let trackerData = {concepts:{},logs:[],milestones:{}};
+let submitData  = {submissions:[]};
+let saveTimer   = null;
+
+function setSyncStatus(status, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + status;
+  lbl.textContent = label;
+}
+
+async function loadData() {
+  setSyncStatus('syncing','Loading...');
+  try {
+    const [tr, sr] = await Promise.all([
+      fetch(`${BASE}/${TRACKER_BIN}/latest`,{headers:{'X-Master-Key':API_KEY}}).then(r=>r.json()),
+      fetch(`${BASE}/${SUBMIT_BIN}/latest`, {headers:{'X-Master-Key':API_KEY}}).then(r=>r.json())
+    ]);
+    if (tr.record) trackerData = tr.record;
+    if (sr.record) submitData  = sr.record;
+    setSyncStatus('synced','Synced');
+  } catch(e) {
+    setSyncStatus('error','Offline — changes saved locally');
+    try { const s=localStorage.getItem('hub-tracker'); if(s) trackerData=JSON.parse(s); } catch(e){}
+    try { const s=localStorage.getItem('hub-submit');  if(s) submitData=JSON.parse(s);  } catch(e){}
+  }
+  render();
+}
+
+async function saveTracker() {
+  try { localStorage.setItem('hub-tracker', JSON.stringify(trackerData)); } catch(e){}
+  setSyncStatus('syncing','Saving...');
+  try {
+    await fetch(`${BASE}/${TRACKER_BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(trackerData)});
+    setSyncStatus('synced','Saved');
+  } catch(e) { setSyncStatus('error','Save failed — stored locally'); }
+}
+
+async function saveSubmit() {
+  try { localStorage.setItem('hub-submit', JSON.stringify(submitData)); } catch(e){}
+  setSyncStatus('syncing','Saving...');
+  try {
+    await fetch(`${BASE}/${SUBMIT_BIN}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(submitData)});
+    setSyncStatus('synced','Saved');
+  } catch(e) { setSyncStatus('error','Save failed — stored locally'); }
+}
+
+function debounceSave(fn) {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(fn, 800);
+}
+
+function render() {
+  renderConcepts();
+  renderLog();
+  renderMilestones();
+  renderOverall();
+  renderDashboard();
+  renderSubmissions();
+  renderSyllabus();
+}
+
+function renderConcepts() {
+  const container = document.getElementById('concept-sections');
+  container.innerHTML = '';
+  Object.entries(CONCEPTS).forEach(([phase, items]) => {
+    const sec = document.createElement('div');
+    sec.style.marginBottom = '20px';
+    const label = document.createElement('span');
+    label.className = 'section-label ' + PHASE_COLORS[phase];
+    label.textContent = PHASE_LABELS[phase];
+    sec.appendChild(label);
+    const grid = document.createElement('div');
+    grid.className = 'concept-grid';
+    items.forEach(c => {
+      const done = trackerData.concepts[c];
+      const el = document.createElement('div');
+      el.className = 'concept-item' + (done?' done':'');
+      el.onclick = () => { trackerData.concepts[c]=!trackerData.concepts[c]; debounceSave(saveTracker); renderConcepts(); renderOverall(); renderDashboard(); };
+      el.innerHTML = `<div class="chk"><svg class="chk-svg" viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="concept-name">${c}</span>`;
+      grid.appendChild(el);
+    });
+    sec.appendChild(grid);
+    container.appendChild(sec);
+  });
+}
+
+function renderOverall() {
+  const all  = Object.values(CONCEPTS).flat();
+  const done = all.filter(c=>trackerData.concepts[c]).length;
+  const pct  = Math.round((done/all.length)*100);
+  document.getElementById('overall-bar').style.width = pct+'%';
+  document.getElementById('overall-pct').textContent = pct+'%';
+}
+
+function renderMilestones() {
+  const list = document.getElementById('milestone-list');
+  list.innerHTML = '';
+  MILESTONES.forEach(m => {
+    const done = trackerData.milestones[m.id];
+    const el = document.createElement('div');
+    el.className = 'milestone-item'+(done?' done':'');
+    el.onclick = () => { trackerData.milestones[m.id]=!trackerData.milestones[m.id]; debounceSave(saveTracker); renderMilestones(); renderDashboard(); };
+    el.innerHTML = `<div class="ms-check"><span class="ms-check-mark">✓</span></div><div><div class="milestone-title">${m.title}</div><div class="milestone-sub">${m.sub}</div><div class="milestone-week">${m.week}</div></div>`;
+    list.appendChild(el);
+  });
+}
+
+function addLog() {
+  const date  = document.getElementById('log-date').value;
+  const hours = parseFloat(document.getElementById('log-hours').value);
+  const week  = document.getElementById('log-week').value;
+  const title = document.getElementById('log-title').value.trim();
+  const notes = document.getElementById('log-notes').value.trim();
+  if(!date||!hours||!title){showToast('Fill in date, hours, and what you worked on.');return;}
+  trackerData.logs.unshift({id:Date.now(),date,hours,week,title,notes});
+  document.getElementById('log-date').value='';
+  document.getElementById('log-hours').value='';
+  document.getElementById('log-title').value='';
+  document.getElementById('log-notes').value='';
+  debounceSave(saveTracker);
+  renderLog();
+  renderDashboard();
+  showToast('Session logged.');
+}
+
+function deleteLog(id) {
+  trackerData.logs = trackerData.logs.filter(l=>l.id!==id);
+  debounceSave(saveTracker);
+  renderLog();
+  renderDashboard();
+}
+
+function renderLog() {
+  const list = document.getElementById('log-list');
+  renderStats();
+  if(!trackerData.logs.length){list.innerHTML='<div class="empty-state">No entries yet.</div>';return;}
+  list.innerHTML='';
+  trackerData.logs.forEach(l=>{
+    const el=document.createElement('div'); el.className='log-entry';
+    const bg=WEEK_BG[l.week]||'#f4f4f4'; const tc=WEEK_TC[l.week]||'#666';
+    const d=new Date(l.date+'T12:00:00');
+    const ds=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    el.innerHTML=`<div class="log-top"><div class="log-badges"><span class="badge badge-date">${ds}</span><span class="badge" style="background:${bg};color:${tc}">${l.week}</span><span style="font-size:11px;color:#aaa">${l.hours} hr${l.hours!==1?'s':''}</span></div><button class="btn btn-danger" onclick="deleteLog(${l.id})">remove</button></div><div class="log-title">${l.title}</div>${l.notes?`<div class="log-notes">${l.notes}</div>`:''}`;
+    list.appendChild(el);
+  });
+}
+
+function renderStats() {
+  const days  = new Set(trackerData.logs.map(l=>l.date)).size;
+  const hours = trackerData.logs.reduce((s,l)=>s+l.hours,0);
+  document.getElementById('stat-days').textContent  = days;
+  document.getElementById('stat-hours').textContent = hours%1===0?hours:hours.toFixed(1);
+  const sorted=[...new Set(trackerData.logs.map(l=>l.date))].sort();
+  let streak=0;
+  if(sorted.length){streak=1;for(let i=sorted.length-1;i>0;i--){const diff=(new Date(sorted[i]+'T12:00:00')-new Date(sorted[i-1]+'T12:00:00'))/86400000;if(diff<=3)streak++;else break;}}
+  document.getElementById('stat-streak').textContent = streak;
+}
+
+function renderDashboard() {
+  const all     = Object.values(CONCEPTS).flat();
+  const cdone   = all.filter(c=>trackerData.concepts[c]).length;
+  const hours   = trackerData.logs.reduce((s,l)=>s+l.hours,0);
+  const mdone   = MILESTONES.filter(m=>trackerData.milestones[m.id]).length;
+  const days    = new Set(trackerData.logs.map(l=>l.date)).size;
+  const sdone   = submitData.submissions.length;
+  const sorted  = [...new Set(trackerData.logs.map(l=>l.date))].sort();
+  let streak=0;
+  if(sorted.length){streak=1;for(let i=sorted.length-1;i>0;i--){const diff=(new Date(sorted[i]+'T12:00:00')-new Date(sorted[i-1]+'T12:00:00'))/86400000;if(diff<=3)streak++;else break;}}
+  document.getElementById('d-concepts').textContent    = cdone;
+  document.getElementById('d-hours').textContent       = hours%1===0?hours:hours.toFixed(1);
+  document.getElementById('d-milestones').textContent  = mdone;
+  document.getElementById('d-days').textContent        = days;
+  document.getElementById('d-streak').textContent      = streak;
+  document.getElementById('d-submissions').textContent = sdone;
+  const recent = document.getElementById('d-recent-log');
+  if(!trackerData.logs.length){recent.innerHTML='<p style="color:#aaa;font-size:13px">No log entries yet.</p>';return;}
+  const l = trackerData.logs[0];
+  const bg=WEEK_BG[l.week]||'#f4f4f4'; const tc=WEEK_TC[l.week]||'#666';
+  const d=new Date(l.date+'T12:00:00');
+  const ds=d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+  recent.innerHTML=`<div class="log-entry"><div class="log-top"><div class="log-badges"><span class="badge badge-date">${ds}</span><span class="badge" style="background:${bg};color:${tc}">${l.week}</span><span style="font-size:11px;color:#aaa">${l.hours} hr${l.hours!==1?'s':''}</span></div></div><div class="log-title">${l.title}</div>${l.notes?`<div class="log-notes">${l.notes}</div>`:''}</div>`;
+}
+
+function submitMilestone() {
+  const code   = document.getElementById('sub-code').value.trim();
+  const output = document.getElementById('sub-output').value.trim();
+  const notes  = document.getElementById('sub-notes').value.trim();
+  if(!code||!output){showToast('Paste your script and output before submitting.');return;}
+  submitData.submissions.unshift({id:Date.now(),type:'Week 1 Milestone',date:new Date().toISOString().split('T')[0],code,output,notes});
+  document.getElementById('sub-code').value='';
+  document.getElementById('sub-output').value='';
+  document.getElementById('sub-notes').value='';
+  debounceSave(saveSubmit);
+  renderSubmissions();
+  renderDashboard();
+  showToast('Submitted. Share your hub URL in chat for review.');
+}
+
+function renderSubmissions() {
+  const list = document.getElementById('submission-list');
+  if(!submitData.submissions.length){list.innerHTML='<div class="empty-state">No submissions yet.</div>';return;}
+  list.innerHTML='';
+  submitData.submissions.forEach(s=>{
+    const el=document.createElement('div'); el.className='submission-item';
+    const d=new Date(s.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    el.innerHTML=`<div class="submission-item-top"><span class="submission-item-title">${s.type}</span><span class="submission-item-date">${d}</span></div><div class="submission-code">${s.code}</div>${s.output?`<div style="margin-top:8px;font-size:11px;color:#888;font-weight:500">Output</div><div class="submission-code" style="margin-top:4px">${s.output}</div>`:''}${s.notes?`<div style="margin-top:8px;font-size:12px;color:#888">${s.notes}</div>`:''}`;
+    list.appendChild(el);
+  });
+}
+
+function renderSyllabus() {
+  const SYLLABUS = [
+    {phase:'p1',title:'Foundations — Variables, Data, Control Flow',dates:'Mar 27 – Apr 10',weeks:[
+      {num:'Week 1',title:'Core Python + Data Types',date:'Mar 27 – Apr 3',goal:'Write Python from memory. Build the invoice script without help.',days:[['Fri Mar 27','Variables, strings, integers, floats, booleans. F-strings. Basic math. VS Code setup. Lists and dictionaries intro. ✓ Already completed.'],['Mon Mar 30','Lists deep dive — indexing, slicing, appending, looping. List comprehensions. Exercises 1–3.'],['Tue Mar 31','Dictionaries deep dive — creating, accessing, checking keys, the grouping pattern. Rebuild client totals from scratch.'],['Wed Apr 1','If/elif/else chains. Boolean logic. Comparison operators. Grade checker and FizzBuzz. Time entry report independently.'],['Thu Apr 2','For loops with range(). While loops. Break and continue. Nested loops. 3 original loop problems.'],['Fri Apr 3','Review day. Rebuild invoice script and time entry report from blank file, no reference.']],why:'Everything else is built on top of these patterns. The grouping dictionary pattern you\'ll use every single week for the rest of this course.',ms:'Rebuild time entry report from scratch, no notes',msc:'p1-label'},
+      {num:'Week 2',title:'Functions + Tuples, Sets, Nested Structures',date:'Apr 6 – Apr 10',goal:'Write modular code using functions. Handle any data shape.',days:[['Mon Apr 6','Defining functions with def. Parameters and return values. Rewrite last week\'s time entry report using at least 4 functions.'],['Tue Apr 7','Default parameter values. Functions calling functions. Build a reusable invoice summary function.'],['Wed Apr 8','Tuples vs lists. Sets — deduplication, membership testing. Find all unique consultants and projects.'],['Thu Apr 9','Nested data structures — lists of dicts, dicts of dicts. 3 progressively deeper nesting exercises.'],['Fri Apr 10','Build a mini reporting engine from scratch. Returns a nested summary dict by consultant and project.']],why:'Salesforce API responses come back as deeply nested dicts. Functions let you build automations that are reusable instead of one-off scripts.',ms:'Reusable reporting engine that handles any time entry dataset',msc:'p1-label'},
+    ]},
+    {phase:'p2',title:'Files, Data, and the Real World',dates:'Apr 13 – Apr 24',weeks:[
+      {num:'Week 3',title:'Working With Files — CSV, JSON, Text',date:'Apr 13 – Apr 17',goal:'Replace hardcoded data with actual file inputs. Build things that persist output.',days:[['Mon Apr 13','Reading and writing text files. File paths. Read a list of names from a text file and output stats.'],['Tue Apr 14','CSV module — reading and writing. Fake Kantata export CSV → formatted summary.'],['Wed Apr 15','JSON — reading and writing. Convert a CSV to JSON and back.'],['Thu Apr 16','Error handling — try/except. Add error handling to everything this week so it never crashes silently.'],['Fri Apr 17','CSV pipeline: read, validate, flag bad data, write clean rows and flagged rows to separate files.']],why:'Your actual Kantata exports are CSVs. Every API call returns JSON. The error handling is what makes scripts trustworthy enough to run without babysitting.',ms:'CSV pipeline that validates, filters, and exports to multiple output files',msc:'p2-label'},
+      {num:'Week 4',title:'Pandas — Data Like a Professional',date:'Apr 20 – Apr 24',goal:'Replace manual loops with vectorized operations.',days:[['Mon Apr 20','Install pandas. DataFrames — creating, reading CSVs. Explore shape, columns, dtypes, head().'],['Tue Apr 21','Filtering rows, selecting columns, boolean indexing. Time entry report with pandas — no manual loops.'],['Wed Apr 22','GroupBy and aggregations — sum, mean, count. Full consultant/project summary with one groupby chain.'],['Thu Apr 23','Sorting, ranking, merging DataFrames. Join two CSVs on a shared column.'],['Fri Apr 24','Export to CSV and Excel. Raw Kantata-style export → formatted Excel report.']],why:'Pandas is how data professionals manipulate tabular data. Knowing it means processing thousands of rows in seconds and producing formatted reports automatically.',ms:'Automated Excel report generator from raw CSV input',msc:'p2-label'},
+    ]},
+    {phase:'p3',title:'APIs — Connecting to Real Systems',dates:'Apr 27 – May 8',weeks:[
+      {num:'Week 5',title:'HTTP and the Requests Library',date:'Apr 27 – May 1',goal:'Make your first real API calls. Pull live data into Python.',days:[['Mon Apr 27','What is an API. HTTP — GET vs POST, status codes, headers. Call a free public API and print the response.'],['Tue Apr 28','Parsing JSON API responses. Navigate nested objects. Extract 5 fields from an API response.'],['Wed Apr 29','Authentication — API keys, Bearer tokens, headers. First authenticated Salesforce API call.'],['Thu Apr 30','SOQL via Salesforce API. Pull Kantata time entries directly into Python without exporting a CSV.'],['Fri May 1','Handle API errors and rate limits. Paginate through large results. Full month time entry summary automatically.']],why:'This is where scripts stop touching fake data and start touching your real job. Pulling live Kantata data via API instead of manually exporting CSVs is your first real automation.',ms:'Script that pulls live Kantata time entries and produces a summary automatically',msc:'p3-label'},
+      {num:'Week 6',title:'Salesforce API Deep Dive + Intacct',date:'May 4 – May 8',goal:'Automate at least one real job task end to end.',days:[['Mon May 4','Salesforce object model from Python. Pull Opportunities, Time Entries, Accounts. Compare to UI.'],['Tue May 5','Consultant utilization report — pull from Kantata via API, calculate hours vs target, output to Excel.'],['Wed May 6','Intacct API basics. Authenticate and query. Pull invoice records and cross-reference with Kantata.'],['Thu May 7','Cross-system reconciliation script. Flag time entries with no corresponding invoice.'],['Fri May 8','Document everything this week. One-page summary per automation. Start of August portfolio.']],why:'Your first documented proof of concept. Real automation, real systems, real output that saves real time. This is what you bring to Jack in August.',ms:'First documented automation — real data, real output, time savings quantified',msc:'p3-label'},
+    ]},
+    {phase:'p4',title:'AI Integration — Claude API + Prompt Engineering',dates:'May 11 – May 22',weeks:[
+      {num:'Week 7',title:'Claude API + Prompt Engineering',date:'May 11 – May 15',goal:'Make your first AI-powered automation.',days:[['Mon May 11','Install Anthropic Python SDK. First Claude API call from code. Understand tokens, max_tokens, cost.'],['Tue May 12','Prompt engineering — role, context, task, format. Take a time entry exception and have Claude explain it.'],['Wed May 13','Structured outputs — ask Claude to respond in JSON. Parse the response back into Python.'],['Thu May 14','Build prompts dynamically from real data using f-strings. The AI sees real Kantata data.'],['Fri May 15','Anomaly detection script — pull entries from Kantata, pass unusual ones to Claude, get explanations.']],why:'This is where everything compounds. Real data from your real job, passed to an AI model, intelligent output back — automatically. The core of every AI automation you will ever build.',ms:'AI-powered anomaly detection report using live Kantata data',msc:'p4-label'},
+      {num:'Week 8',title:'Chaining AI Calls + Complex Workflows',date:'May 18 – May 22',goal:'Build multi-step AI workflows.',days:[['Mon May 18','Chain API calls — output of one Claude call as input to next. Classify entries then generate commentary.'],['Tue May 19','Token limits and large datasets — chunking, batching, rate limits. Handle a full month without hitting limits.'],['Wed May 20','Invoice narrative generator — plain English summary of monthly billing activity per client.'],['Thu May 21','Email delivery via smtplib. Anomaly report now runs, generates, and emails itself. Zero human involvement.'],['Fri May 22','Document and package weeks 7 and 8 as clean production-ready scripts with README files.']],why:'A script that emails itself is a real automation. The invoice narrative generator is directly demonstrable to Jack — it shows intelligence, not just data processing.',ms:'Self-running report that pulls data, generates AI commentary, and emails itself',msc:'p4-label'},
+    ]},
+    {phase:'p5',title:'Automation, Scheduling, and August Prep',dates:'May 25 – Jun 5',weeks:[
+      {num:'Week 9',title:'Scheduling, Logging, and Production Readiness',date:'May 25 – May 29',goal:'Make your automations run themselves.',days:[['Mon May 25','Cron jobs on Mac — schedule monthly time entry report to run on the 1st at 8am automatically.'],['Tue May 26','Logging — write script run results, errors, timestamps to a log file. Every automation logs now.'],['Wed May 27','Environment variables — store API keys securely. Refactor all scripts. Required before showing anyone.'],['Thu May 28','Workato deep dive — documentation, YouTube walkthroughs. Map Python automations to Workato recipes.'],['Fri May 29','Make the case to Jack for Workato access. Specific, informed conversation using this week\'s vocabulary.']],why:'Scripts that run manually are tools. Scripts that run themselves are automations. You can\'t show Jack something that requires you at a keyboard to run it.',ms:'At least one automation running on a schedule with logging, zero manual involvement',msc:'p5-label'},
+      {num:'Week 10',title:'Portfolio, Documentation, and August Prep',date:'Jun 1 – Jun 5',goal:'Package everything into a demonstrable portfolio.',days:[['Mon Jun 1','Inventory everything built. One-paragraph description per automation — what it does, what it replaced, time saved.'],['Tue Jun 2','Quantify time savings — hours/month, hours/year, salary cost equivalent. Business case for August.'],['Wed Jun 3','Build 90-day roadmap — specific automations, systems, outcomes for post-August full-time focus.'],['Thu Jun 4','Rehearse August conversation. Schedule a casual check-in with Jack — plant the seed.'],['Fri Jun 5','Free day. Build anything you want. Explore, break something, extend beyond scope.']],why:'The portfolio is what turns 10 weeks of learning into a career inflection point. Jack needs to walk upstairs with something concrete. Not pitching — presenting evidence.',ms:'Portfolio complete — business case written, roadmap built, Jack conversation had',msc:'p5-label'},
+    ]},
+  ];
+
+  const container = document.getElementById('syllabus-content');
+  container.innerHTML = '';
+  SYLLABUS.forEach(phase => {
+    const ph = document.createElement('div'); ph.className = 'syl-phase';
+    ph.innerHTML = `<div class="syl-phase-hdr"><span class="section-label ${phase.phase}-label">${'Phase '+(Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5})[Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5}).indexOf(phase.phase)])}</span><span class="syl-phase-title">${phase.title}</span><span class="syl-phase-dates">${phase.dates}</span></div>`;
+    phase.weeks.forEach(w => {
+      const wk = document.createElement('div'); wk.className = 'card';
+      const isFirst = w.num === 'Week 1';
+      wk.innerHTML = `<div class="card-header" onclick="toggleCard(this)"><span style="font-size:11px;font-weight:500;color:#aaa;min-width:52px">${w.num}</span><span class="card-title">${w.title}</span><span class="card-meta">${w.date}</span><span class="chevron">▼</span></div>`;
+      const body = document.createElement('div');
+      body.className = 'card-body' + (isFirst?' open':'');
+      let inner = `<p class="syl-goal">${w.goal}</p>`;
+      w.days.forEach(([day,task]) => { inner += `<div class="syl-day-row"><span class="syl-day-label">${day}</span><span class="syl-day-tasks">${task}</span></div>`; });
+      inner += `<div class="syl-why"><strong>Why this matters:</strong> ${w.why}</div>`;
+      inner += `<span class="syl-ms section-label ${w.msc}" style="margin-top:10px">Milestone: ${w.ms}</span>`;
+      body.innerHTML = inner;
+      wk.appendChild(body);
+      ph.appendChild(wk);
+    });
+    container.appendChild(ph);
+  });
+}
+
+function navTo(page) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+page).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function toggleCard(header) {
+  const body    = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen  = body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  chevron.style.transform = isOpen?'':'rotate(180deg)';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+loadData();
+</script>
+</body>
+</html>

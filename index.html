@@ -13,7 +13,7 @@
   .app { display: flex; height: 100vh; overflow: hidden; }
   .sidebar { width: 220px; flex-shrink: 0; border-right: 1px solid #eee; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; }
   @media (prefers-color-scheme: dark) { .sidebar { background: #1a1a1a; border-color: #2a2a2a; } }
-  .content { flex: 1; overflow-y: auto; padding: 36px 44px; max-width: 860px; }
+  .content { flex: 1; overflow-y: auto; padding: 36px 44px; }
   @media (max-width: 700px) { .sidebar { display: none; } .content { padding: 20px; } }
 
   /* ── SIDEBAR ── */
@@ -249,7 +249,7 @@
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Learn</div>
-    <div class="nav-item" onclick="navTo('syllabus')"><div class="nav-dot" style="background:#7F77DD"></div>Syllabus</div>
+    <div class="nav-item" onclick="navTo('syllabus')"><div class="nav-dot" style="background:#7F77DD"></div>Course Scope</div>
     <div class="nav-item" onclick="window.location.href='week1.html'"><div class="nav-dot" style="background:#185FA5"></div>Week 1 Module</div>
   </div>
   <div class="nav-group">

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Submissions — AI Automation Bootcamp</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; line-height: 1.7; }
+  @media (prefers-color-scheme: dark) { body { background: #141414; color: #e8e6e0; } }
+
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar { width: 220px; flex-shrink: 0; border-right: 1px solid #eee; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; }
+  @media (prefers-color-scheme: dark) { .sidebar { background: #1a1a1a; border-color: #2a2a2a; } }
+  @media (max-width: 700px) { .sidebar { display: none; } }
+
+  .sidebar-top { padding: 20px 16px 14px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .sidebar-top { border-color: #2a2a2a; } }
+  .back-link { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #888; cursor: pointer; text-decoration: none; margin-bottom: 10px; transition: color 0.15s; }
+  .back-link:hover { color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .back-link:hover { color: #e8e6e0; } }
+  .sidebar-title { font-size: 13px; font-weight: 500; }
+  .sidebar-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .nav-group { padding: 10px 0 4px; }
+  .nav-group-label { font-size: 10px; font-weight: 500; color: #bbb; text-transform: uppercase; letter-spacing: 0.08em; padding: 0 16px 4px; }
+  .nav-item { display: block; font-size: 12px; color: #666; padding: 5px 16px; cursor: pointer; transition: all 0.12s; border-left: 2px solid transparent; }
+  @media (prefers-color-scheme: dark) { .nav-item { color: #888; } }
+  .nav-item:hover { background: #f0f0f0; color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .nav-item:hover { background: #222; color: #e8e6e0; } }
+  .nav-item.active { background: #f0f0f0; color: #1a1a1a; border-left-color: #1a1a1a; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .nav-item.active { background: #222; color: #e8e6e0; border-left-color: #e8e6e0; } }
+
+  .main { flex: 1; overflow-y: auto; padding: 36px 44px; }
+  @media (max-width: 700px) { .main { padding: 20px; } }
+
+  .page-title { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  .page-sub { font-size: 14px; color: #888; margin-bottom: 28px; }
+
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; color: #666; cursor: pointer; background: transparent; transition: all 0.12s; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { .filter-btn { border-color: #333; color: #888; } }
+  .filter-btn:hover { border-color: #999; color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .filter-btn:hover { color: #e8e6e0; } }
+  .filter-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  @media (prefers-color-scheme: dark) { .filter-btn.active { background: #e8e6e0; color: #1a1a1a; border-color: #e8e6e0; } }
+
+  .stats-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat-pill { font-size: 12px; padding: 6px 14px; border-radius: 8px; border: 1px solid #eee; color: #555; }
+  @media (prefers-color-scheme: dark) { .stat-pill { border-color: #2a2a2a; color: #aaa; } }
+  .stat-pill strong { color: #1a1a1a; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .stat-pill strong { color: #e8e6e0; } }
+
+  .submission-card { border: 1px solid #eee; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { .submission-card { border-color: #2a2a2a; } }
+  .card-top { padding: 14px 16px; background: #fafafa; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; cursor: pointer; user-select: none; }
+  @media (prefers-color-scheme: dark) { .card-top { background: #1e1e1e; } }
+  .card-top:hover { background: #f4f4f4; }
+  @media (prefers-color-scheme: dark) { .card-top:hover { background: #222; } }
+  .card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .type-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+  .badge-guided { background: #E6F1FB; color: #185FA5; }
+  .badge-challenge { background: #FAEEDA; color: #854F0B; }
+  .badge-milestone { background: #E1F5EE; color: #0F6E56; }
+  .badge-other { background: #F1EFE8; color: #5F5E5A; }
+  .card-date { font-size: 11px; color: #aaa; }
+  .card-filename { font-size: 11px; font-family: 'SF Mono','Fira Code','Consolas',monospace; color: #888; background: #f0efe8; padding: 2px 6px; border-radius: 4px; }
+  @media (prefers-color-scheme: dark) { .card-filename { background: #252525; } }
+  .chevron { font-size: 10px; color: #aaa; transition: transform 0.2s; flex-shrink: 0; margin-top: 3px; }
+
+  .card-body { display: none; border-top: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .card-body { border-color: #2a2a2a; } }
+  .card-body.open { display: block; }
+
+  .problem-section { padding: 14px 16px; border-bottom: 1px solid #eee; background: #fafafa; }
+  @media (prefers-color-scheme: dark) { .problem-section { background: #1e1e1e; border-color: #2a2a2a; } }
+  .section-label-sm { font-size: 10px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .problem-text { font-size: 13px; color: #555; line-height: 1.6; }
+  @media (prefers-color-scheme: dark) { .problem-text { color: #aaa; } }
+
+  .code-section { padding: 14px 16px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .code-section { border-color: #2a2a2a; } }
+  .code-block { background: #f6f6f4; border-radius: 8px; padding: 14px 16px; font-family: 'SF Mono','Fira Code','Consolas',monospace; font-size: 12px; line-height: 1.6; white-space: pre-wrap; max-height: 320px; overflow-y: auto; border: 1px solid #eee; margin-top: 8px; }
+  @media (prefers-color-scheme: dark) { .code-block { background: #1a1a1a; border-color: #2a2a2a; color: #e8e6e0; } }
+
+  .notes-section { padding: 12px 16px; }
+  .notes-text { font-size: 13px; color: #888; line-height: 1.6; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: #bbb; }
+  .empty-state p { font-size: 14px; margin-bottom: 8px; }
+  .empty-state small { font-size: 12px; color: #ccc; }
+
+  .loading { text-align: center; padding: 40px; color: #aaa; font-size: 13px; }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; display: inline-block; margin-right: 5px; vertical-align: middle; }
+  .sync-dot.synced { background: #1D9E75; }
+  .sync-dot.syncing { background: #EF9F27; }
+  .sync-dot.error { background: #E24B4A; }
+  .sync-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #888; padding: 8px 16px; border-bottom: 1px solid #eee; }
+  @media (prefers-color-scheme: dark) { .sync-row { border-color: #2a2a2a; } }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-top">
+    <a class="back-link" href="index.html">← Back to Hub</a>
+    <div class="sidebar-title">My Submissions</div>
+    <div class="sidebar-sub">All saved work in one place</div>
+  </div>
+  <div class="sync-row">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Loading...</span>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Filter by week</div>
+    <div class="nav-item active" onclick="filterWeek('all', this)">All submissions</div>
+    <div class="nav-item" onclick="filterWeek('Week 1', this)">Week 1</div>
+    <div class="nav-item" onclick="filterWeek('Week 2', this)">Week 2</div>
+    <div class="nav-item" onclick="filterWeek('Week 3', this)">Week 3</div>
+    <div class="nav-item" onclick="filterWeek('Week 4', this)">Week 4</div>
+    <div class="nav-item" onclick="filterWeek('Week 5', this)">Week 5</div>
+    <div class="nav-item" onclick="filterWeek('Week 6', this)">Week 6</div>
+    <div class="nav-item" onclick="filterWeek('Week 7', this)">Week 7</div>
+    <div class="nav-item" onclick="filterWeek('Week 8', this)">Week 8</div>
+    <div class="nav-item" onclick="filterWeek('Week 9', this)">Week 9</div>
+    <div class="nav-item" onclick="filterWeek('Week 10', this)">Week 10</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Filter by type</div>
+    <div class="nav-item" onclick="filterType('guided', this)">Guided Practice</div>
+    <div class="nav-item" onclick="filterType('challenge', this)">Challenges</div>
+    <div class="nav-item" onclick="filterType('milestone', this)">Milestones</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="page-title">My Submissions</div>
+  <p class="page-sub">Every piece of work you've saved — exercises, challenges, and milestones — all in one place.</p>
+
+  <div class="stats-row" id="stats-row">
+    <div class="stat-pill"><strong id="stat-total">0</strong> total submissions</div>
+    <div class="stat-pill"><strong id="stat-milestones">0</strong> milestones</div>
+    <div class="stat-pill"><strong id="stat-exercises">0</strong> exercises</div>
+  </div>
+
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" onclick="filterType('all', this)">All</button>
+    <button class="filter-btn" onclick="filterType('guided', this)">Guided Practice</button>
+    <button class="filter-btn" onclick="filterType('challenge', this)">Challenges</button>
+    <button class="filter-btn" onclick="filterType('milestone', this)">Milestones</button>
+  </div>
+
+  <div id="submission-list"><div class="loading"><span class="sync-dot syncing"></span> Loading submissions...</div></div>
+</div>
+</div>
+
+<script>
+const SUBMIT_BIN = '69c6d3bcb7ec241ddcae225c';
+const API_KEY    = '$2a$10$76FBJXGqFrFTplqqEofln.iCs9sAaBZtsOTu6tp73cB8j/QmWUZym';
+const BASE       = 'https://api.jsonbin.io/v3/b';
+
+let allSubmissions = [];
+let activeWeek = 'all';
+let activeType = 'all';
+
+const FILE_NAMES = {
+  'Exercise 1.1 — Guided Practice':               '1.1_Week1_Practice.py',
+  'Challenges 2.1–2.4 — Guided Practice Part 2':  '1.2_Week1_Challenge.py',
+  'Week 1 Milestone':                              '1.3_Week1_Milestone.py',
+  'Exercise 2.1 — Guided Practice':               '2.1_Week2_Practice.py',
+  'Challenges — Week 2 Part 2':                   '2.2_Week2_Challenge.py',
+  'Week 2 Milestone':                              '2.3_Week2_Milestone.py',
+};
+
+const WEEK_MAP = {
+  'w1':'Week 1','w2':'Week 2','w3':'Week 3','w4':'Week 4','w5':'Week 5',
+  'w6':'Week 6','w7':'Week 7','w8':'Week 8','w9':'Week 9','w10':'Week 10'
+};
+
+function getWeekFromType(type) {
+  const m = type.match(/[Ww](?:eek\s*)?(\d+)/);
+  if (m) return 'Week ' + m[1];
+  const fn = FILE_NAMES[type] || '';
+  const fm = fn.match(/^w(\d+)/);
+  if (fm) return 'Week ' + fm[1];
+  return 'Unknown';
+}
+
+function getBadgeClass(type) {
+  const t = type.toLowerCase();
+  if (t.includes('milestone')) return 'badge-milestone';
+  if (t.includes('challenge')) return 'badge-challenge';
+  if (t.includes('guided') || t.includes('exercise')) return 'badge-guided';
+  return 'badge-other';
+}
+
+function getFilename(type) {
+  return FILE_NAMES[type] || '';
+}
+
+function setSyncStatus(status, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + status;
+  lbl.textContent = label;
+}
+
+async function loadSubmissions() {
+  setSyncStatus('syncing', 'Loading...');
+  try {
+    const r = await fetch(`${BASE}/${SUBMIT_BIN}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+    const j = await r.json();
+    if (j.record && j.record.submissions) {
+      allSubmissions = j.record.submissions;
+    }
+    setSyncStatus('synced', 'Synced');
+  } catch(e) {
+    try {
+      const s = localStorage.getItem('hub-submit');
+      if (s) allSubmissions = JSON.parse(s).submissions || [];
+    } catch(e2) {}
+    setSyncStatus('error', 'Offline — showing local data');
+  }
+  renderStats();
+  renderSubmissions();
+}
+
+function renderStats() {
+  const total      = allSubmissions.length;
+  const milestones = allSubmissions.filter(s => s.type.toLowerCase().includes('milestone')).length;
+  const exercises  = total - milestones;
+  document.getElementById('stat-total').textContent      = total;
+  document.getElementById('stat-milestones').textContent = milestones;
+  document.getElementById('stat-exercises').textContent  = exercises;
+}
+
+function renderSubmissions() {
+  const list = document.getElementById('submission-list');
+  let filtered = allSubmissions;
+
+  if (activeWeek !== 'all') {
+    filtered = filtered.filter(s => getWeekFromType(s.type) === activeWeek);
+  }
+  if (activeType !== 'all') {
+    filtered = filtered.filter(s => {
+      const t = s.type.toLowerCase();
+      if (activeType === 'guided')    return t.includes('guided') || t.includes('exercise');
+      if (activeType === 'challenge') return t.includes('challenge');
+      if (activeType === 'milestone') return t.includes('milestone');
+      return true;
+    });
+  }
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><p>No submissions yet${activeWeek !== 'all' || activeType !== 'all' ? ' matching this filter' : ''}.</p><small>Complete exercises in the week modules and save your work to see it here.</small></div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  filtered.forEach((s, idx) => {
+    const d = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+    const badgeClass = getBadgeClass(s.type);
+    const filename   = getFilename(s.type);
+    const week       = getWeekFromType(s.type);
+
+    const card = document.createElement('div');
+    card.className = 'submission-card';
+
+    card.innerHTML = `
+      <div class="card-top" onclick="toggleCard(this)">
+        <div class="card-meta">
+          <span class="type-badge ${badgeClass}">${s.type}</span>
+          ${filename ? `<span class="card-filename">${filename}</span>` : ''}
+          <span class="card-date">${d}</span>
+          ${week !== 'Unknown' ? `<span style="font-size:11px;color:#bbb">${week}</span>` : ''}
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        ${s.problem ? `
+        <div class="problem-section">
+          <div class="section-label-sm">The problem</div>
+          <div class="problem-text">${s.problem}</div>
+        </div>` : ''}
+        <div class="code-section">
+          <div class="section-label-sm">Your script${filename ? ' — ' + filename : ''}</div>
+          <div class="code-block">${escHtml(s.code)}</div>
+        </div>
+        ${s.output ? `
+        <div class="code-section">
+          <div class="section-label-sm">Terminal output</div>
+          <div class="code-block">${escHtml(s.output)}</div>
+        </div>` : ''}
+        ${s.notes ? `
+        <div class="notes-section">
+          <div class="section-label-sm">Your notes</div>
+          <div class="notes-text">${escHtml(s.notes)}</div>
+        </div>` : ''}
+      </div>`;
+
+    list.appendChild(card);
+  });
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toggleCard(header) {
+  const body    = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen  = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+function filterWeek(week, el) {
+  activeWeek = week;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderSubmissions();
+}
+
+function filterType(type, el) {
+  activeType = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderSubmissions();
+}
+
+loadSubmissions();
+</script>
+</body>
+</html>

@@ -113,7 +113,7 @@
   .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
   .stat-card { padding: 14px; border: 1px solid #eee; border-radius: 10px; text-align: center; }
   @media (prefers-color-scheme: dark) { .stat-card { border-color: #2a2a2a; } }
-  .stat-num { font-size: 26px; font-weight: 500; }
+  .stat-num { font-size: 20px; font-weight: 500; }
   .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
 
   /* ── CONCEPTS ── */
@@ -254,7 +254,7 @@
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Submit</div>
-    <div class="nav-item" onclick="navTo('submissions')"><div class="nav-dot" style="background:#993556"></div>My Submissions</div>
+    <div class="nav-item" onclick="window.location.href='submissions.html'"><div class="nav-dot" style="background:#993556"></div>My Submissions</div>
   </div>
   <div class="overall-bar-wrap">
     <div class="overall-bar-label"><span>Concepts</span><span id="overall-pct">0%</span></div>
@@ -270,9 +270,9 @@
   <div class="page-title">Good to have you back.</div>
   <p class="page-sub">Everything syncs automatically across your Mac and work computer.</p>
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num" id="d-concepts">0</div><div class="stat-label">Concepts checked off</div></div>
-    <div class="stat-card"><div class="stat-num" id="d-hours">0</div><div class="stat-label">Hours logged</div></div>
-    <div class="stat-card"><div class="stat-num" id="d-milestones">0</div><div class="stat-label">Milestones hit</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-concepts">0</div><div class="stat-label" id="d-concepts-label">Concepts checked off</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-hours">0</div><div class="stat-label" id="d-hours-label">Hours logged</div></div>
+    <div class="stat-card"><div class="stat-num" id="d-milestones">0</div><div class="stat-label" id="d-milestones-label">Milestones hit</div></div>
   </div>
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-num" id="d-days">0</div><div class="stat-label">Days logged</div></div>
@@ -340,7 +340,7 @@
 
 <!-- SYLLABUS -->
 <div class="panel" id="panel-syllabus">
-  <div class="page-title">Syllabus</div>
+  <div class="page-title">Course Scope</div>
   <p class="page-sub">10 weeks · Mar 27 – Jun 5, 2026 · 30 hrs/week</p>
   <div class="meta-pills">
     <span class="meta-pill">Start: Fri Mar 27, 2026</span>
@@ -705,7 +705,7 @@ const CONCEPTS = {
   p2:['Reading text files','Writing text files','Absolute vs relative file paths','CSV module — reading','CSV module — writing','JSON reading and writing','Try/except error handling','Catching specific error types','Graceful failure patterns','Pandas DataFrames basics','Filtering and selecting columns','Boolean indexing in pandas','GroupBy and aggregations','Sorting and ranking','Merging DataFrames','Exporting to CSV and Excel'],
   p3:['What an API is','GET vs POST requests','Status codes and headers','The requests library','Parsing JSON responses','API authentication and tokens','Salesforce REST API basics','SOQL queries from Python','Handling API errors','Rate limit management','Pagination through results','Intacct API basics','Cross-system data reconciliation'],
   p4:['Anthropic Python SDK setup','First Claude API call','Tokens and cost awareness','Prompt engineering — role and context','Prompt engineering — structured output','Parsing JSON from Claude','Building prompts dynamically','Chaining multiple AI calls','Chunking large datasets','Invoice narrative generation','Email delivery from Python','Production script packaging'],
-  p5:['Cron job scheduling on Mac','Logging script runs to file','Environment variables for credentials','Workato conceptual understanding','Workato recipe mapping','Portfolio documentation','Time savings quantification','90-day roadmap building','August conversation prep']
+  p5:['Cron job scheduling on Mac','Logging script runs to file','Environment variables for credentials','Workato conceptual understanding','Workato recipe mapping','Portfolio documentation','Time savings quantification','90-day roadmap building','Role transition planning']
 };
 
 const PHASE_LABELS = {p1:'Phase 1 — Foundations',p2:'Phase 2 — Files and Data',p3:'Phase 3 — APIs',p4:'Phase 4 — AI Integration',p5:'Phase 5 — Automation'};
@@ -721,7 +721,7 @@ const MILESTONES = [
   {id:'m7',week:'Week 7',title:'AI-powered anomaly detection report',sub:'Live Kantata data processed by Claude'},
   {id:'m8',week:'Week 8',title:'Self-running AI report with email',sub:'Pulls data, generates commentary, emails itself'},
   {id:'m9',week:'Week 9',title:'Scheduled automation with logging',sub:'Runs on its own, zero manual involvement'},
-  {id:'m10',week:'Week 10',title:'August portfolio complete',sub:'Business case written, roadmap built, Jack conversation had'}
+  {id:'m10',week:'Week 10',title:'Week 10 milestone complete',sub:'Portfolio built, automations documented, time savings quantified'}
 ];
 
 const WEEK_BG = {'Week 1':'#E6F1FB','Week 2':'#E6F1FB','Week 3':'#EAF3DE','Week 4':'#EAF3DE','Week 5':'#FAEEDA','Week 6':'#FAEEDA','Week 7':'#E1F5EE','Week 8':'#E1F5EE','Week 9':'#EEEDFE','Week 10':'#EEEDFE'};
@@ -896,9 +896,15 @@ function renderDashboard() {
   const sorted  = [...new Set(trackerData.logs.map(l=>l.date))].sort();
   let streak=0;
   if(sorted.length){streak=1;for(let i=sorted.length-1;i>0;i--){const diff=(new Date(sorted[i]+'T12:00:00')-new Date(sorted[i-1]+'T12:00:00'))/86400000;if(diff<=3)streak++;else break;}}
-  document.getElementById('d-concepts').textContent    = cdone;
-  document.getElementById('d-hours').textContent       = hours%1===0?hours:hours.toFixed(1);
-  document.getElementById('d-milestones').textContent  = mdone;
+  const ctotal = all.length;
+  const mtotal = MILESTONES.length;
+  const htotal = 300; // estimated total course hours (30 hrs/week x 10 weeks)
+  document.getElementById('d-concepts').textContent       = cdone + ' / ' + ctotal;
+  document.getElementById('d-concepts-label').textContent = 'concepts checked off';
+  document.getElementById('d-hours').textContent          = (hours%1===0?hours:hours.toFixed(1)) + ' / ' + htotal;
+  document.getElementById('d-hours-label').textContent    = 'hours logged';
+  document.getElementById('d-milestones').textContent     = mdone + ' / ' + mtotal;
+  document.getElementById('d-milestones-label').textContent = 'milestones hit';
   document.getElementById('d-days').textContent        = days;
   document.getElementById('d-streak').textContent      = streak;
   document.getElementById('d-submissions').textContent = sdone;
@@ -950,15 +956,15 @@ function renderSyllabus() {
     ]},
     {phase:'p3',title:'APIs — Connecting to Real Systems',dates:'Apr 27 – May 8',weeks:[
       {num:'Week 5',title:'HTTP and the Requests Library',date:'Apr 27 – May 1',goal:'Make your first real API calls. Pull live data into Python.',days:[['Mon Apr 27','What is an API. HTTP — GET vs POST, status codes, headers. Call a free public API and print the response.'],['Tue Apr 28','Parsing JSON API responses. Navigate nested objects. Extract 5 fields from an API response.'],['Wed Apr 29','Authentication — API keys, Bearer tokens, headers. First authenticated Salesforce API call.'],['Thu Apr 30','SOQL via Salesforce API. Pull Kantata time entries directly into Python without exporting a CSV.'],['Fri May 1','Handle API errors and rate limits. Paginate through large results. Full month time entry summary automatically.']],why:'This is where scripts stop touching fake data and start touching your real job. Pulling live Kantata data via API instead of manually exporting CSVs is your first real automation.',ms:'Script that pulls live Kantata time entries and produces a summary automatically',msc:'p3-label'},
-      {num:'Week 6',title:'Salesforce API Deep Dive + Intacct',date:'May 4 – May 8',goal:'Automate at least one real job task end to end.',days:[['Mon May 4','Salesforce object model from Python. Pull Opportunities, Time Entries, Accounts. Compare to UI.'],['Tue May 5','Consultant utilization report — pull from Kantata via API, calculate hours vs target, output to Excel.'],['Wed May 6','Intacct API basics. Authenticate and query. Pull invoice records and cross-reference with Kantata.'],['Thu May 7','Cross-system reconciliation script. Flag time entries with no corresponding invoice.'],['Fri May 8','Document everything this week. One-page summary per automation. Start of August portfolio.']],why:'Your first documented proof of concept. Real automation, real systems, real output that saves real time. This is what you bring to Jack in August.',ms:'First documented automation — real data, real output, time savings quantified',msc:'p3-label'},
+      {num:'Week 6',title:'Salesforce API Deep Dive + Intacct',date:'May 4 – May 8',goal:'Automate at least one real job task end to end.',days:[['Mon May 4','Salesforce object model from Python. Pull Opportunities, Time Entries, Accounts. Compare to UI.'],['Tue May 5','Consultant utilization report — pull from Kantata via API, calculate hours vs target, output to Excel.'],['Wed May 6','Intacct API basics. Authenticate and query. Pull invoice records and cross-reference with Kantata.'],['Thu May 7','Cross-system reconciliation script. Flag time entries with no corresponding invoice.'],['Fri May 8','Document everything this week. One-page summary per automation. Start of August portfolio.']],why:'Your first documented proof of concept. Real automation, real systems, real output that saves real time. This is your first real proof of concept — a working automation you can demonstrate.',ms:'First documented automation — real data, real output, time savings quantified',msc:'p3-label'},
     ]},
     {phase:'p4',title:'AI Integration — Claude API + Prompt Engineering',dates:'May 11 – May 22',weeks:[
       {num:'Week 7',title:'Claude API + Prompt Engineering',date:'May 11 – May 15',goal:'Make your first AI-powered automation.',days:[['Mon May 11','Install Anthropic Python SDK. First Claude API call from code. Understand tokens, max_tokens, cost.'],['Tue May 12','Prompt engineering — role, context, task, format. Take a time entry exception and have Claude explain it.'],['Wed May 13','Structured outputs — ask Claude to respond in JSON. Parse the response back into Python.'],['Thu May 14','Build prompts dynamically from real data using f-strings. The AI sees real Kantata data.'],['Fri May 15','Anomaly detection script — pull entries from Kantata, pass unusual ones to Claude, get explanations.']],why:'This is where everything compounds. Real data from your real job, passed to an AI model, intelligent output back — automatically. The core of every AI automation you will ever build.',ms:'AI-powered anomaly detection report using live Kantata data',msc:'p4-label'},
-      {num:'Week 8',title:'Chaining AI Calls + Complex Workflows',date:'May 18 – May 22',goal:'Build multi-step AI workflows.',days:[['Mon May 18','Chain API calls — output of one Claude call as input to next. Classify entries then generate commentary.'],['Tue May 19','Token limits and large datasets — chunking, batching, rate limits. Handle a full month without hitting limits.'],['Wed May 20','Invoice narrative generator — plain English summary of monthly billing activity per client.'],['Thu May 21','Email delivery via smtplib. Anomaly report now runs, generates, and emails itself. Zero human involvement.'],['Fri May 22','Document and package weeks 7 and 8 as clean production-ready scripts with README files.']],why:'A script that emails itself is a real automation. The invoice narrative generator is directly demonstrable to Jack — it shows intelligence, not just data processing.',ms:'Self-running report that pulls data, generates AI commentary, and emails itself',msc:'p4-label'},
+      {num:'Week 8',title:'Chaining AI Calls + Complex Workflows',date:'May 18 – May 22',goal:'Build multi-step AI workflows.',days:[['Mon May 18','Chain API calls — output of one Claude call as input to next. Classify entries then generate commentary.'],['Tue May 19','Token limits and large datasets — chunking, batching, rate limits. Handle a full month without hitting limits.'],['Wed May 20','Invoice narrative generator — plain English summary of monthly billing activity per client.'],['Thu May 21','Email delivery via smtplib. Anomaly report now runs, generates, and emails itself. Zero human involvement.'],['Fri May 22','Document and package weeks 7 and 8 as clean production-ready scripts with README files.']],why:'A script that emails itself is a real automation. The invoice narrative generator demonstrates real AI intelligence applied to a real finance workflow — not just data processing.',ms:'Self-running report that pulls data, generates AI commentary, and emails itself',msc:'p4-label'},
     ]},
     {phase:'p5',title:'Automation, Scheduling, and August Prep',dates:'May 25 – Jun 5',weeks:[
-      {num:'Week 9',title:'Scheduling, Logging, and Production Readiness',date:'May 25 – May 29',goal:'Make your automations run themselves.',days:[['Mon May 25','Cron jobs on Mac — schedule monthly time entry report to run on the 1st at 8am automatically.'],['Tue May 26','Logging — write script run results, errors, timestamps to a log file. Every automation logs now.'],['Wed May 27','Environment variables — store API keys securely. Refactor all scripts. Required before showing anyone.'],['Thu May 28','Workato deep dive — documentation, YouTube walkthroughs. Map Python automations to Workato recipes.'],['Fri May 29','Make the case to Jack for Workato access. Specific, informed conversation using this week\'s vocabulary.']],why:'Scripts that run manually are tools. Scripts that run themselves are automations. You can\'t show Jack something that requires you at a keyboard to run it.',ms:'At least one automation running on a schedule with logging, zero manual involvement',msc:'p5-label'},
-      {num:'Week 10',title:'Portfolio, Documentation, and August Prep',date:'Jun 1 – Jun 5',goal:'Package everything into a demonstrable portfolio.',days:[['Mon Jun 1','Inventory everything built. One-paragraph description per automation — what it does, what it replaced, time saved.'],['Tue Jun 2','Quantify time savings — hours/month, hours/year, salary cost equivalent. Business case for August.'],['Wed Jun 3','Build 90-day roadmap — specific automations, systems, outcomes for post-August full-time focus.'],['Thu Jun 4','Rehearse August conversation. Schedule a casual check-in with Jack — plant the seed.'],['Fri Jun 5','Free day. Build anything you want. Explore, break something, extend beyond scope.']],why:'The portfolio is what turns 10 weeks of learning into a career inflection point. Jack needs to walk upstairs with something concrete. Not pitching — presenting evidence.',ms:'Portfolio complete — business case written, roadmap built, Jack conversation had',msc:'p5-label'},
+      {num:'Week 9',title:'Scheduling, Logging, and Production Readiness',date:'May 25 – May 29',goal:'Make your automations run themselves.',days:[['Mon May 25','Cron jobs on Mac — schedule monthly time entry report to run on the 1st at 8am automatically.'],['Tue May 26','Logging — write script run results, errors, timestamps to a log file. Every automation logs now.'],['Wed May 27','Environment variables — store API keys securely. Refactor all scripts. Required before showing anyone.'],['Thu May 28','Workato deep dive — documentation, YouTube walkthroughs. Map Python automations to Workato recipes.'],['Fri May 29','Prepare a specific, informed case for Workato access using the vocabulary you learned this week.']],why:'Scripts that run manually are tools. Scripts that run themselves are automations. A real automation runs on a schedule and logs its own results without you touching it.',ms:'At least one automation running on a schedule with logging, zero manual involvement',msc:'p5-label'},
+      {num:'Week 10',title:'Portfolio, Documentation, and August Prep',date:'Jun 1 – Jun 5',goal:'Package everything into a demonstrable portfolio.',days:[['Mon Jun 1','Inventory everything built. One-paragraph description per automation — what it does, what it replaced, time saved.'],['Tue Jun 2','Quantify time savings — hours per month, hours per year, dollar value. Build the business case.'],['Wed Jun 3','Build a 90-day roadmap — specific automations, systems, and outcomes for when you transition into full-time automation work.'],['Thu Jun 4','Review your portfolio and roadmap. Identify the right moment to propose a formal role transition.'],['Fri Jun 5','Free day. Build anything you want. Explore, break something, extend beyond scope.']],why:'The portfolio is what turns 10 weeks of learning into a career inflection point. The portfolio is what turns 10 weeks of learning into a career inflection point. Concrete work, documented outcomes, a clear roadmap for what comes next.',ms:'Portfolio complete — automations documented, business case written, roadmap built',msc:'p5-label'},
     ]},
   ];
 

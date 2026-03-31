@@ -205,6 +205,48 @@
   .pill-green { background: rgba(79,247,158,0.15); color: var(--accent3); }
   .pill-yellow { background: rgba(247,196,79,0.15); color: var(--accent2); }
 
+  /* ── DEEP DIVIDER ── */
+  .deep-divider { display: flex; align-items: center; gap: 14px; margin: 48px 0 32px; }
+  .deep-divider::before, .deep-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .deep-divider span { font-family: var(--mono-font); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); white-space: nowrap; padding: 0 4px; }
+
+  /* ── SECTION PDF LINK ── */
+  .section-pdf-link { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono-font); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 18px; transition: color 0.15s; opacity: 0.7; }
+  .section-pdf-link:hover { color: var(--accent); opacity: 1; }
+
+  /* ── DEEP JUMP LINK ── */
+  .deep-jump-link { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono-font); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; margin: 0 0 18px; transition: color 0.15s; opacity: 0.7; }
+  .deep-jump-link:hover { color: var(--accent); opacity: 1; }
+
+  /* ── TAG DETAILED ── */
+  .tag-detailed { background: rgba(144,153,184,0.12); color: var(--muted); }
+
+  /* ── OVERVIEW VISUAL ZONE ── */
+  .overview-zone { margin-top: 32px; }
+  .overview-zone-title { font-family: var(--mono-font); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; opacity: 0.7; }
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; border-left: 3px solid var(--accent); }
+  .concept-card.yellow { border-left-color: var(--accent2); }
+  .concept-card.red { border-left-color: var(--accent4); }
+  .concept-card.green { border-left-color: var(--accent3); }
+  .concept-label { font-family: var(--heading-font); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; line-height: 1.3; }
+  .concept-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; text-align: center; }
+  .stat-number { font-family: var(--heading-font); font-size: 28px; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+  .stat-number.yellow { color: var(--accent2); }
+  .stat-number.green { color: var(--accent3); }
+  .stat-label { font-family: var(--mono-font); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .stat-source { font-size: 10px; color: var(--muted); opacity: 0.6; }
+  .formula-visual { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .formula-visual-title { font-family: var(--mono-font); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; opacity: 0.7; }
+  .formula-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .formula-row:last-child { margin-bottom: 0; }
+  .formula-name { font-family: var(--mono-font); font-size: 11px; color: var(--muted); width: 120px; flex-shrink: 0; }
+  .formula-eq { font-family: var(--mono-font); font-size: 13px; color: var(--accent3); background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 6px; padding: 8px 14px; flex: 1; }
+  .jcurve-container { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .jcurve-title { font-family: var(--mono-font); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; opacity: 0.7; }
+
   /* ── MISC ── */
   p { margin-bottom: 12px; }
   p:last-child { margin-bottom: 0; }
@@ -221,8 +263,8 @@
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="sidebar-top">
-    <a class="back-link" href="index.html">← Back to Hub</a>
-    <div class="sidebar-label">Additional Resources</div>
+    <a class="back-link" href="index.html">← Hub</a>
+    <div class="sidebar-label">SBRM</div>
     <div class="sidebar-title">Software Business Reading Materials</div>
   </div>
 
@@ -233,7 +275,7 @@
 
   <div class="nav-section">
     <div class="nav-section-title">A. Fundamental Knowledge</div>
-    <a class="nav-link" href="#profitability"><span class="nav-dot" style="background:var(--accent)"></span>SaaS Profitability & Valuation</a>
+    <a class="nav-link" href="#profitability"><span class="nav-dot" style="background:var(--accent)"></span>Profitability & Valuation</a>
     <a class="nav-link" href="#arr-billings-rpo"><span class="nav-dot" style="background:var(--accent)"></span>ARR, Billings & RPO</a>
     <a class="nav-link" href="#rule-of-40"><span class="nav-dot" style="background:var(--accent)"></span>Rule of 40</a>
     <a class="nav-link" href="#ltv-cac"><span class="nav-dot" style="background:var(--accent)"></span>LTV / CAC</a>
@@ -242,27 +284,33 @@
 
   <div class="nav-section">
     <div class="nav-section-title">B. Accounting Knowledge</div>
-    <a class="nav-link" href="#saas-transition"><span class="nav-dot" style="background:var(--accent2)"></span>Why Companies Go SaaS</a>
+    <a class="nav-link" href="#saas-transition"><span class="nav-dot" style="background:var(--accent2)"></span>SaaS Transition</a>
     <a class="nav-link" href="#asc-606"><span class="nav-dot" style="background:var(--accent2)"></span>ASC 606</a>
   </div>
 
   <div class="nav-section">
-    <div class="nav-section-title">Deep Dives</div>
-    <a class="nav-link" href="#saas-transition-deep"><span class="nav-dot" style="background:var(--accent2)"></span>Jefferies — SaaS Transition</a>
-    <a class="nav-link" href="#ltv-cac-deep"><span class="nav-dot" style="background:var(--accent)"></span>Goldman — LTV:CAC</a>
-    <a class="nav-link" href="#arr-billings-rpo-deep"><span class="nav-dot" style="background:var(--accent)"></span>RBC — ARR, Billings & RPO</a>
+    <div class="nav-section-title">C. Competitive Knowledge</div>
+    <a class="nav-link" href="#musical-chairs"><span class="nav-dot" style="background:var(--accent4)"></span>Musical Chairs</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">D. Detailed Knowledge</div>
+    <a class="nav-link" href="#wso-pe"><span class="nav-dot" style="background:var(--muted)"></span>PE Interview Prep</a>
+    <a class="nav-link" href="#wso-technical"><span class="nav-dot" style="background:var(--muted)"></span>Technical Interview Guide</a>
   </div>
 
   <div class="pdf-section">
     <div class="pdf-section-title">Source PDFs</div>
-    <a class="pdf-link" href="pdfs/Needham profitability 4-26-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Needham — Profitability</a>
-    <a class="pdf-link" href="pdfs/RBC ARR Billings RPO 4-28-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> RBC — ARR/Billings/RPO</a>
-    <a class="pdf-link" href="pdfs/Barclays Rule of 40 4-4-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Barclays — Rule of 40</a>
-    <a class="pdf-link" href="pdfs/Goldman Benchmarking LTV CAC 3-8-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Goldman — LTV:CAC</a>
-    <a class="pdf-link" href="pdfs/Baird Magic Number 4-26-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Baird — Magic Number</a>
-    <a class="pdf-link" href="pdfs/Jefferies SaaS Transition 2-28-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Jefferies — SaaS Transition</a>
-    <a class="pdf-link" href="pdfs/asc-606-summary.pdf" target="_blank"><span class="pdf-link-icon">↗</span> ASC 606 Summary</a>
-    <a class="pdf-link" href="pdfs/DB musical chairs 4-4-2022.pdf" target="_blank"><span class="pdf-link-icon">↗</span> DB — Musical Chairs</a>
+    <a class="pdf-link" href="pdfs/1_Needham_Profitability.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Needham — Profitability</a>
+    <a class="pdf-link" href="pdfs/2_Billings_RPO.pdf" target="_blank"><span class="pdf-link-icon">↗</span> RBC — Billings & RPO</a>
+    <a class="pdf-link" href="pdfs/3_Rule_of_40.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Barclays — Rule of 40</a>
+    <a class="pdf-link" href="pdfs/4_LTV_CAC.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Goldman — LTV:CAC</a>
+    <a class="pdf-link" href="pdfs/5_Baird Magic Number.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Baird — Magic Number</a>
+    <a class="pdf-link" href="pdfs/6_SaaS_Transition.pdf" target="_blank"><span class="pdf-link-icon">↗</span> Jefferies — SaaS Transition</a>
+    <a class="pdf-link" href="pdfs/7_asc_606.pdf" target="_blank"><span class="pdf-link-icon">↗</span> ASC 606</a>
+    <a class="pdf-link" href="pdfs/8_Musical_chairs.pdf" target="_blank"><span class="pdf-link-icon">↗</span> DB — Musical Chairs</a>
+    <a class="pdf-link" href="pdfs/9_Interview_Prep.pdf" target="_blank"><span class="pdf-link-icon">↗</span> WSO — PE Prep</a>
+    <a class="pdf-link" href="pdfs/10_Interview_Guide.pdf" target="_blank"><span class="pdf-link-icon">↗</span> WSO — Technical Guide</a>
   </div>
 </nav>
 
@@ -293,30 +341,160 @@
       <div class="section-header">
         <div class="section-title">Table of Contents</div>
       </div>
-      <p style="color:var(--muted);margin-bottom:22px;">The readings are organized into three knowledge tiers. Fundamental and Accounting are the core material — what you'll actually need to understand SaaS business models and investor conversations. Competitive is supplementary context.</p>
+      <p style="color:var(--muted);margin-bottom:22px;">The readings are organized into four knowledge tiers. Fundamental and Accounting are the core material — what you need to understand SaaS business models and investor conversations. Competitive is supplementary context. Detailed is advanced reference, out of scope for current study.</p>
 
-      <div class="toc-grid">
+      <div class="toc-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
         <a class="toc-card blue" href="#profitability">
           <div class="toc-num">A</div>
           <div class="toc-card-title">Fundamental Knowledge</div>
-          <div class="toc-card-desc">Profitability & valuation, ARR/Billings/RPO, Rule of 40, LTV/CAC, Magic Number. The core metrics framework for evaluating SaaS companies.</div>
+          <div class="toc-card-desc">Profitability & valuation, ARR/Billings/RPO, Rule of 40, LTV:CAC, Magic Number. The core metrics framework for evaluating SaaS companies.</div>
         </a>
         <a class="toc-card yellow" href="#saas-transition">
           <div class="toc-num">B</div>
           <div class="toc-card-title">Accounting Knowledge</div>
           <div class="toc-card-desc">Why companies transition to SaaS, and how bookings and billings flow through to revenue under ASC 606.</div>
         </a>
-        <a class="toc-card red" href="#arr-billings-rpo-deep">
-          <div class="toc-num">↓</div>
-          <div class="toc-card-title">Deep Dives</div>
-          <div class="toc-card-desc">Full synthesis from the source reports — Jefferies SaaS Transition, Goldman LTV:CAC, RBC ARR/Billings/RPO.</div>
+        <a class="toc-card red" href="#musical-chairs">
+          <div class="toc-num">C</div>
+          <div class="toc-card-title">Competitive Knowledge</div>
+          <div class="toc-card-desc">Talent dynamics in software — how declining equity values affect retention risk and operational costs.</div>
+        </a>
+        <a class="toc-card" href="#wso-pe" style="border-color:var(--border);">
+          <div class="toc-num" style="color:var(--muted);opacity:0.3;">D</div>
+          <div class="toc-card-title">Detailed Knowledge</div>
+          <div class="toc-card-desc">Advanced PE and finance interview prep. Out of scope for current study — reference only.</div>
         </a>
       </div>
 
-      <div class="note">
-        <div class="note-label">Key Framing</div>
-        <p>Unprofitable ≠ uninvestable. GAAP losses in SaaS are often an accounting artifact, not a business quality signal. Focus on FCF trajectory, unit economics, and growth rate duration — not near-term GAAP earnings. Valuation multiples are highly sensitive to how long a company can sustain its growth rate, less so to near-term profitability.</p>
-      </div>
+      <!-- BEFORE YOU READ ZONE -->
+      <div class="overview-zone">
+        <div class="overview-zone-title">Before You Read — Key Ideas Across All Material</div>
+
+        <!-- Concept Cards -->
+        <div class="concept-grid">
+          <div class="concept-card">
+            <div class="concept-label">Unprofitable ≠ Uninvestable</div>
+            <div class="concept-desc">GAAP losses in SaaS are an accounting artifact — software companies must expense R&D and S&M headcount immediately, while retailers capitalize equivalent investments. Focus on FCF, not GAAP earnings.</div>
+          </div>
+          <div class="concept-card yellow">
+            <div class="concept-label">GAAP Revenue Is Backward-Looking</div>
+            <div class="concept-desc">Roughly 63% of a SaaS company's quarterly revenue was already in deferred revenue at the quarter's start. ARR, billings, and RPO are how investors see what's coming before it hits the income statement.</div>
+          </div>
+          <div class="concept-card yellow">
+            <div class="concept-label">The J-Curve Is Not a Business Problem</div>
+            <div class="concept-desc">A SaaS transition creates apparent revenue decline — same contract value, spread over years instead of front-loaded. The business isn't deteriorating. The accounting timing shifted.</div>
+          </div>
+          <div class="concept-card green">
+            <div class="concept-label">Growth Duration Drives Valuation More Than Margins</div>
+            <div class="concept-desc">A company growing 40% for 8 years is worth 2.8× more than the same company growing for only 4 years — regardless of near-term profitability. Sustaining the growth rate matters more than near-term margin.</div>
+          </div>
+          <div class="concept-card">
+            <div class="concept-label">Sales Efficiency Compounds or Destroys</div>
+            <div class="concept-desc">LTV:CAC and Magic Number together tell you whether to pour fuel on the go-to-market engine or fix it first. A Magic Number below 0.75 means you're destroying value with each S&M dollar spent.</div>
+          </div>
+          <div class="concept-card red">
+            <div class="concept-label">Billings Is Broken — RPO Replaced It</div>
+            <div class="concept-desc">COVID exposed billings' fragility: customers shifted to monthly billing, collapsing billings at healthy companies. ASC 606's RPO is now the preferred leading indicator for enterprise SaaS with multi-year contracts.</div>
+          </div>
+        </div>
+
+        <!-- Key Stats -->
+        <div class="overview-zone-title">Key Benchmarks</div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-label">Rule of 40 Threshold</div>
+            <div class="stat-number">≥ 40</div>
+            <div class="stat-source">Growth % + FCF Margin %</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Median LTV:CAC</div>
+            <div class="stat-number">4.1x</div>
+            <div class="stat-source">Goldman Q4 2021 sector</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">RPO Coverage Ratio</div>
+            <div class="stat-number yellow">63–66%</div>
+            <div class="stat-source">cRPO ÷ NTM Revenue (RBC)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Avg Transition Duration</div>
+            <div class="stat-number yellow">3.7 yrs</div>
+            <div class="stat-source">Jefferies (ADSK, PTC, ADBE, INTU)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Healthy LTV:CAC</div>
+            <div class="stat-number green">&gt; 3x</div>
+            <div class="stat-source">SaaS industry benchmark</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Strong Magic Number</div>
+            <div class="stat-number green">&gt; 1.0</div>
+            <div class="stat-source">Aggressively increase S&M</div>
+          </div>
+        </div>
+
+        <!-- Formulas -->
+        <div class="overview-zone-title">Core Formulas</div>
+        <div class="formula-visual">
+          <div class="formula-row">
+            <div class="formula-name">Rule of 40</div>
+            <div class="formula-eq">Revenue Growth % + FCF Margin % ≥ 40</div>
+          </div>
+          <div class="formula-row">
+            <div class="formula-name">Billings</div>
+            <div class="formula-eq">Revenue + (Ending Deferred Revenue − Beginning Deferred Revenue)</div>
+          </div>
+          <div class="formula-row">
+            <div class="formula-name">LTV / CAC</div>
+            <div class="formula-eq">(Gross Margin % × ARPU ÷ Churn Rate) ÷ (S&M Spend ÷ New Customers)</div>
+          </div>
+          <div class="formula-row">
+            <div class="formula-name">Magic Number</div>
+            <div class="formula-eq">(Quarterly Revenue_t − Revenue_t-1) × 4 ÷ S&M Spend_t-1</div>
+          </div>
+          <div class="formula-row" style="margin-bottom:0;">
+            <div class="formula-name">ARR (estimate)</div>
+            <div class="formula-eq">Most recent quarter's subscription revenue × 4</div>
+          </div>
+        </div>
+
+        <!-- J-Curve Diagram -->
+        <div class="overview-zone-title">The SaaS J-Curve</div>
+        <div class="jcurve-container">
+          <div class="jcurve-title">Revenue trajectory during a perpetual license → SaaS transition</div>
+          <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;">
+            <defs>
+              <linearGradient id="curveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#f7c44f;stop-opacity:0.8"/>
+                <stop offset="45%" style="stop-color:#f74f7c;stop-opacity:0.8"/>
+                <stop offset="100%" style="stop-color:#4ff79e;stop-opacity:0.9"/>
+              </linearGradient>
+            </defs>
+            <!-- Axes -->
+            <line x1="50" y1="20" x2="50" y2="170" stroke="#363c52" stroke-width="1"/>
+            <line x1="50" y1="170" x2="580" y2="170" stroke="#363c52" stroke-width="1"/>
+            <!-- Baseline reference -->
+            <line x1="50" y1="100" x2="580" y2="100" stroke="#363c52" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- J-Curve path -->
+            <path d="M 50,80 C 120,78 160,85 200,105 C 240,125 260,140 290,145 C 320,150 350,138 400,110 C 450,82 500,50 560,30" fill="none" stroke="url(#curveGrad)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Labels -->
+            <text x="54" y="16" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#9099b8" letter-spacing="1">REVENUE</text>
+            <text x="55" y="95" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#9099b8">Pre-transition baseline</text>
+            <!-- Phase labels -->
+            <text x="100" y="165" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#f7c44f" text-anchor="middle">Transition</text>
+            <text x="240" y="165" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#f74f7c" text-anchor="middle">J-Curve dip</text>
+            <text x="420" y="165" font-family="'IBM Plex Mono',monospace" font-size="8" fill="#4ff79e" text-anchor="middle">Subscription compounding</text>
+            <!-- Annotation -->
+            <text x="295" y="162" font-family="'IBM Plex Mono',monospace" font-size="7" fill="#9099b8" text-anchor="middle">~3.7yr avg</text>
+          </svg>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;">
+            <div style="font-size:11px;color:var(--accent2);font-family:'IBM Plex Mono',monospace;">① Revenue appears to fall<br><span style="color:var(--muted);font-size:10px;">Perpetual licenses stop; subscription base too small to offset</span></div>
+            <div style="font-size:11px;color:var(--accent4);font-family:'IBM Plex Mono',monospace;">② The pain period<br><span style="color:var(--muted);font-size:10px;">Costs held flat, GAAP margins compress. This is NOT business deterioration.</span></div>
+            <div style="font-size:11px;color:var(--accent3);font-family:'IBM Plex Mono',monospace;">③ Compounding kicks in<br><span style="color:var(--muted);font-size:10px;">Renewals require no incremental S&M. Revenue accelerates, margins expand.</span></div>
+          </div>
+        </div>
+
+      </div><!-- /overview-zone -->
     </section>
 
     <!-- ━━━ A. FUNDAMENTAL KNOWLEDGE ━━━ -->
@@ -327,9 +505,10 @@
         <span class="section-tag tag-fundamental">Fundamental · 1 of 5</span>
         <h2 class="section-title">Unprofitable ≠ Uninvestable — How Accounting Distorts Profit Views</h2>
       </div>
+      <a href="pdfs/1_Needham_Profitability.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Needham, April 2022</a>
 
       <div class="card">
-        <div class="card-source">Source: Needham Industry Update, April 26, 2022 — Priority: Crash course on company valuation</div>
+        <div class="card-source">Source: Needham Industry Update, April 26, 2022 — Crash course on company valuation</div>
 
         <div class="insight">
           <div class="insight-label">The Core Argument</div>
@@ -400,14 +579,17 @@
         <span class="section-tag tag-fundamental">Fundamental · 2 of 5</span>
         <h2 class="section-title">ARR, Billings &amp; RPO — Topline Leading Indicators</h2>
       </div>
+      <a href="pdfs/2_Billings_RPO.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — RBC, April 2022</a>
 
       <div class="note">
         <div class="note-label">Reading Guidance</div>
         <p>The RBC report covers these topline metrics in depth — the company-specific analyses are less important than the conceptual framework. The key concept: SaaS revenue is backward-looking. ARR, billings, and RPO are how investors look ahead. These are the primary leading indicators of future growth.</p>
       </div>
 
-      <div class="card" style="margin-top:22px;">
-        <h3 style="font-family:var(--heading-font);font-size:18px;margin-bottom:12px;">Why Leading Indicators Matter in SaaS</h3>
+      <a href="#arr-billings-rpo-deep" class="deep-jump-link">↓ Jump to full RBC report analysis</a>
+
+      <div class="card">
+        <div class="card-source">Source: RBC Capital Markets Software Primers, April 28, 2022 — Focus on topline metrics framework</div>
         <p>In a SaaS model, <strong style="color:var(--text)">GAAP revenue is a lagging metric</strong>. Roughly 63% of a typical SaaS company's quarterly revenue was already sitting in deferred revenue at the start of the quarter — reflecting decisions customers made months or years ago, not current momentum. To gauge what's happening now, you need forward-looking signals.</p>
       </div>
 
@@ -478,7 +660,122 @@ ARR (Clearwater)        = (Last month's recurring revenue ÷ days in month) × 3
         <p>Billings was the dominant SaaS metric for years because it could be calculated from standard GAAP financials without needing management disclosure. COVID exposed its fragility: customers shifted to monthly/quarterly billing cycles, collapsing billings figures even at healthy companies. ASC 606's introduction of RPO gave investors a better tool. Billings is now considered noisy, not conclusive — use RPO or cRPO for enterprise SaaS, and ARR for transition or consumption stories.</p>
       </div>
 
-      <p style="margin-top:16px;font-size:13px;color:var(--muted);">→ Full analysis in the Deep Dives section: <a href="#arr-billings-rpo-deep" style="color:var(--accent);">RBC — ARR, Billings &amp; RPO Deep Dive</a></p>
+      <p style="margin-top:16px;font-size:13px;color:var(--muted);display:none;"></p>
+
+      <div class="deep-divider"><span>Full Report Analysis — RBC Capital Markets</span></div>
+      <div id="arr-billings-rpo-deep"></div>
+
+      <div class="card">
+        <div class="card-source">Source: RBC Capital Markets Software Primers, April 28, 2022</div>
+
+        <div class="note">
+          <div class="note-label">Reading Guidance</div>
+          <p>Focus on the topline metrics framework — the company-specific analyses in the original report are less critical. The key concept: SaaS revenue is backward-looking. ARR, billings, and RPO are how investors see what's coming before it hits the income statement.</p>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">Part 1 — Billings: The Legacy Metric</h3>
+        <p style="margin-bottom:14px;">Billings (Revenue + change in deferred revenue) was the dominant SaaS metric for years. It requires no management disclosure — derivable from standard GAAP financials. Its advantage is objectivity; its weakness is sensitivity.</p>
+
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="compare-col-title blue">Why Billings Worked</div>
+            <ul>
+              <li>Purely GAAP-derived — no management judgment required</li>
+              <li>Captures new invoicing activity in the period regardless of revenue recognition timing</li>
+              <li>Effective when all companies bill annually and have similar contract durations</li>
+              <li>Easy to compare across companies using only public filings</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title red">Why Billings Broke</div>
+            <ul>
+              <li>COVID: customers shifted to monthly/quarterly billing → billings collapsed at healthy companies</li>
+              <li>Multi-year deals front-load billings, making comparisons across deal structures meaningless</li>
+              <li>Consumption companies bill in arrears → deferred revenue change is near-zero, billings is useless</li>
+              <li>Management can game billings by pushing customers toward annual prepayment at quarter-end</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 2 — RPO: The GAAP Replacement</h3>
+        <div class="metric-grid">
+          <div class="metric-box green">
+            <div class="metric-name">Total RPO</div>
+            <div class="metric-headline">All committed future revenue</div>
+            <div class="metric-desc">Deferred revenue (billed, not yet recognized) + unbilled contractual backlog (signed but not yet invoiced). Introduced under ASC 606. More comprehensive than billings — captures multi-year contract backlog.</div>
+          </div>
+          <div class="metric-box blue">
+            <div class="metric-name">Current RPO (cRPO)</div>
+            <div class="metric-headline">Next 12 months of RPO</div>
+            <div class="metric-desc">The portion of total RPO expected to convert to revenue in the next year. More actionable than total RPO for near-term growth forecasting. RBC median cRPO coverage ratio: ~63–66% of NTM revenue.</div>
+          </div>
+          <div class="metric-box yellow">
+            <div class="metric-name">Practical Expedient — Key Exception</div>
+            <div class="metric-headline">Some companies opt out of RPO disclosure</div>
+            <div class="metric-desc">ASC 606 allows companies to exclude contracts of 12 months or less from RPO disclosure. Companies using this — including COUP, DOCU, GWRE, MDB, NICE, PD, PLTR — have RPO figures that systematically understate their true backlog.</div>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 3 — ARR: Non-GAAP But Often Most Useful</h3>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="compare-col-title blue">When ARR Is Most Useful</div>
+            <ul>
+              <li>Cloud-transition companies: GAAP revenue distorted by J-curve; ARR shows what the business looks like in subscription terms</li>
+              <li>Private companies at growth stage: ARR is the primary metric for investor communications pre-IPO</li>
+              <li>Consumption companies: directionally useful as a trailing usage run rate, though seasonality requires Y/Y comparison</li>
+              <li>When management provides ARR guidance — enables beat/miss analysis alongside revenue</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title yellow">The Definition Problem — No Universal Standard</div>
+            <ul>
+              <li><strong style="color:var(--text)">CrowdStrike:</strong> annualized value of active subscription contracts at period end</li>
+              <li><strong style="color:var(--text)">Dropbox:</strong> active paid users × annualized subscription price; FX rates locked at annual update</li>
+              <li><strong style="color:var(--text)">Clearwater Analytics:</strong> last month's recurring revenue ÷ days in month × 365</li>
+              <li><strong style="color:var(--text)">Investor estimate:</strong> most recent quarterly subscription revenue × 4</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 4 — Consumption Companies: None of the Three Work Well</h3>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="compare-col-title red">Why Standard Metrics Break Down</div>
+            <ul>
+              <li><strong style="color:var(--text)">Billings is useless:</strong> consumption companies bill in arrears — deferred revenue change is essentially zero</li>
+              <li><strong style="color:var(--text)">RPO dramatically understates:</strong> contracts only obligate minimums, but actual usage runs 3–5× above. RPO coverage for consumption companies: typically 10–30%</li>
+              <li><strong style="color:var(--text)">ARR is directionally useful but flawed:</strong> annualizing trailing usage assumes flat future consumption. Heavily seasonal — Q4 ARR may overstate full-year picture</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title blue">RBC's Recommendation: Use NRR</div>
+            <ul>
+              <li>NRR improvement or deterioration reliably signals coming revenue acceleration or deceleration</li>
+              <li>Reflects actual usage expansion from existing customers — the core growth driver in consumption models</li>
+              <li>Twilio reports NRR quarterly (not TTM) — providing a more timely signal on usage trends</li>
+              <li>RBC is open to ARR as supplemental consumption disclosure but does not yet consider it best practice</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Summary — Which Metric to Use When</h3>
+        <table class="threshold-table">
+          <thead><tr><th>Company Type</th><th>Best Leading Indicator</th><th>Key Caveat</th></tr></thead>
+          <tbody>
+            <tr><td>Enterprise SaaS, multi-year contracts, full RPO</td><td class="good">cRPO growth + cRPO coverage ratio</td><td>Most comprehensive GAAP metric; harder to game</td></tr>
+            <tr><td>Companies guiding to RPO (CRM, NOW, WDAY)</td><td class="good">cRPO vs. management guidance</td><td>Coverage ratio above historical norm → likely conservative guidance</td></tr>
+            <tr><td>Companies using practical expedient (COUP, DOCU, MDB, PLTR)</td><td class="mid">Billings or ARR</td><td>RPO excludes contracts ≤12 months — understates backlog</td></tr>
+            <tr><td>Cloud-transition or on-prem term license companies</td><td class="good">ARR growth YoY</td><td>Normalizes for GAAP J-curve distortions; verify definition</td></tr>
+            <tr><td>Consumption-based (SNOW, TWLO, FSLY, MDB/Atlas)</td><td class="bad">NRR + usage growth trends</td><td>Billings useless; RPO understates minimums; ARR assumes flat usage</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight green" style="margin-top:22px;">
+          <div class="insight-label">OneStream & Kantata Context</div>
+          <p>OneStream sells enterprise SaaS on multi-year subscription contracts — making the RPO framework the most directly relevant lens. When you process consulting orders in Kantata, each signed contract contributes to RPO at signing: the billed portion sits in deferred revenue on the balance sheet; the unbilled future invoices are off-balance-sheet backlog. Revenue is then recognized ratably as the performance obligation is delivered under ASC 606. A multi-year SaaS deal is exactly the scenario where cRPO matters most to investors.</p>
+        </div>
+      </div>
     </section>
 
     <!-- 3. RULE OF 40 -->
@@ -487,6 +784,7 @@ ARR (Clearwater)        = (Last month's recurring revenue ÷ days in month) × 3
         <span class="section-tag tag-fundamental">Fundamental · 3 of 5</span>
         <h2 class="section-title">Rule of 40 — The North Star Metric</h2>
       </div>
+      <a href="pdfs/3_Rule_of_40.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Barclays, April 2022</a>
 
       <div class="card">
         <div class="card-source">Source: Barclays, April 2022 — Great introduction to the North Star metric for software companies</div>
@@ -529,6 +827,8 @@ ARR (Clearwater)        = (Last month's recurring revenue ÷ days in month) × 3
         <span class="section-tag tag-fundamental">Fundamental · 4 of 5</span>
         <h2 class="section-title">LTV / CAC — Customer Return on Investment</h2>
       </div>
+      <a href="pdfs/4_LTV_CAC.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Goldman Sachs, March 2022</a>
+      <a href="#ltv-cac-deep" class="deep-jump-link">↓ Jump to full Goldman report analysis</a>
 
       <div class="card">
         <div class="card-source">Source: Goldman Sachs, March 8, 2022 — One of the most important sales efficiency metrics</div>
@@ -571,14 +871,82 @@ Simplified: Annual Contract Value × Gross Margin % × Customer Lifetime Years
           <p>Magic Number and LTV/CAC are both sales efficiency metrics but measure different things. Magic Number is a quick approximation using public financials (revenue growth ÷ S&M spend). LTV/CAC requires deeper data: churn rates, gross margins per customer, and acquisition costs broken out by channel. Together they triangulate the health of the go-to-market engine.</p>
         </div>
       </div>
-    </section>
 
-    <!-- 5. MAGIC NUMBER -->
+      <div class="deep-divider"><span>Full Report Analysis — Goldman Sachs</span></div>
+      <div id="ltv-cac-deep"></div>
+
+      <div class="card">
+        <div class="card-source">Source: Goldman Sachs Equity Research, March 8, 2022 — Gabriela Borges, Kash Rangan et al.</div>
+
+        <div class="note">
+          <div class="note-label">What to Focus On</div>
+          <p>The Goldman report covers all major software KPIs for Q4 2021. The key takeaways: (1) how LTV and CAC are formally defined and calculated, (2) the broader market context shift from "growth at any cost" to "profitable growth," and (3) how LTV:CAC correlates to EV/Sales multiples.</p>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">Goldman's Formal LTV:CAC Definitions</h3>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="compare-col-title blue">LTV Formula (Goldman)</div>
+            <div class="formula-block" style="margin-top:8px;font-size:12px;">
+LTV = GAAP Subscription Gross Margin %
+      ÷ (Gross Revenue Churn % + 8.5% discount rate)
+
+Key inputs:
+• Gross margin: cost to service $1 of recurring revenue
+• Gross churn: how fast the customer base decays
+• 8.5% discount rate: reflects long-term displacement risk</div>
+            <p style="font-size:13px;color:var(--muted);margin-top:7px;">The 8.5% discount rate acknowledges that even great SaaS businesses face competitive risk over time. LTV is the <em>discounted</em> present value of $1 of recurring revenue.</p>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title yellow">CAC Formula (Goldman)</div>
+            <div class="formula-block" style="margin-top:8px;font-size:12px;">
+CAC = TTM GAAP S&amp;M Expense
+      ÷ (Gross New ARR)
+
+Where:
+• GAAP S&amp;M includes stock-based compensation
+• Gross New ARR = YoY change in ARR + gross churn
+  (cost to add $1 of gross new ARR, before churn)</div>
+            <p style="font-size:13px;color:var(--muted);margin-top:7px;">Using <em>gross</em> new ARR (not net) is deliberate — it isolates the new logo acquisition cost from the churn offset, giving a cleaner view of sales engine efficiency.</p>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Q4 2021 Market Context</h3>
+        <div class="metric-grid">
+          <div class="metric-box red"><div class="metric-name">The Rate Shift</div><div class="metric-headline">Growth at any cost is over</div><div class="metric-desc">Rising interest rates in 2022 compressed software multiples back to 2019 levels. Investors shifted focus from pure revenue growth to quality of growth — specifically, unit economics and FCF generation.</div></div>
+          <div class="metric-box blue"><div class="metric-name">Correlation Shift</div><div class="metric-headline">LTV:CAC ↑, Revenue Growth ↓</div><div class="metric-desc">In Q4 2021, the correlation of EV/Sales multiples with LTV:CAC increased while the correlation with revenue growth decreased. The market was rewarding efficiency, not just speed.</div></div>
+          <div class="metric-box yellow"><div class="metric-name">Median LTV:CAC</div><div class="metric-headline">4.06x (down from 4.17x)</div><div class="metric-desc">Slight decline driven by CAC rising — S&M spend normalizing after COVID tailwinds. Goldman expected further CAC increases in 2022 from in-person events resuming and wage inflation.</div></div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Q4 2021 Sector Benchmarks</h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>Company</th><th>Gross Margin</th><th>Est. Gross Churn</th><th>CAC</th><th>LTV</th><th>LTV:CAC</th><th>NRR</th><th>EV/ARR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Snowflake (SNOW)</td><td>~75%</td><td>3%</td><td>$1.00</td><td>6.9x</td><td class="highlight">6.85x</td><td>178%</td><td>50.2x</td></tr>
+            <tr><td>CrowdStrike (CRWD)</td><td>~75%</td><td>3%</td><td>$0.89</td><td>6.6x</td><td class="highlight">7.41x</td><td>125%</td><td>27.9x</td></tr>
+            <tr><td>Datadog (DDOG)</td><td>~74%</td><td>7%</td><td>$0.46</td><td>5.1x</td><td class="highlight">11.02x</td><td>N/A</td><td>37.0x</td></tr>
+            <tr><td>ServiceNow (NOW)</td><td>~78%</td><td>3%</td><td>$1.56</td><td>7.5x</td><td class="highlight">4.85x</td><td>N/A</td><td>18.3x</td></tr>
+            <tr><td>Salesforce (CRM)</td><td>~73%</td><td>9%</td><td>$1.63</td><td>4.7x</td><td class="highlight">2.86x</td><td>N/A</td><td>7.6x</td></tr>
+            <tr><td>Workday (WDAY)</td><td>~74%</td><td>4%</td><td>$1.42</td><td>6.6x</td><td class="highlight">4.69x</td><td>N/A</td><td>12.7x</td></tr>
+            <tr><td>HubSpot (HUBS)</td><td>~79%</td><td>13%</td><td>$1.12</td><td>4.0x</td><td class="highlight">3.57x</td><td>N/A</td><td>15.5x</td></tr>
+            <tr><td>Zoom (ZM)</td><td>~74%</td><td>23%</td><td>$0.73</td><td>2.5x</td><td class="highlight">3.37x</td><td>N/A</td><td>6.6x</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight">
+          <div class="insight-label">Reading This Table</div>
+          <p><strong style="color:var(--text)">CAC below $1.00</strong> means the company spends less than $1 in S&M to add $1 of gross new ARR — extremely efficient. <strong style="color:var(--text)">High LTV:CAC (7x+)</strong> reflects low churn + high margins + efficient S&M — Datadog's 11x is exceptional. <strong style="color:var(--text)">Zoom's high churn (23%)</strong> dramatically suppresses LTV despite good gross margins. <strong style="color:var(--text)">NRR above 120%</strong> (Snowflake at 178%) means existing customers are expanding so fast that the company generates organic growth even without new logo additions.</p>
+        </div>
+      </div>
+    </section>
     <section class="section" id="magic-number">
       <div class="section-header">
         <span class="section-tag tag-fundamental">Fundamental · 5 of 5</span>
         <h2 class="section-title">Magic Number — Sales Efficiency</h2>
       </div>
+      <a href="pdfs/5_Baird Magic Number.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Baird, April 2022</a>
 
       <div class="card">
         <div class="card-source">Source: Baird Equity Research, April 26, 2022 — Quick intro to another good SaaS sales efficiency metric</div>
@@ -632,6 +1000,8 @@ Simplified: Annual Contract Value × Gross Margin % × Customer Lifetime Years
         <span class="section-tag tag-accounting">Accounting · 1 of 2</span>
         <h2 class="section-title">Why Companies Transition to SaaS</h2>
       </div>
+      <a href="pdfs/6_SaaS_Transition.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Jefferies, February 2022</a>
+      <a href="#saas-transition-deep" class="deep-jump-link">↓ Jump to full Jefferies report analysis</a>
 
       <div class="card">
         <div class="card-source">Source: Jefferies SaaS Transition, February 2022 — Explains why companies like to go to SaaS</div>
@@ -661,7 +1031,65 @@ Simplified: Annual Contract Value × Gross Margin % × Customer Lifetime Years
           <p>Under legacy perpetual license models, revenue was front-loaded (recognized when software was delivered). Under SaaS, revenue is recognized <em>ratably over the contract term</em>. This means a company switching from perpetual to SaaS will see apparent revenue decline during transition — even though underlying bookings and customer value may be growing. This is not a business deterioration; it's an accounting timing shift. Investors must look at ARR and Billings, not just GAAP revenue, to see what's happening.</p>
         </div>
 
-        <p style="margin-top:16px;font-size:13px;color:var(--muted);">→ Full J-curve analysis and case studies in Deep Dives: <a href="#saas-transition-deep" style="color:var(--accent2);">Jefferies — SaaS Transition</a></p>
+        <p style="margin-top:16px;font-size:13px;color:var(--muted);display:none;"></p>
+      </div>
+
+      <div class="deep-divider"><span>Full Report Analysis — Jefferies Equity Research</span></div>
+      <div id="saas-transition-deep"></div>
+
+      <div class="card">
+        <div class="card-source">Source: Jefferies Equity Research, February 28, 2022 — Charles Brennan & Alex Nguyen</div>
+
+        <div class="note">
+          <div class="note-label">Context</div>
+          <p>The Jefferies analysis goes deeper than the "why" — it also documents the financial J-curve (the "pain") and the long-term valuation re-rating (the "gain"), making it essential for investor conversations about any software vendor mid-transition.</p>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">What Is a SaaS Transition?</h3>
+        <div class="compare-grid" style="margin-top:14px;">
+          <div class="compare-col">
+            <div class="compare-col-title blue">1. Architectural Shift</div>
+            <ul>
+              <li>Software moves from <strong style="color:var(--text)">on-premise</strong> to <strong style="color:var(--text)">cloud-hosted</strong> — managed by the vendor, not the customer</li>
+              <li>Vendor controls updates, uptime, and version management</li>
+              <li>All customers on the same version — enabling faster product innovation cycles</li>
+              <li>Drives operational gains: scalability, flexibility, cross-sell, infrastructure monetization</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="compare-col-title yellow">2. Contracting Shift</div>
+            <ul>
+              <li>From <strong style="color:var(--text)">licence + maintenance</strong> (large upfront fee + ~20% annual maintenance) to <strong style="color:var(--text)">subscription</strong> (bundled, recognized ratably)</li>
+              <li>Revenue recognition pushed to the right — same total value, spread over years instead of front-loaded</li>
+              <li>Creates the J-curve: near-term revenue compression, eventual acceleration as subscription base compounds</li>
+              <li>Management rarely cuts costs during the revenue dip — causing temporary margin compression</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">The 5 Operational Gains</h3>
+        <div class="metric-grid">
+          <div class="metric-box blue"><div class="metric-name">1. Scalability</div><div class="metric-headline">Cloud scales with demand</div><div class="metric-desc">No need to buy infrastructure for peak capacity. Elastic compute is more cost-efficient than on-prem hardware provisioning.</div></div>
+          <div class="metric-box green"><div class="metric-name">2. Flexibility</div><div class="metric-headline">Access from anywhere</div><div class="metric-desc">Cloud enables remote work, mobile access, and easier collaboration — directly improving customer satisfaction and stickiness.</div></div>
+          <div class="metric-box yellow"><div class="metric-name">3. Automatic Updates</div><div class="metric-headline">Vendor manages versions</div><div class="metric-desc">All customers on the same version = faster feature delivery, fewer support tickets for legacy bugs, more innovation cycles per year.</div></div>
+          <div class="metric-box blue"><div class="metric-name">4. Cross-Selling</div><div class="metric-headline">Seamless expansion</div><div class="metric-desc">Cloud delivery makes it frictionless for customers to adopt additional modules, driving higher NRR and revenue per customer.</div></div>
+          <div class="metric-box green"><div class="metric-name">5. Infrastructure Revenue</div><div class="metric-headline">Capture hosting costs</div><div class="metric-desc">Vendors can charge holistically for the solution including infrastructure. They use hyperscalers (AWS/Azure/GCP) at volume discounts — the spread is incremental low-risk revenue.</div></div>
+        </div>
+
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">The Quantified Gain — Jefferies' Cross-Company Data</h3>
+        <p style="margin-bottom:14px;">Jefferies studied 4 companies that completed SaaS transitions (ADSK, PTC, ADBE, INTU) plus 4 mid-transition (SAP, Sage, Software AG, CyberArk). Key results from the completers:</p>
+
+        <div class="metric-grid">
+          <div class="metric-box blue"><div class="metric-name">Revenue Growth Acceleration</div><div class="metric-headline">+6 percentage points</div><div class="metric-desc">Average acceleration in annual revenue growth rate post-transition. Growth re-accelerates once subscription base compounds and licence drag disappears.</div></div>
+          <div class="metric-box green"><div class="metric-name">Margin Improvement</div><div class="metric-headline">+250 bps avg. EBIT</div><div class="metric-desc">Recurring revenue provides operating leverage — cost base becomes more fixed relative to revenue. Compared to pre-transition adj. EBIT margins.</div></div>
+          <div class="metric-box yellow"><div class="metric-name">Valuation Re-Rating</div><div class="metric-headline">+~3x EV/NTM Revenue</div><div class="metric-desc">All 4 studied US completers saw meaningful multiple expansion 2 years after margins inflected. Market rewards recurring revenue quality and visible growth.</div></div>
+          <div class="metric-box red"><div class="metric-name">Average Transition Duration</div><div class="metric-headline">3.7 years average</div><div class="metric-desc">Range: ADSK took only 1 year; INTU took nearly 6 years. Depends on product complexity, starting mix of recurring revenue, and how aggressively management pushes the migration.</div></div>
+        </div>
+
+        <div class="insight yellow" style="margin-top:22px;">
+          <div class="insight-label">The J-Curve in Plain Terms</div>
+          <p>During transition, a company replaces $1 of upfront perpetual license revenue with $0.10–0.15/year of subscription revenue — for the same underlying contract value. The pain is real and lasts ~3.7 years on average. The gain is that the subscription base compounds with every renewal while acquisition costs stay relatively fixed. Post-transition, NRR above 100% means the installed base generates organic revenue growth before a single new customer is added.</p>
+        </div>
       </div>
     </section>
 
@@ -671,6 +1099,7 @@ Simplified: Annual Contract Value × Gross Margin % × Customer Lifetime Years
         <span class="section-tag tag-accounting">Accounting · 2 of 2</span>
         <h2 class="section-title">ASC 606 — Revenue Recognition Mechanics</h2>
       </div>
+      <a href="pdfs/7_asc_606.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — ASC 606 Summary</a>
 
       <div class="card">
         <div class="card-source">Source: ASC 606 Summary — Quick intro to how bookings / billings turn into revenue</div>
@@ -717,326 +1146,162 @@ Simplified: Annual Contract Value × Gross Margin % × Customer Lifetime Years
       </div>
     </section>
 
-  </div><!-- /content -->
+  </div><!-- /content B -->
 
-  <!-- ━━━ DEEP DIVES ━━━ -->
+  <!-- ━━━ C. COMPETITIVE KNOWLEDGE ━━━ -->
   <div class="content">
 
-    <!-- JEFFERIES DEEP DIVE -->
-    <section class="section" id="saas-transition-deep">
+    <section class="section" id="musical-chairs">
       <div class="section-header">
-        <span class="section-tag tag-accounting">Accounting · Deep Dive</span>
-        <h2 class="section-title">Jefferies — No Pain, No Gain: The SaaS Transition Playbook</h2>
+        <span class="section-tag tag-competitive">Competitive · 1 of 1</span>
+        <h2 class="section-title">Not-So-Musical Chairs — Talent Risk from Declining Equity Values</h2>
+      </div>
+      <a href="pdfs/8_Musical_chairs.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — Deutsche Bank, April 2022</a>
+
+      <div class="note">
+        <div class="note-label">Reading Guidance</div>
+        <p>This is supplementary context — less important than Sections A and B. The core value: understanding how equity compensation dynamics affect talent retention risk, operational costs, and valuation at software companies. Relevant for understanding why some high-growth companies appeared more expensive than their stated financials suggested in 2022.</p>
       </div>
 
       <div class="card">
-        <div class="card-source">Source: Jefferies Equity Research, February 28, 2022 — Charles Brennan & Alex Nguyen</div>
+        <div class="card-source">Source: Deutsche Bank Equity Research, April 4, 2022 — Brad Zelnick et al.</div>
 
-        <div class="note">
-          <div class="note-label">Context</div>
-          <p>Categorized under Accounting Knowledge — specifically to explain why companies transition to SaaS. But the Jefferies analysis goes deeper: it also documents the financial J-curve (the "pain") and the long-term valuation re-rating (the "gain"), making it essential for investor conversations about any software vendor mid-transition.</p>
-        </div>
+        <p>With software equities (IGV) down 21% from November 2021 highs — and several high-growth names down 30–60% — Deutsche Bank analyzed the talent retention risk created when employees' equity compensation falls significantly underwater. The report argues this creates real operational risk and makes many companies more expensive than they appear on the surface.</p>
 
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">What Is a SaaS Transition?</h3>
-        <p>Jefferies identifies two simultaneous changes when a software company goes SaaS:</p>
-
-        <div class="compare-grid" style="margin-top:14px;">
-          <div class="compare-col">
-            <div class="compare-col-title blue">1. Architectural Shift</div>
-            <ul>
-              <li>Software moves from <strong style="color:var(--text)">on-premise</strong> to <strong style="color:var(--text)">cloud-hosted</strong> — managed by the vendor, not the customer</li>
-              <li>Vendor controls updates, uptime, and version management</li>
-              <li>All customers on the same version — enabling faster product innovation cycles</li>
-              <li>Drives operational gains: scalability, flexibility, cross-sell, infrastructure monetization</li>
-            </ul>
-          </div>
-          <div class="compare-col">
-            <div class="compare-col-title yellow">2. Contracting Shift</div>
-            <ul>
-              <li>From <strong style="color:var(--text)">licence + maintenance</strong> (large upfront fee + ~20% annual maintenance) to <strong style="color:var(--text)">subscription</strong> (bundled, recognized ratably)</li>
-              <li>Revenue recognition pushed to the right — same total value, spread over years instead of front-loaded</li>
-              <li>Creates the J-curve: near-term revenue compression, eventual acceleration as subscription base compounds</li>
-              <li>Management rarely cuts costs during the revenue dip — causing temporary margin compression</li>
-            </ul>
-          </div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">The 5 Operational Gains</h3>
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">The Three-Part Screening Framework</h3>
         <div class="metric-grid">
-          <div class="metric-box blue"><div class="metric-name">1. Scalability</div><div class="metric-headline">Cloud scales with demand</div><div class="metric-desc">No need to buy infrastructure for peak capacity. Elastic compute is more cost-efficient than on-prem hardware provisioning.</div></div>
-          <div class="metric-box green"><div class="metric-name">2. Flexibility</div><div class="metric-headline">Access from anywhere</div><div class="metric-desc">Cloud enables remote work, mobile access, and easier collaboration — directly improving customer satisfaction and stickiness.</div></div>
-          <div class="metric-box yellow"><div class="metric-name">3. Automatic Updates</div><div class="metric-headline">Vendor manages versions</div><div class="metric-desc">All customers on the same version = faster feature delivery, fewer support tickets for legacy bugs, more innovation cycles per year.</div></div>
-          <div class="metric-box blue"><div class="metric-name">4. Cross-Selling</div><div class="metric-headline">Seamless expansion</div><div class="metric-desc">Cloud delivery makes it frictionless for customers to adopt additional modules, driving higher NRR and revenue per customer.</div></div>
-          <div class="metric-box green"><div class="metric-name">5. Infrastructure Revenue</div><div class="metric-headline">Capture hosting costs</div><div class="metric-desc">Vendors can charge holistically for the solution including infrastructure. They use hyperscalers (AWS/Azure/GCP) at volume discounts — the spread is incremental low-risk revenue.</div></div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">The Quantified Gain — Jefferies' Cross-Company Data</h3>
-        <p style="margin-bottom:14px;">Jefferies studied 4 companies that completed SaaS transitions (ADSK, PTC, ADBE, INTU) plus 4 mid-transition (SAP, Sage, Software AG, CyberArk). Key results from the completers:</p>
-
-        <div class="metric-grid">
-          <div class="metric-box blue"><div class="metric-name">Revenue Growth Acceleration</div><div class="metric-headline">+6 percentage points</div><div class="metric-desc">Average acceleration in annual revenue growth rate post-transition. Growth re-accelerates once subscription base compounds and licence drag disappears.</div></div>
-          <div class="metric-box green"><div class="metric-name">Margin Improvement</div><div class="metric-headline">+250 bps avg. EBIT</div><div class="metric-desc">Recurring revenue provides operating leverage — cost base becomes more fixed relative to revenue. Compared to pre-transition adj. EBIT margins.</div></div>
-          <div class="metric-box yellow"><div class="metric-name">Valuation Re-Rating</div><div class="metric-headline">+~3x EV/NTM Revenue</div><div class="metric-desc">All 4 studied US completers saw meaningful multiple expansion 2 years after margins inflected. Market rewards recurring revenue quality and visible growth.</div></div>
-          <div class="metric-box red"><div class="metric-name">Average Transition Duration</div><div class="metric-headline">3.7 years average</div><div class="metric-desc">Range: ADSK took only 1 year; INTU took nearly 6 years. Depends on product complexity, starting mix of recurring revenue, and how aggressively management pushes the migration.</div></div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">The Cost — The J-Curve in Detail</h3>
-        <div class="compare-grid">
-          <div class="compare-col">
-            <div class="compare-col-title yellow">Revenue Impact</div>
-            <ul>
-              <li>Near-term revenue growth falls by ~10% as licence revenue (front-loaded) gives way to ratable subscription revenue</li>
-              <li>In extreme cases (like Adobe in 2013), GAAP revenue can go <em>negative</em> year-over-year during a fast transition</li>
-              <li>This is an accounting artifact — ARR and bookings may be growing strongly throughout</li>
-              <li>Once licence revenue shrinks to ~10-15%, subscription compounding takes over and growth re-accelerates</li>
-            </ul>
-          </div>
-          <div class="compare-col">
-            <div class="compare-col-title red">Margin Impact</div>
-            <ul>
-              <li>Companies increase opex by ~5% on average to invest in cloud infrastructure and retrain sales for subscription GTM</li>
-              <li>Average margin compression: <strong style="color:var(--text)">~15%</strong> from peak to trough</li>
-              <li>Average quarters to margin trough: <strong style="color:var(--text)">~6 quarters</strong></li>
-              <li>Average quarters to return to pre-transition margin level: <strong style="color:var(--text)">~9 quarters</strong></li>
-              <li>Total foregone profit: average <strong style="color:var(--text)">~1.5 years of pre-transition profit</strong></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="insight yellow" style="margin-top:18px;">
-          <div class="insight-label">Key Inflection Point: ~75-80% Recurring Revenue</div>
-          <p>Once a company reaches roughly 75–80% recurring revenue as a share of total revenue, Jefferies found that margins typically start inflecting upward. At this point, legacy licence revenue is small enough that it no longer drags on reported growth, and the subscription base's compounding economics dominate. This is the signal investors watch for when evaluating mid-transition companies.</p>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Valuation Dynamics — Announcement vs. Completion</h3>
-        <table class="threshold-table">
-          <thead><tr><th>Company</th><th>Stock Reaction on Announcement</th><th>Valuation After Completion</th></tr></thead>
-          <tbody>
-            <tr><td>Adobe (ADBE)</td><td class="bad">–8% on announcement day</td><td class="good">+6.4x EV/NTM rev premium vs. sector</td></tr>
-            <tr><td>Autodesk (ADSK)</td><td class="bad">–14%</td><td class="good">+6.4x EV/NTM rev premium</td></tr>
-            <tr><td>Intuit (INTU)</td><td class="bad">–1%</td><td class="good">+3.1x EV/NTM rev premium</td></tr>
-            <tr><td>PTC</td><td class="bad">–3%</td><td class="good">+3.1x EV/NTM rev premium</td></tr>
-            <tr><td>SAP</td><td class="bad">–22% on acceleration announcement</td><td class="mid">Still no evidence of valuation upside (2022)</td></tr>
-            <tr><td>Sage</td><td class="bad">–6%</td><td class="mid">Trading at 40% discount to EU software peers</td></tr>
-          </tbody>
-        </table>
-
-        <div class="insight">
-          <div class="insight-label">Europe vs. US Divergence</div>
-          <p>As of February 2022, Jefferies noted that all 4 completed US transitions resulted in positive valuation re-ratings, but there was <strong style="color:var(--text)">no evidence of valuation upside in Europe</strong>. SAP, Sage, and Software AG were all still trading at discounts to their pre-transition levels. Jefferies speculated this may reflect different investor bases, market depth, or product complexity factors — but it was still unresolved.</p>
-        </div>
-
-        <div class="insight green">
-          <div class="insight-label">OneStream Context</div>
-          <p>OneStream is a native cloud SaaS company — it never went through a painful perpetual-to-subscription transition. This is a competitive advantage: OneStream entered the market with all the operational benefits of SaaS without the J-curve penalty that legacy ERPs like SAP and Oracle are still navigating. The subscription-based ARR from consulting contracts processed in Kantata is the revenue engine that Jefferies identifies as structurally superior to perpetual licensing.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- GOLDMAN DEEP DIVE -->
-    <section class="section" id="ltv-cac-deep">
-      <div class="section-header">
-        <span class="section-tag tag-fundamental">Fundamental · Deep Dive</span>
-        <h2 class="section-title">Goldman Sachs — Benchmarking LTV:CAC Across the Software Sector</h2>
-      </div>
-
-      <div class="card">
-        <div class="card-source">Source: Goldman Sachs Equity Research, March 8, 2022 — Gabriela Borges, Kash Rangan et al.</div>
-
-        <div class="note">
-          <div class="note-label">What to Focus On</div>
-          <p>The Goldman report covers all major software KPIs for Q4 2021. The key takeaways: (1) how LTV and CAC are formally defined and calculated, (2) the broader market context shift from "growth at any cost" to "profitable growth," and (3) how LTV:CAC correlates to EV/Sales multiples.</p>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">Goldman's Formal LTV:CAC Definitions</h3>
-        <div class="compare-grid">
-          <div class="compare-col">
-            <div class="compare-col-title blue">LTV Formula (Goldman)</div>
-            <div class="formula-block" style="margin-top:8px;font-size:12px;">
-LTV = GAAP Subscription Gross Margin %
-      ÷ (Gross Revenue Churn % + 8.5% discount rate)
-
-Key inputs:
-• Gross margin: cost to service $1 of recurring revenue
-• Gross churn: how fast the customer base decays
-• 8.5% discount rate: reflects long-term displacement/
-  disruption risk inherent in software</div>
-            <p style="font-size:13px;color:var(--muted);margin-top:7px;">The 8.5% discount rate acknowledges that even great SaaS businesses face competitive risk over time. LTV is the <em>discounted</em> present value of $1 of recurring revenue.</p>
-          </div>
-          <div class="compare-col">
-            <div class="compare-col-title yellow">CAC Formula (Goldman)</div>
-            <div class="formula-block" style="margin-top:8px;font-size:12px;">
-CAC = TTM GAAP S&amp;M Expense
-      ÷ (Gross New ARR)
-
-Where:
-• GAAP S&amp;M includes stock-based compensation
-  (Goldman views SBC as a real cost of doing business)
-• Gross New ARR = YoY change in ARR + gross churn
-  (cost to add $1 of gross new ARR, before churn)</div>
-            <p style="font-size:13px;color:var(--muted);margin-top:7px;">Using <em>gross</em> new ARR (not net) is deliberate — it isolates the new logo acquisition cost from the churn offset, giving a cleaner view of sales engine efficiency.</p>
-          </div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Q4 2021 Market Context</h3>
-        <div class="metric-grid">
-          <div class="metric-box red"><div class="metric-name">The Rate Shift</div><div class="metric-headline">Growth at any cost is over</div><div class="metric-desc">Rising interest rates in 2022 compressed software multiples back to 2019 levels. Investors shifted focus from pure revenue growth to quality of growth — specifically, unit economics and FCF generation.</div></div>
-          <div class="metric-box blue"><div class="metric-name">Correlation Shift</div><div class="metric-headline">LTV:CAC ↑, Revenue Growth ↓</div><div class="metric-desc">In Q4 2021, the correlation of EV/Sales multiples with LTV:CAC increased while the correlation with revenue growth decreased. The market was rewarding efficiency, not just speed.</div></div>
-          <div class="metric-box yellow"><div class="metric-name">Median LTV:CAC</div><div class="metric-headline">4.06x (down from 4.17x)</div><div class="metric-desc">The slight decline was driven by CAC rising (S&M spend normalizing after COVID tailwinds). Goldman expected further CAC increases in 2022 from in-person events resuming and wage inflation.</div></div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Q4 2021 Sector Benchmarks</h3>
-        <table class="data-table">
-          <thead>
-            <tr><th>Company</th><th>Gross Margin</th><th>Est. Gross Churn</th><th>CAC</th><th>LTV</th><th>LTV:CAC</th><th>NRR</th><th>EV/ARR</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Snowflake (SNOW)</td><td>~75%</td><td>3%</td><td>$1.00</td><td>6.9x</td><td class="highlight">6.85x</td><td>178%</td><td>50.2x</td></tr>
-            <tr><td>CrowdStrike (CRWD)</td><td>~75%</td><td>3%</td><td>$0.89</td><td>6.6x</td><td class="highlight">7.41x</td><td>125%</td><td>27.9x</td></tr>
-            <tr><td>Datadog (DDOG)</td><td>~74%</td><td>7%</td><td>$0.46</td><td>5.1x</td><td class="highlight">11.02x</td><td>N/A</td><td>37.0x</td></tr>
-            <tr><td>ServiceNow (NOW)</td><td>~78%</td><td>3%</td><td>$1.56</td><td>7.5x</td><td class="highlight">4.85x</td><td>N/A</td><td>18.3x</td></tr>
-            <tr><td>Salesforce (CRM)</td><td>~73%</td><td>9%</td><td>$1.63</td><td>4.7x</td><td class="highlight">2.86x</td><td>N/A</td><td>7.6x</td></tr>
-            <tr><td>Workday (WDAY)</td><td>~74%</td><td>4%</td><td>$1.42</td><td>6.6x</td><td class="highlight">4.69x</td><td>N/A</td><td>12.7x</td></tr>
-            <tr><td>HubSpot (HUBS)</td><td>~79%</td><td>13%</td><td>$1.12</td><td>4.0x</td><td class="highlight">3.57x</td><td>N/A</td><td>15.5x</td></tr>
-            <tr><td>Zoom (ZM)</td><td>~74%</td><td>23%</td><td>$0.73</td><td>2.5x</td><td class="highlight">3.37x</td><td>N/A</td><td>6.6x</td></tr>
-          </tbody>
-        </table>
-
-        <div class="insight">
-          <div class="insight-label">Reading This Table</div>
-          <p><strong style="color:var(--text)">CAC below $1.00</strong> means the company spends less than $1 in S&M to add $1 of gross new ARR — extremely efficient. <strong style="color:var(--text)">High LTV:CAC (7x+)</strong> reflects low churn + high margins + efficient S&M — Datadog's 11x is exceptional. <strong style="color:var(--text)">Zoom's high churn (23%)</strong> dramatically suppresses LTV despite good gross margins. <strong style="color:var(--text)">NRR above 120%</strong> (Snowflake at 178%) means existing customers are expanding so fast that the company generates organic growth even without new logo additions.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- RBC DEEP DIVE -->
-    <section class="section" id="arr-billings-rpo-deep">
-      <div class="section-header">
-        <span class="section-tag tag-fundamental">Fundamental · Deep Dive</span>
-        <h2 class="section-title">RBC — ARR, Billings &amp; RPO: A Complete Framework</h2>
-      </div>
-
-      <div class="card">
-        <div class="card-source">Source: RBC Capital Markets Software Primers, April 28, 2022</div>
-
-        <div class="note">
-          <div class="note-label">Reading Guidance</div>
-          <p>Focus on the topline metrics framework — the company-specific analyses in the original report are less critical. The key concept: SaaS revenue is backward-looking. ARR, billings, and RPO are how investors see what's coming before it hits the income statement.</p>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:22px 0 12px;">Part 1 — Billings: The Legacy Metric</h3>
-        <p style="margin-bottom:14px;">Billings (Revenue + change in deferred revenue) was the dominant SaaS metric for years. It requires no management disclosure — derivable from standard GAAP financials. Its advantage is objectivity; its weakness is sensitivity.</p>
-
-        <div class="compare-grid">
-          <div class="compare-col">
-            <div class="compare-col-title blue">Why Billings Worked</div>
-            <ul>
-              <li>Purely GAAP-derived — no management judgment required</li>
-              <li>Captures new invoicing activity in the period regardless of revenue recognition timing</li>
-              <li>Effective when all companies bill annually and have similar contract durations</li>
-              <li>Easy to compare across companies using only public filings</li>
-            </ul>
-          </div>
-          <div class="compare-col">
-            <div class="compare-col-title red">Why Billings Broke Down</div>
-            <ul>
-              <li>COVID caused customers to shift to monthly/quarterly billing — collapsing billings at healthy companies</li>
-              <li>Duration changes distort the metric without reflecting any change in business quality</li>
-              <li>Completely useless for consumption-based businesses (Snowflake, Twilio) that bill in arrears</li>
-              <li>Can be gamed: pre-billing customers inflates billings without reflecting real demand</li>
-            </ul>
-          </div>
-        </div>
-
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 2 — RPO: The GAAP Upgrade</h3>
-        <p style="margin-bottom:14px;">Remaining Performance Obligations (RPO) was introduced under ASC 606 as a GAAP-required disclosure. It captures all signed contractual revenue not yet recognized — both the billed portion (deferred revenue) and the unbilled backlog from multi-year contracts.</p>
-
-        <div class="metric-grid">
-          <div class="metric-box green">
-            <div class="metric-name">cRPO (Current RPO)</div>
-            <div class="metric-headline">Next 12 months of contracted revenue</div>
-            <div class="metric-desc">The portion of total RPO expected to be recognized in the next 12 months. This is the most actionable metric — it's a near-term revenue floor derived from signed contracts, not forecasted demand.</div>
-          </div>
-          <div class="metric-box blue">
-            <div class="metric-name">RPO Coverage Ratio</div>
-            <div class="metric-headline">cRPO ÷ NTM Revenue</div>
-            <div class="metric-desc">RBC's preferred measure of forward revenue visibility. Sector median is ~63–66%. Companies above this range have more revenue already contracted than peers — a positive signal. Companies guiding to RPO (CRM, NOW, WDAY) can be benchmarked against this guidance.</div>
+          <div class="metric-box red">
+            <div class="metric-name">Screen 1</div>
+            <div class="metric-headline">Share price decline × SBC as % of OpEx</div>
+            <div class="metric-desc">Companies with the largest share price drops AND heaviest use of equity compensation face the highest retention risk. Employees are "underwater" on option grants or holding RSUs worth significantly less. Hot Zone companies: AI, CDAY, CFLT, DOCU, MTTR, OKTA, PLTR, SNOW, TWLO, XM, ZM, ZS.</div>
           </div>
           <div class="metric-box yellow">
-            <div class="metric-name">Practical Expedient — Key Exception</div>
-            <div class="metric-headline">Some companies opt out of RPO disclosure</div>
-            <div class="metric-desc">ASC 606 allows companies to exclude contracts of 12 months or less from RPO disclosure (the "practical expedient"). Companies using this — including COUP, DOCU, GWRE, MDB, NICE, PD, PLTR — have RPO figures that systematically understate their true backlog.</div>
+            <div class="metric-name">Screen 2</div>
+            <div class="metric-headline">New headcount as % of total employees</div>
+            <div class="metric-desc">Companies where 40%+ of current headcount were hired in the past 2 years face outsized risk — those employees received grants near peak valuations in 2020–2021, making them most likely to be underwater. BILL, DOCU, NET, OKTA, SHOP, SNOW, TEAM, TWLO, ZM, ZS all screen positive here.</div>
+          </div>
+          <div class="metric-box blue">
+            <div class="metric-name">Screen 3</div>
+            <div class="metric-headline">SBC as % of current market cap</div>
+            <div class="metric-desc">Measures potential dilution from equity compensation. Highest users: MTTR, AI, SPLK, PLTR, PING, OKTA. Companies with high SBC relative to market cap will need to issue significantly more shares or cash bonuses to retain talent — making stated valuations understate the true cost.</div>
           </div>
         </div>
 
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 3 — ARR: Non-GAAP But Often Most Useful</h3>
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Why This Matters — The Retention Risk Mechanism</h3>
         <div class="compare-grid">
           <div class="compare-col">
-            <div class="compare-col-title blue">When ARR Is Most Useful</div>
+            <div class="compare-col-title red">The Risk</div>
             <ul>
-              <li>Cloud-transition companies: GAAP revenue distorted by the J-curve; ARR shows what the business actually looks like in subscription terms</li>
-              <li>Private companies at growth stage: ARR is the primary metric for investor communications pre-IPO</li>
-              <li>Consumption companies: directionally useful as a trailing usage run rate, though seasonality requires Y/Y comparison</li>
-              <li>When management provides ARR guidance — enables beat/miss analysis alongside revenue</li>
+              <li>Underwater options and lower-value RSUs act as a <strong style="color:var(--text)">de facto pay cut</strong> — and reduce the cost of leaving (less unvested equity to forfeit)</li>
+              <li>Unlike 2000 and 2008 downturns, underlying software fundamentals remained strong in 2022 — top performers had compelling outside options</li>
+              <li>Mid-level manager departures are particularly damaging — they trigger cascading individual contributor turnover</li>
+              <li>Choppy equity markets also made pre-IPO valuations uncertain, opening conversations for talent currently at privates</li>
             </ul>
           </div>
           <div class="compare-col">
-            <div class="compare-col-title yellow">The Definition Problem — No Universal Standard</div>
-            <p style="font-size:13px;margin-bottom:8px;">Every company defines ARR differently. Always read the footnotes before comparing ARR across companies. Key variation points:</p>
+            <div class="compare-col-title blue">How Companies Responded</div>
             <ul>
-              <li><strong style="color:var(--text)">CrowdStrike:</strong> annualized value of active subscription contracts at period end, assuming renewal even past expiry if in active discussions</li>
-              <li><strong style="color:var(--text)">Dropbox:</strong> active paid users × annualized subscription price; FX rates locked at annual update</li>
-              <li><strong style="color:var(--text)">Clearwater Analytics:</strong> last month's recurring revenue ÷ days in month × 365</li>
-              <li><strong style="color:var(--text)">Investor estimate (when not disclosed):</strong> most recent quarterly subscription revenue × 4</li>
+              <li>Option repricing and RSU conversion programs (Zoom modified RSU values; DocuSign increased equity/cash bonus pools)</li>
+              <li>Supplemental cash comp increases (Alphabet, Amazon raised cash compensation policies)</li>
+              <li>Additional equity grants at discounted levels (Robinhood, Snap, Roku, Uber; Apple granted RSU bonuses up to $200k)</li>
+              <li>These actions make equity valuations <strong style="color:var(--text)">more expensive than they appear</strong> — increasing diluted shares and pressuring non-GAAP FCF</li>
             </ul>
           </div>
         </div>
 
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Part 4 — Consumption Companies: None of the Three Work Well</h3>
-        <p style="margin-bottom:14px;">For consumption-based businesses (Twilio, Snowflake, Fastly, MongoDB Atlas, New Relic), all three standard metrics have fundamental limitations:</p>
-
-        <div class="compare-grid">
-          <div class="compare-col">
-            <div class="compare-col-title red">Why Standard Metrics Break Down</div>
-            <ul>
-              <li><strong style="color:var(--text)">Billings is useless:</strong> consumption companies bill in arrears based on actual usage — the change in deferred revenue is essentially zero, making calculated billings meaningless</li>
-              <li><strong style="color:var(--text)">RPO dramatically understates future revenue:</strong> contracts only obligate customers to minimum commitments, but actual usage routinely runs 3–5× above minimums. RPO coverage for consumption companies is typically just 10–30%</li>
-              <li><strong style="color:var(--text)">ARR is directionally useful but flawed:</strong> annualizing trailing usage assumes flat future consumption. Consumption businesses are heavily seasonal — a Q4 ARR run rate may overstate the full-year picture</li>
-            </ul>
+        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Key Conclusions</h3>
+        <div class="metric-grid">
+          <div class="metric-box blue">
+            <div class="metric-name">HCM Becomes More Important</div>
+            <div class="metric-headline">WDAY, ORCL, PAYC, CDAY benefit</div>
+            <div class="metric-desc">With talent war intensifying, human capital management software becomes top of mind for CFOs. DB highlighted these four as potential winners within their coverage universe.</div>
           </div>
-          <div class="compare-col">
-            <div class="compare-col-title blue">RBC's Recommendation: Use NRR</div>
-            <p style="font-size:13px;margin-bottom:10px;">For consumption companies, <strong style="color:var(--text)">Net Revenue Retention (NRR)</strong> is the best available leading indicator:</p>
-            <ul>
-              <li>NRR improvement or deterioration reliably signals a coming acceleration or deceleration in revenue</li>
-              <li>Reflects actual usage expansion from existing customers — the core growth driver in consumption models</li>
-              <li>Twilio reports NRR quarterly (not TTM) — providing a more timely signal on usage trends</li>
-              <li>RBC is open to ARR as a supplemental consumption disclosure but does not yet consider it best practice</li>
-            </ul>
+          <div class="metric-box red">
+            <div class="metric-name">Valuations Are Understated</div>
+            <div class="metric-headline">True cost exceeds stated financials</div>
+            <div class="metric-desc">Increased cash comp headwinds non-GAAP FCF. Repriced options and additional equity grants increase diluted share count. AI, CDAY, CFLT, MTTR, OKTA, PLTR, SNOW, XM, ZM, ZS are highest risk.</div>
+          </div>
+          <div class="metric-box green">
+            <div class="metric-name">Opportunity for Some</div>
+            <div class="metric-headline">Strong fundamentals + lower stock = recruiting edge</div>
+            <div class="metric-desc">Companies with strong business fundamentals but depressed valuations can offer new employees compelling equity at discounted levels — particularly attractive versus privates that haven't yet been marked down.</div>
           </div>
         </div>
 
-        <h3 style="font-family:var(--heading-font);font-size:19px;margin:26px 0 12px;">Summary — Which Metric to Use When</h3>
-        <table class="threshold-table">
-          <thead><tr><th>Company Type</th><th>Best Leading Indicator</th><th>Key Caveat</th></tr></thead>
-          <tbody>
-            <tr><td>Enterprise SaaS, multi-year contracts, full RPO</td><td class="good">cRPO growth + cRPO coverage ratio</td><td>Most comprehensive GAAP metric; includes all contractual commitments; harder to game</td></tr>
-            <tr><td>Companies guiding to RPO (CRM, NOW, WDAY)</td><td class="good">cRPO vs. management guidance</td><td>Coverage ratio above historical norm → likely conservative guidance / upside potential</td></tr>
-            <tr><td>Companies using practical expedient (COUP, DOCU, GWRE, MDB, NICE, PD, PLTR)</td><td class="mid">Billings or ARR (RPO is incomplete)</td><td>RPO excludes contracts ≤12 months — understates backlog; billings or ARR may be more complete</td></tr>
-            <tr><td>Cloud-transition or on-prem term license companies</td><td class="good">ARR growth YoY</td><td>Normalizes for GAAP J-curve / ASC 606 upfront recognition distortions; verify definition</td></tr>
-            <tr><td>SMB SaaS / companies with variable billing durations</td><td class="mid">Current (short-term) billings</td><td>Controls for duration shifts better than total billings; still sensitive to payment term changes</td></tr>
-            <tr><td>Consumption-based (SNOW, TWLO, FSLY, MDB/Atlas, NEWR)</td><td class="bad">NRR + usage growth trends</td><td>Billings useless; RPO understates minimums only; ARR assumes flat usage. NRR is best proxy.</td></tr>
-          </tbody>
-        </table>
-
-        <div class="insight green" style="margin-top:22px;">
-          <div class="insight-label">OneStream & Kantata Context</div>
-          <p>OneStream sells enterprise SaaS on multi-year subscription contracts — making the RPO framework the most directly relevant lens. When you process consulting orders in Kantata, each signed contract contributes to RPO at signing: the billed portion sits in deferred revenue on the balance sheet; the unbilled future invoices are off-balance-sheet backlog. Revenue is then recognized ratably as the performance obligation is delivered under ASC 606. The contract structure — term length, billing frequency, services vs. pure SaaS mix — determines which metric best captures that contract's contribution to forward revenue visibility. A multi-year SaaS deal is exactly the scenario where cRPO matters most to investors.</p>
+        <div class="insight">
+          <div class="insight-label">The Broader Point for Software Analysis</div>
+          <p>Stock-based compensation is a real cost, not a free resource. When equity values fall significantly, the economics of SBC-heavy compensation models break down — and companies must choose between higher cash costs, higher dilution, or higher attrition risk. For any company where SBC is a large percentage of OpEx, this dynamic should be part of valuation analysis, not a footnote.</p>
         </div>
       </div>
     </section>
 
-  </div><!-- /deep dives content -->
+  </div><!-- /content C -->
+
+  <!-- ━━━ D. DETAILED KNOWLEDGE ━━━ -->
+  <div class="content">
+
+    <section class="section" id="wso-pe">
+      <div class="section-header">
+        <span class="section-tag tag-detailed">Detailed · 1 of 2</span>
+        <h2 class="section-title">WSO — PE Interview Prep Pack</h2>
+      </div>
+      <a href="pdfs/9_Interview_Prep.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — WSO</a>
+
+      <div class="card">
+        <div class="card-source">Source: Wall Street Oasis PE Interview Prep Pack — MBA-level crash course for private equity interviews</div>
+
+        <div class="note">
+          <div class="note-label">Scope Note</div>
+          <p>This material is out of scope for current study. It covers MBA-level private equity interview preparation — LBO modeling, deal structuring, fund mechanics, and investment thesis frameworks. Filed here for future reference when the technical foundation from the core curriculum is complete.</p>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-box blue">
+            <div class="metric-name">What It Covers</div>
+            <div class="metric-headline">PE interview fundamentals</div>
+            <div class="metric-desc">LBO modeling mechanics, fund structures (management fees, carried interest), deal sourcing and evaluation, investment thesis construction, and common technical interview questions.</div>
+          </div>
+          <div class="metric-box yellow">
+            <div class="metric-name">When to Use It</div>
+            <div class="metric-headline">Advanced reference only</div>
+            <div class="metric-desc">Relevant if exploring PE careers or needing to speak fluently about PE investment frameworks. Not a prerequisite for understanding SaaS metrics or software business models.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="wso-technical">
+      <div class="section-header">
+        <span class="section-tag tag-detailed">Detailed · 2 of 2</span>
+        <h2 class="section-title">WSO — Technical Interview Guide</h2>
+      </div>
+      <a href="pdfs/10_Interview_Guide.pdf" class="section-pdf-link" target="_blank">↗ Open source PDF — WSO</a>
+
+      <div class="card">
+        <div class="card-source">Source: Wall Street Oasis Technical Interview Guide — Comprehensive finance and accounting technical prep</div>
+
+        <div class="note">
+          <div class="note-label">Scope Note</div>
+          <p>This material is out of scope for current study. As the original reading guidance put it: if you know all of this, you'll probably know more finance and accounting than most private equity investors. Filed here as a long-term reference resource.</p>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-box blue">
+            <div class="metric-name">What It Covers</div>
+            <div class="metric-headline">Deep technical finance & accounting</div>
+            <div class="metric-desc">Financial statement analysis, valuation methodologies (DCF, comps, precedent transactions), accounting mechanics, and the technical questions that come up in investment banking and PE interviews.</div>
+          </div>
+          <div class="metric-box yellow">
+            <div class="metric-name">When to Use It</div>
+            <div class="metric-headline">Advanced reference only</div>
+            <div class="metric-desc">Useful as a comprehensive reference once Sections A and B are fully internalized. Not required for understanding SaaS business models — but valuable for anyone pursuing finance roles where deep technical knowledge is tested.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content D -->
+
 </main>
 
 <script>

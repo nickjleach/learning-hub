@@ -1,1 +1,1 @@
-# learning-hub
+# hub

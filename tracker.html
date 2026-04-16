@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Tracker — Nick Leach</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f4f0;--surface:#fff;--surface2:#f0eeea;--border:#e2e0db;--border2:#cac8c2;
+  --text:#3d3d3a;--text-dim:#888780;--text-muted:#b0aea8;--text-bright:#1a1a18;
+  --accent:#185FA5;--accent-bg:#deeaf7;
+  --green:#3B6D11;--green-bg:#eaf3de;
+  --amber:#7a4e0d;--amber-bg:#faeeda;
+  --red:#8b2020;--red-bg:#fce8e8;
+  --blue:#185FA5;--blue-bg:#deeaf7;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;--serif:'Playfair Display',serif;
+  --r:8px;--sw:220px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#0d0f14;--surface:#13161e;--surface2:#1a1e28;--border:#252a38;--border2:#2e3448;
+  --text:#c2c0b6;--text-dim:#7a8099;--text-muted:#4a4f62;--text-bright:#eef0f8;
+  --accent:#4f8ef7;--accent-bg:#1a2c52;
+  --green:#5ecb8a;--green-bg:#1a3d2a;
+  --amber:#e0a84b;--amber-bg:#3a2a10;
+  --red:#e07070;--red-bg:#3a1520;
+  --blue:#4f8ef7;--blue-bg:#1a2c52;
+}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding-bottom:24px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-brand{padding:22px 16px 16px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.sb-brand-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--text-bright)}
+.sb-brand-sub{font-size:11px;color:var(--text-dim);margin-top:3px;font-family:var(--mono)}
+.sync-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--mono)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.sync-dot.synced{background:var(--green)}
+.sync-dot.syncing{background:var(--amber)}
+.sync-dot.error{background:var(--red)}
+.sb-sec{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);padding:0 16px;margin:12px 0 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;font-size:13px;color:var(--text-dim);border-left:2px solid transparent;transition:background .12s,color .12s;user-select:none}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{color:var(--text-bright);border-left-color:var(--accent);background:var(--accent-bg)}
+.nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--text-muted)}
+.nav-item.active .nav-dot{background:var(--accent)}
+.sb-legend{padding:0 16px;display:flex;flex-direction:column;gap:6px}
+.leg-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-dim)}
+.leg-sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.month-ctrl{margin-top:auto;padding:14px 16px 0;border-top:1px solid var(--border)}
+.month-ctrl-lbl{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
+.month-row{display:flex;align-items:center;gap:4px}
+.mnav-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--text-dim);border-radius:5px;padding:4px 8px;font-size:12px;cursor:pointer;font-family:var(--sans);transition:background .12s}
+.mnav-btn:hover{background:var(--border);color:var(--text)}
+.month-disp{flex:1;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-bright);font-weight:500}
+.today-jump{width:100%;margin-top:5px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);border-radius:5px;padding:5px;font-size:11px;font-family:var(--sans);cursor:pointer;transition:background .12s}
+.today-jump:hover{background:var(--border);color:var(--text)}
+
+/* MAIN */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.pane-inner{padding:28px 32px;max-width:920px;width:100%}
+.page-title{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--text-bright);line-height:1.2}
+.page-sub{font-size:12px;color:var(--text-dim);margin-top:4px;font-family:var(--mono)}
+
+/* PROGRESS */
+.prog-strip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 16px;margin:16px 0;display:flex;align-items:center;gap:16px}
+.prog-meta{flex:1}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.prog-lbl{font-size:12px;color:var(--text-dim)}
+.prog-pct{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:500}
+.prog-bar-bg{height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:99px;background:var(--accent);transition:width .4s}
+.prog-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);font-family:var(--mono);margin-top:4px}
+.bd-badge{background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:8px 12px;text-align:center;flex-shrink:0}
+.bd-badge-num{font-family:var(--mono);font-size:19px;color:var(--text-bright);font-weight:500;line-height:1}
+.bd-badge-sub{font-size:10px;color:var(--text-muted);margin-top:2px;text-transform:uppercase;letter-spacing:.07em}
+
+/* TODAY BOX */
+.today-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px}
+.today-box-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:9px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.today-box-title{font-family:var(--serif);font-size:15px;color:var(--text-bright)}
+.today-box-date{font-family:var(--mono);font-size:11px;color:var(--text-dim)}
+.focus-grp-lbl{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin:10px 0 4px}
+.focus-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:opacity .12s}
+.focus-item:last-child{border-bottom:none}
+.focus-item:hover{opacity:.85}
+.f-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;transition:all .12s}
+.focus-item.f-done .f-check{background:var(--green-bg);border-color:var(--green)}
+.f-dot{width:6px;height:6px;border-radius:50%}
+.focus-item.f-done .f-dot{background:var(--green)}
+.focus-item.f-done .f-name{text-decoration:line-through;color:var(--text-dim)}
+.f-body{flex:1;min-width:0}
+.f-name{font-size:13px;color:var(--text-bright);font-weight:500}
+.f-parent{font-size:11px;color:var(--text-dim);margin-top:1px}
+.f-meta{font-size:11px;color:var(--text-dim);font-family:var(--mono);margin-top:1px}
+.f-overdue-tag{font-size:10px;color:var(--red);font-family:var(--mono);flex-shrink:0;margin-top:4px}
+.no-tasks{font-size:13px;color:var(--text-dim);font-style:italic;padding:4px 0}
+
+/* SECTION LABEL */
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin:20px 0 8px;display:flex;align-items:center;gap:10px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TASK ROWS (All Tasks) */
+.task-row{border-radius:var(--r);border:1px solid var(--border);background:var(--surface);margin-bottom:5px;overflow:hidden}
+.task-row.t-overdue{border-color:var(--red)}
+.task-row.t-active{border-left:2px solid var(--blue)}
+.task-row.t-done{opacity:.32}
+.task-main{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;transition:background .12s;user-select:none}
+.task-main:hover{background:var(--surface2)}
+.task-row.t-overdue .task-main{background:var(--red-bg)}
+.expand-icon{font-size:11px;color:var(--text-muted);flex-shrink:0;margin-top:3px;width:14px;text-align:center;transition:transform .15s;display:inline-block}
+.task-row.t-expanded .expand-icon{transform:rotate(90deg)}
+.t-check{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .12s}
+.t-done-ring{background:var(--green-bg)!important;border-color:var(--green)!important}
+.t-check-dot{width:7px;height:7px;border-radius:50%}
+.t-done-dot{background:var(--green)!important}
+.task-body{flex:1;min-width:0}
+.task-name{font-size:13px;color:var(--text-bright);font-weight:500}
+.t-overdue .task-name{color:var(--red)}
+.task-bd{font-family:var(--mono);font-size:11px;margin-top:2px;color:var(--text-dim);display:flex;gap:6px;flex-wrap:wrap}
+.bd-mid{color:var(--blue)}.bd-close{color:var(--green)}.bd-emea{color:var(--text-dim)}
+.bd-sep{color:var(--border2)}
+.task-note{font-size:12px;color:var(--text-dim);margin-top:3px;line-height:1.4}
+.task-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.status-pill{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.p-overdue{background:var(--red-bg);color:var(--red);border:1px solid var(--red)}
+.p-active{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue)}
+.p-upcoming{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.p-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green)}
+.cat-pill{font-size:10px;padding:1px 6px;border-radius:99px;border:1px solid var(--border);color:var(--text-muted);white-space:nowrap}
+.hrs-lbl{font-family:var(--mono);font-size:10px;color:var(--text-muted)}
+.prog-frac{font-family:var(--mono);font-size:11px;color:var(--text-dim)}
+.subtask-list{border-top:1px solid var(--border);background:var(--surface2);display:none}
+.task-row.t-expanded .subtask-list{display:block}
+.st-item{display:flex;align-items:flex-start;gap:9px;padding:8px 12px 8px 38px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;user-select:none}
+.st-item:last-child{border-bottom:none}
+.st-item:hover{background:var(--border)}
+.st-item.st-done{opacity:.38}
+.st-item.st-done .st-name{text-decoration:line-through;color:var(--text-dim)}
+.st-ring{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.st-item.st-done .st-ring{background:var(--green-bg);border-color:var(--green)}
+.st-dot{width:5px;height:5px;border-radius:50%}
+.st-item.st-done .st-dot{background:var(--green)}
+.st-name{font-size:12px;color:var(--text-bright);font-weight:500;flex:1}
+.st-meta{font-size:11px;color:var(--text-dim);font-family:var(--mono);margin-top:1px}
+
+/* CALENDAR — full screen, weekdays only (5 cols) */
+#pane-calendar{flex:1;display:none;flex-direction:column}
+.cal-header{padding:20px 24px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.cal-title{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--text-bright)}
+.cal-sub{font-size:12px;color:var(--text-dim);font-family:var(--mono);margin-top:3px}
+.cal-body{flex:1;display:flex;flex-direction:column;padding:10px 14px 12px;min-height:0;overflow:hidden}
+.cal-dow-row{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:3px;flex-shrink:0}
+.cal-dow{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:3px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;flex:1;grid-auto-rows:1fr}
+.cal-cell{border-radius:6px;border:1px solid var(--border);padding:6px 7px;background:var(--surface);cursor:pointer;transition:border-color .12s,background .12s;overflow:hidden;display:flex;flex-direction:column;min-height:80px}
+.cal-cell:hover{border-color:var(--border2);background:var(--surface2)}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default;pointer-events:none}
+.cal-cell.istoday{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.cal-cell.past{opacity:.42}
+.cal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;flex-shrink:0}
+.cal-num{font-size:11px;color:var(--text-dim);font-family:var(--mono)}
+.cal-cell.istoday .cal-num{color:var(--accent);font-weight:600}
+.cal-bd{font-size:9px;color:var(--text-muted);font-family:var(--mono)}
+.cal-chips{display:flex;flex-direction:column;gap:2px;flex:1;overflow:hidden}
+.chip{font-size:9px;border-radius:3px;padding:1px 5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0}
+.ch-mid-s{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue)}
+.ch-mid-d{background:var(--accent-bg);color:var(--accent)}
+.ch-cls-s{background:var(--green-bg);color:var(--green);border:1px solid var(--green)}
+.ch-cls-d{background:var(--green-bg);color:var(--green);opacity:.8}
+.ch-emea{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.ch-over{background:var(--red-bg);color:var(--red)}
+.ch-sub{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border2);font-style:italic}
+.cal-more{font-size:9px;color:var(--text-muted);font-family:var(--mono);margin-top:2px}
+.cal-legend-row{display:flex;gap:12px;flex-wrap:wrap;padding:8px 0 0;flex-shrink:0}
+.cal-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim)}
+.cal-leg-sw{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* DAY PANEL */
+.day-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;display:none;align-items:flex-start;justify-content:flex-end}
+.day-overlay.open{display:flex}
+.day-panel{background:var(--surface);width:380px;max-width:95vw;height:100vh;overflow-y:auto;border-left:1px solid var(--border);display:flex;flex-direction:column;animation:slideIn .18s ease}
+@keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+.dp-hdr{padding:18px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.dp-close{float:right;background:none;border:none;font-size:18px;color:var(--text-dim);cursor:pointer;line-height:1;margin-top:-2px}
+.dp-close:hover{color:var(--text)}
+.dp-title{font-family:var(--serif);font-size:17px;color:var(--text-bright);font-weight:600}
+.dp-bd{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-top:3px}
+.dp-body{padding:14px 20px;flex:1}
+.dp-grp-lbl{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin:12px 0 6px;display:flex;align-items:center;gap:8px}
+.dp-grp-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.dp-block{background:var(--surface2);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.dp-block-hdr{padding:7px 12px;font-size:12px;font-weight:500;color:var(--text-bright);border-bottom:1px solid var(--border)}
+.dp-st{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;user-select:none}
+.dp-st:last-child{border-bottom:none}
+.dp-st:hover{background:var(--border)}
+.dp-st.st-done .dp-st-name{text-decoration:line-through;opacity:.5}
+.dp-st-ring{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.dp-st.st-done .dp-st-ring{background:var(--green-bg);border-color:var(--green)}
+.dp-st-dot{width:5px;height:5px;border-radius:50%}
+.dp-st.st-done .dp-st-dot{background:var(--green)}
+.dp-st-name{flex:1;font-size:12px;color:var(--text-bright)}
+.dp-st-hrs{font-family:var(--mono);font-size:11px;color:var(--text-muted);flex-shrink:0}
+.dp-empty{font-size:13px;color:var(--text-dim);font-style:italic;padding:10px 0}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-brand-title">Task Tracker</div>
+    <div class="sb-brand-sub">Nick Leach &middot; OneStream</div>
+    <div class="sync-row"><div class="sync-dot" id="sync-dot"></div><span id="sync-label">Connecting...</span></div>
+  </div>
+  <div class="sb-sec">Views</div>
+  <div class="nav-item active" onclick="switchTab('today',this)"><div class="nav-dot"></div>Today's Focus</div>
+  <div class="nav-item" onclick="switchTab('list',this)"><div class="nav-dot"></div>All Tasks</div>
+  <div class="nav-item" onclick="switchTab('calendar',this)"><div class="nav-dot"></div>Calendar</div>
+  <div class="sb-sec" style="margin-top:16px">BD Type</div>
+  <div class="sb-legend">
+    <div class="leg-row"><div class="leg-sw" style="background:var(--blue-bg);border:1px solid var(--blue)"></div>Mid-month BD</div>
+    <div class="leg-row"><div class="leg-sw" style="background:var(--green-bg);border:1px solid var(--green)"></div>Close / next-month BD</div>
+    <div class="leg-row"><div class="leg-sw" style="background:var(--red-bg);border:1px solid var(--red)"></div>Overdue</div>
+  </div>
+  <div class="month-ctrl">
+    <div class="month-ctrl-lbl">Period</div>
+    <div class="month-row">
+      <button class="mnav-btn" onclick="shiftMonth(-1)">&#8592;</button>
+      <div class="month-disp" id="month-disp"></div>
+      <button class="mnav-btn" onclick="shiftMonth(1)">&#8594;</button>
+    </div>
+    <button class="today-jump" onclick="shiftMonth(0)">Jump to today</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div id="pane-today" style="display:block"><div class="pane-inner" id="today-inner"></div></div>
+  <div id="pane-list"  style="display:none"><div class="pane-inner" id="list-inner"></div></div>
+  <div id="pane-calendar"></div>
+</div>
+
+<div class="day-overlay" id="day-overlay" onclick="overlayClick(event)">
+  <div class="day-panel" id="day-panel">
+    <div class="dp-hdr">
+      <button class="dp-close" onclick="closeDayPanel()">&#x2715;</button>
+      <div class="dp-title" id="dp-title"></div>
+      <div class="dp-bd" id="dp-bd"></div>
+    </div>
+    <div class="dp-body" id="dp-body"></div>
+  </div>
+</div>
+
+<script>
+// ── TASK DATA ─────────────────────────────────────────────────────────────────
+const TASK_DEFS = [
+  {id:'gen_inv',   name:'Generate invoices',                      type:'mid',   bd:5,        startBd:5,        hrs:2,   cat:'Invoicing',       note:'AR closes BD4 — cannot generate until AR is closed for the prior month.',subtasks:[]},
+  {id:'send_inv',  name:'Send all invoices',                       type:'mid',   bd:10,       startBd:6,        hrs:7.5, cat:'Invoicing',       note:'Depends on invoice generation (BD5). Complete all subtasks BD6–10.',
+    subtasks:[
+      {id:'si_1',name:'Populate invoice tracker file',             scheduledBd:6,  hrs:1},
+      {id:'si_2',name:'Generate all invoices & send for approval', scheduledBd:6,  hrs:0.5},
+      {id:'si_3',name:'Re-format all annuity invoices',            scheduledBd:7,  hrs:0.5},
+      {id:'si_4',name:'Attach time detail reports to invoices',    scheduledBd:8,  hrs:1},
+      {id:'si_5',name:'Save all time detail report attachments',   scheduledBd:8,  hrs:1.5},
+      {id:'si_6',name:'Dispatch all invoices',                     scheduledBd:9,  hrs:0.5},
+      {id:'si_7',name:'Import error invoices',                     scheduledBd:9,  hrs:1},
+      {id:'si_8',name:'Send invoices via email',                   scheduledBd:10, hrs:1},
+      {id:'si_9',name:'Upload invoices in portal (when applicable)',scheduledBd:10,hrs:0.5},
+    ]},
+  {id:'sub_bills', name:'Subcontractor bill review (Coupa)',       type:'mid',   bd:8,        startBd:3,        hrs:5,   cat:'Invoicing',       note:'Standard approvals due BD8. Bills needing discussion wrapped up by BD13.',subtasks:[]},
+  {id:'send_exp',  name:'Send expense invoices',                   type:'mid',   bd:13,       startBd:9,        hrs:3,   cat:'Invoicing',       note:'Also the final deadline for any outstanding subcontractor bill discussions.',subtasks:[]},
+  {id:'pm_out',    name:'Project management / mid-month outreach', type:'mid',   bd:14,       startBd:12,       hrs:2.5, cat:'Project Mgmt',    note:'Initial mid-month outreach must be initiated by BD14.',subtasks:[]},
+  {id:'data_imp',  name:'Send bill number import to data team',    type:'mid',   bd:15,       startBd:13,       hrs:1.5, cat:'Data Team',       note:'Prep export BD13–14, send by BD15.',subtasks:[]},
+  {id:'emea_w1',   name:'EMEA: Week 1 time outreach',             type:'emea',  bd:'fri_w2', startBd:'fri_w2', hrs:0.5, cat:'EMEA',            note:'EMEA only. Outreach on Friday of Week 2 for Week 1 draft/pending time.',subtasks:[]},
+  {id:'emea_w2',   name:'EMEA: Week 2 time outreach',             type:'emea',  bd:'fri_w3', startBd:'fri_w3', hrs:0.5, cat:'EMEA',            note:'EMEA only. Outreach Friday of Week 3 for Week 2 pending time. Stop mid-month reminders after this.',subtasks:[]},
+  {id:'exp_rev',   name:'Expense review (informal)',               type:'close', bd:-1,       startBd:-2,       hrs:1.5, cat:'Month-End Close', note:'Last BD of the month. Informal check before period close.',subtasks:[]},
+  {id:'inv_tie',   name:'Invoice tieout file',                     type:'close', bd:-1,       startBd:-3,       hrs:3,   cat:'Month-End Close', note:'Last BD of the month. Requires invoice data to be complete.',subtasks:[]},
+  {id:'eng_rev',   name:'Engagement review file',                  type:'close', bd:1,        startBd:-1,       hrs:2.5, cat:'Month-End Close', note:'First BD of next month. Begin prep last BD of current month.',subtasks:[]},
+  {id:'close_tp',  name:'Close time period',                       type:'close', bd:1,        startBd:1,        hrs:1,   cat:'Month-End Close', note:'First BD of next month. Execute after engagement review is complete.',subtasks:[]},
+  {id:'war_email', name:'Send WAR email',                          type:'close', bd:2,        startBd:1,        hrs:1,   cat:'Month-End Close', note:'Second BD of next month. Draft BD1, send BD2.',subtasks:[]},
+  {id:'proj_anal', name:'Project analysis',                        type:'close', bd:2,        startBd:1,        hrs:2,   cat:'Month-End Close', note:'Second BD of next month. Work alongside WAR email.',subtasks:[]},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const now=new Date();now.setHours(0,0,0,0);
+let vY=now.getFullYear(),vM=now.getMonth(),tab='today',done={},expanded={};
+
+// ── JSONBIN SYNC ──────────────────────────────────────────────────────────────
+const TRACKER_BIN = '69e05de3856a6821893c20f3';
+const API_KEY     = '$2a$10$76FBJXGqFrFTplqqEofln.iCs9sAaBZtsOTu6tp73cB8j/QmWUZym';
+const BASE        = 'https://api.jsonbin.io/v3/b';
+const LS_KEY      = 'bdtrk_v5';
+let saveTimer     = null;
+
+function setSyncStatus(status, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  if (dot) dot.className = 'sync-dot ' + status;
+  if (lbl) lbl.textContent = label;
+}
+
+async function loadData() {
+  setSyncStatus('syncing', 'Loading...');
+  try {
+    const r = await fetch(`${BASE}/${TRACKER_BIN}/latest`, {headers:{'X-Master-Key':API_KEY}});
+    const j = await r.json();
+    if (j.record && j.record.done && typeof j.record.done === 'object') done = j.record.done;
+    setSyncStatus('synced', 'Synced');
+  } catch(e) {
+    setSyncStatus('error', 'Offline — saved locally');
+    try { const s = localStorage.getItem(LS_KEY); if (s) done = JSON.parse(s); } catch(e2) {}
+  }
+  render();
+}
+
+async function save() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(done)); } catch(e) {}
+  setSyncStatus('syncing', 'Saving...');
+  try {
+    await fetch(`${BASE}/${TRACKER_BIN}`, {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json','X-Master-Key':API_KEY},
+      body: JSON.stringify({done})
+    });
+    setSyncStatus('synced', 'Saved');
+  } catch(e) {
+    setSyncStatus('error', 'Save failed — stored locally');
+  }
+}
+
+function debounceSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 800);
+}
+
+// ── BD UTILS ──────────────────────────────────────────────────────────────────
+function isWknd(d){const w=d.getDay();return w===0||w===6;}
+function getBDs(y,m){const t=new Date(y,m+1,0).getDate(),b=[];for(let d=1;d<=t;d++){const dt=new Date(y,m,d);if(!isWknd(dt))b.push(dt);}return b;}
+function getWkFris(y,m){
+  const r={},f=new Date(y,m,1),g=new Date(f);g.setDate(f.getDate()-f.getDay());
+  let wk=0;for(let w=0;w<6;w++){const fr=new Date(g);fr.setDate(g.getDate()+w*7+5);if(fr.getMonth()===m){wk++;r['fri_w'+wk]=fr;}}return r;
+}
+function resDate(bd,type,y,m){
+  if(type==='mid'){const b=getBDs(y,m);const i=bd-1;return(i>=0&&i<b.length)?b[i]:null;}
+  if(type==='close'){
+    if(bd<0){const b=getBDs(y,m);const i=b.length+bd;return i>=0?b[i]:null;}
+    const nm=m===11?0:m+1,ny=m===11?y+1:y;const b=getBDs(ny,nm);const i=bd-1;return(i>=0&&i<b.length)?b[i]:null;
+  }
+  if(type==='emea')return getWkFris(y,m)[bd]||null;
+  return null;
+}
+function resSubDate(scheduledBd,y,m){
+  if(scheduledBd===null||scheduledBd===undefined)return null;
+  if(typeof scheduledBd==='string')return getWkFris(y,m)[scheduledBd]||null;
+  if(scheduledBd<0){const b=getBDs(y,m);const i=b.length+scheduledBd;return i>=0?b[i]:null;}
+  const b=getBDs(y,m);const i=scheduledBd-1;return(i>=0&&i<b.length)?b[i]:null;
+}
+function bdDisp(t,y,m){
+  if(t.type==='mid')return'BD'+t.bd+' (cur. month)';
+  if(t.type==='close'){if(t.bd<0)return'BD'+t.bd+' (end of month)';const nm=m===11?0:m+1,ny=m===11?y+1:y;return'BD'+t.bd+' '+MONTHS[nm].slice(0,3)+' '+ny;}
+  if(t.type==='emea')return t.bd==='fri_w2'?'Fri of Week 2':'Fri of Week 3';
+  return'';
+}
+
+// ── KEY HELPERS ───────────────────────────────────────────────────────────────
+// Always use subtask IDs for subtask done state, never parent ID when subtasks exist
+function taskDoneKey(taskId){return vY+'-'+vM+'-'+taskId;}
+function isTaskDone(t){
+  if(t.subtasks&&t.subtasks.length) return t.subtasks.every(st=>!!done[taskDoneKey(st.id)]);
+  return !!done[taskDoneKey(t.id)];
+}
+function isStDone(stId){return !!done[taskDoneKey(stId)];}
+
+function tStatus(t,due,start){
+  if(isTaskDone(t))return'done';
+  if(!due||!start)return'upcoming';
+  const cur=vY===now.getFullYear()&&vM===now.getMonth();
+  if(!cur)return'upcoming';
+  if(now>due)return'overdue';
+  if(now>=start)return'active';
+  return'upcoming';
+}
+
+function buildTasks(){
+  return TASK_DEFS.map(t=>{
+    const due=resDate(t.bd,t.type,vY,vM);
+    const start=resDate(t.startBd,t.type,vY,vM);
+    const enrichedSubs=(t.subtasks||[]).map(st=>({
+      ...st,scheduledDate:resSubDate(st.scheduledBd,vY,vM),isDone:isStDone(st.id)
+    }));
+    const doneCount=enrichedSubs.filter(s=>s.isDone).length;
+    const status=tStatus(t,due,start);
+    return{...t,due,start,status,bd:bdDisp(t,vY,vM),subtasks:enrichedSubs,doneCount};
+  }).sort((a,b)=>(a.due||new Date(9999,0,1))-(b.due||new Date(9999,0,1)));
+}
+
+function fmt(d){return d?d.toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—';}
+function bdCls(type){return type==='mid'?'bd-mid':type==='close'?'bd-close':'bd-emea';}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  const tasks=buildTasks(),bds=getBDs(vY,vM),tot=bds.length;
+  const cur=vY===now.getFullYear()&&vM===now.getMonth();
+  let cbd=0;
+  if(cur){
+    for(let i=0;i<bds.length;i++)if(bds[i].getTime()===now.getTime()){cbd=i+1;break;}
+    if(!cbd)for(let i=bds.length-1;i>=0;i--)if(bds[i]<=now){cbd=i+1;break;}
+  }
+  const pct=tot>0?Math.round((cbd/tot)*100):0;
+  document.getElementById('month-disp').textContent=MONTHS[vM].slice(0,3)+' '+vY;
+  if(tab==='today')rToday(tasks,cbd,tot,pct,cur);
+  if(tab==='list')rList(tasks);
+  if(tab==='calendar')rCal(tasks,bds,cbd,tot,cur);
+}
+
+// ── TODAY'S FOCUS ─────────────────────────────────────────────────────────────
+function rToday(tasks,cbd,tot,pct,cur){
+  const el=document.getElementById('today-inner');
+  let h=`<div><div class="page-title">${MONTHS[vM]} ${vY}</div><div class="page-sub">${cur&&cbd?'BD '+cbd+' of '+tot+' business days this period':tot+' business days this period'}</div></div>`;
+  h+=`<div class="prog-strip">
+    <div class="prog-meta">
+      <div class="prog-top"><span class="prog-lbl">Period progress</span><span class="prog-pct">${pct}%</span></div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+      <div class="prog-ends"><span>BD1</span><span>BD${tot}</span></div>
+    </div>
+    <div class="bd-badge"><div class="bd-badge-num">${cbd?'BD'+cbd:'—'}</div><div class="bd-badge-sub">today</div></div>
+  </div>`;
+
+  if(cur){
+    const ds=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    h+=`<div class="today-box"><div class="today-box-hdr"><span class="today-box-title">Today's focus</span><span class="today-box-date">${ds}</span></div>`;
+
+    // Collect focus items — subtasks scheduled today OR main tasks (no subtasks) that are active/overdue
+    const focusItems=[];
+
+    tasks.forEach(t=>{
+      if(t.subtasks&&t.subtasks.length){
+        // Show individual subtasks scheduled for today
+        t.subtasks.forEach(st=>{
+          if(st.scheduledDate&&st.scheduledDate.getTime()===now.getTime()){
+            focusItems.push({kind:'subtask',st,parentName:t.name,parentId:t.id,taskStatus:t.status});
+          }
+        });
+        // If task is overdue, also surface it as a task-level note (no subtask scheduled today)
+        if(t.status==='overdue'&&!t.subtasks.some(st=>st.scheduledDate&&st.scheduledDate.getTime()===now.getTime())){
+          focusItems.push({kind:'task-overdue',t});
+        }
+      } else {
+        // No subtasks — show task if active or overdue
+        if(t.status==='active'||t.status==='overdue'){
+          focusItems.push({kind:'task',t});
+        }
+      }
+    });
+
+    if(!focusItems.length){h+=`<div class="no-tasks">No active tasks or subtasks scheduled for today.</div>`;}
+
+    const overdueItems=focusItems.filter(i=>i.kind==='task-overdue'||(i.kind==='task'&&i.t.status==='overdue'));
+    const activeItems=focusItems.filter(i=>i.kind==='subtask'||(i.kind==='task'&&i.t.status==='active'));
+
+    if(overdueItems.length){
+      h+=`<div class="focus-grp-lbl" style="color:var(--red)">Overdue</div>`;
+      overdueItems.forEach(item=>{
+        const t=item.t;const isDn=isTaskDone(t);
+        h+=`<div class="focus-item${isDn?' f-done':''}" onclick="toggleTask('${t.id}')">
+          <div class="f-check"><div class="f-dot"></div></div>
+          <div class="f-body"><div class="f-name" style="${!isDn?'color:var(--red)':''}">${t.name}</div><div class="f-meta">${t.bd} &middot; was due ${fmt(t.due)}</div></div>
+          ${!isDn?'<div class="f-overdue-tag">OVERDUE</div>':''}
+        </div>`;
+      });
+    }
+    if(activeItems.length){
+      h+=`<div class="focus-grp-lbl">Today's work</div>`;
+      activeItems.forEach(item=>{
+        if(item.kind==='subtask'){
+          const st=item.st;const isDn=st.isDone;
+          h+=`<div class="focus-item${isDn?' f-done':''}" onclick="toggleSt('${st.id}')">
+            <div class="f-check"><div class="f-dot"></div></div>
+            <div class="f-body">
+              <div class="f-name">${st.name}</div>
+              <div class="f-parent">&#x2514; ${item.parentName}</div>
+              <div class="f-meta">~${st.hrs}h</div>
+            </div>
+          </div>`;
+        } else {
+          const t=item.t;const isDn=isTaskDone(t);
+          h+=`<div class="focus-item${isDn?' f-done':''}" onclick="toggleTask('${t.id}')">
+            <div class="f-check"><div class="f-dot"></div></div>
+            <div class="f-body"><div class="f-name">${t.name}</div><div class="f-meta">${t.bd} &middot; due ${fmt(t.due)} &middot; ~${t.hrs}h</div></div>
+          </div>`;
+        }
+      });
+    }
+    h+=`</div>`;
+  }
+
+  // Upcoming — no sorting change, no completed-at-bottom shuffle
+  const up=tasks.filter(t=>t.status==='upcoming'&&t.due).slice(0,5);
+  if(up.length){h+=`<div class="sec-lbl">Coming up next</div>`;up.forEach(t=>{h+=tRow(t,false);});}
+
+  el.innerHTML=h;
+}
+
+// ── ALL TASKS ─────────────────────────────────────────────────────────────────
+function rList(tasks){
+  const dc=tasks.filter(t=>t.status==='done').length;
+  const el=document.getElementById('list-inner');
+  let h=`<div><div class="page-title">${MONTHS[vM]} ${vY}</div><div class="page-sub" style="margin-bottom:0">${dc}/${tasks.length} tasks completed &mdash; &#9654; to expand subtasks, click row to toggle</div></div>`;
+  [{key:'overdue',lbl:'Overdue'},{key:'active',lbl:'In progress'},{key:'upcoming',lbl:'Upcoming'},{key:'done',lbl:'Completed'}].forEach(g=>{
+    const gt=tasks.filter(t=>t.status===g.key);
+    if(!gt.length)return;
+    h+=`<div class="sec-lbl">${g.lbl}</div>`;
+    gt.forEach(t=>{h+=tRow(t,true);});
+  });
+  el.innerHTML=h;
+}
+
+function tRow(t,showSubs){
+  const sc={done:'t-done',overdue:'t-overdue',active:'t-active',upcoming:''}[t.status]||'';
+  const pc={done:'p-done',overdue:'p-overdue',active:'p-active',upcoming:'p-upcoming'}[t.status]||'p-upcoming';
+  const pt={done:'Done',overdue:'Overdue',active:'In progress',upcoming:'Upcoming'}[t.status]||t.status;
+  const hasSubs=t.subtasks&&t.subtasks.length>0;
+  const isExp=!!expanded[t.id];
+  const isDn=isTaskDone(t);
+
+  let leftCtrl='';
+  if(hasSubs){
+    leftCtrl=`<div class="expand-icon">&#9654;</div>`;
+  } else {
+    leftCtrl=`<div class="t-check${isDn?' t-done-ring':''}"><div class="t-check-dot${isDn?' t-done-dot':''}"></div></div>`;
+  }
+
+  const progStr=hasSubs?`<span class="prog-frac">${t.doneCount}/${t.subtasks.length}</span>`:'';
+  const totalHrs=hasSubs?t.subtasks.reduce((a,s)=>a+s.hrs,0):t.hrs;
+  const clickFn=hasSubs?`toggleExpand('${t.id}')`:(`toggleTask('${t.id}')`);
+
+  let subHtml='';
+  if(showSubs&&hasSubs){
+    subHtml=`<div class="subtask-list">`;
+    t.subtasks.forEach(st=>{
+      const isDnSt=st.isDone;
+      subHtml+=`<div class="st-item${isDnSt?' st-done':''}" onclick="toggleSt('${st.id}');event.stopPropagation()">
+        <div class="st-ring" style="${isDnSt?'background:var(--green-bg);border-color:var(--green)':''}"><div class="st-dot" style="${isDnSt?'background:var(--green)':''}"></div></div>
+        <div style="flex:1;min-width:0">
+          <div class="st-name">${st.name}</div>
+          <div class="st-meta">${st.scheduledDate?'Sched. '+fmt(st.scheduledDate):'Unscheduled'} &middot; ~${st.hrs}h</div>
+        </div>
+      </div>`;
+    });
+    subHtml+=`</div>`;
+  }
+
+  return`<div class="task-row ${sc}${isExp?' t-expanded':''}" id="trow-${t.id}">
+    <div class="task-main" onclick="${clickFn}">
+      ${leftCtrl}
+      <div class="task-body">
+        <div class="task-name">${t.name}</div>
+        <div class="task-bd"><span class="${bdCls(t.type)}">${t.bd}</span><span class="bd-sep">|</span><span>Start ${fmt(t.start)}</span><span class="bd-sep">|</span><span>Due ${fmt(t.due)}</span></div>
+        <div class="task-note">${t.note}</div>
+      </div>
+      <div class="task-right">
+        <span class="status-pill ${pc}">${pt}</span>
+        ${progStr}
+        <span class="cat-pill">${t.cat}</span>
+        <span class="hrs-lbl">~${totalHrs}h</span>
+      </div>
+    </div>
+    ${subHtml}
+  </div>`;
+}
+
+// ── CALENDAR (weekdays only) ──────────────────────────────────────────────────
+function rCal(tasks,bds,cbd,tot,cur){
+  const el=document.getElementById('pane-calendar');
+
+  // Build event map
+  const evMap={};
+  const add=(dt,cls,label,tid,stid)=>{
+    if(!dt)return;const k=dt.toDateString();
+    if(!evMap[k])evMap[k]=[];evMap[k].push({cls,label,tid,stid});
+  };
+  tasks.forEach(t=>{
+    const base=t.type==='mid'?'mid':t.type==='close'?'cls':'emea';
+    if(t.subtasks&&t.subtasks.length){
+      t.subtasks.forEach(st=>{
+        if(st.scheduledDate)add(st.scheduledDate,t.status==='overdue'?'ch-over':'ch-sub',st.name,t.id,st.id);
+      });
+    } else {
+      if(t.start&&t.due&&t.start.getTime()!==t.due.getTime())add(t.start,'ch-'+base+'-s',t.name,t.id,null);
+      if(t.due)add(t.due,t.status==='overdue'?'ch-over':'ch-'+base+'-d',t.name,t.id,null);
+    }
+  });
+
+  const bdLookup={};bds.forEach((dt,i)=>{bdLookup[dt.toDateString()]='BD'+(i+1);});
+
+  const y=vY,m=vM,totalDays=new Date(y,m+1,0).getDate();
+
+  // Build ordered list of weekdays only
+  const weekdays=[];
+  for(let d=1;d<=totalDays;d++){
+    const dt=new Date(y,m,d);
+    if(!isWknd(dt))weekdays.push(dt);
+  }
+
+  // Find what weekday-of-week the first weekday falls on (Mon=0..Fri=4)
+  const firstWkday=weekdays[0];
+  const firstDow=firstWkday.getDay(); // 1=Mon..5=Fri
+  const offsetCols=firstDow-1; // empty cells before first weekday (Mon=0 offset, Tue=1, etc)
+
+  let h=`<div class="cal-header">
+    <div class="cal-title">${MONTHS[m]} ${y}</div>
+    <div class="cal-sub">${cur&&cbd?'BD '+cbd+' of '+tot+' business days this period':tot+' business days this period'}</div>
+  </div>
+  <div class="cal-body">
+    <div class="cal-dow-row">`;
+  ['Mon','Tue','Wed','Thu','Fri'].forEach(d=>h+=`<div class="cal-dow">${d}</div>`);
+  h+=`</div><div class="cal-grid">`;
+
+  for(let i=0;i<offsetCols;i++)h+=`<div class="cal-cell empty"></div>`;
+
+  weekdays.forEach(dt=>{
+    const k=dt.toDateString();
+    const it=dt.getTime()===now.getTime(),ps=dt<now&&!it;
+    let cl='cal-cell';if(it)cl+=' istoday';if(ps)cl+=' past';
+    const evts=evMap[k]||[];
+    const show=evts.slice(0,4);
+    const more=evts.length>4?evts.length-4:0;
+    const chips=show.map(e=>`<div class="chip ${e.cls}" title="${e.label}">${e.label.split(' ').slice(0,4).join(' ')}</div>`).join('');
+    const moreHtml=more?`<div class="cal-more">+${more} more</div>`:'';
+    const dtStr=dt.toISOString().split('T')[0];
+    h+=`<div class="${cl}" onclick="openDayPanel('${dtStr}')">
+      <div class="cal-top"><span class="cal-num">${dt.getDate()}</span><span class="cal-bd">${bdLookup[k]||''}</span></div>
+      <div class="cal-chips">${chips}${moreHtml}</div>
+    </div>`;
+  });
+
+  h+=`</div>
+  <div class="cal-legend-row">
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--blue-bg);border:1px solid var(--blue)"></div>Mid-month start</div>
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--accent-bg)"></div>Mid-month due</div>
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--green-bg);border:1px solid var(--green)"></div>Close start</div>
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--green-bg)"></div>Close due</div>
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--surface2);border:1px solid var(--border2)"></div>Subtask</div>
+    <div class="cal-leg-item"><div class="cal-leg-sw" style="background:var(--red-bg);border:1px solid var(--red)"></div>Overdue</div>
+  </div></div>`;
+
+  el.innerHTML=h;
+}
+
+// ── DAY PANEL ─────────────────────────────────────────────────────────────────
+let currentPanelDate=null;
+
+function openDayPanel(dateStr){
+  currentPanelDate=dateStr;
+  _renderDayPanel(dateStr);
+  document.getElementById('day-overlay').classList.add('open');
+}
+function _renderDayPanel(dateStr){
+  const dt=new Date(dateStr+'T00:00:00');
+  const tasks=buildTasks();
+  const bds=getBDs(vY,vM);
+  const bdIdx=bds.findIndex(b=>b.toDateString()===dt.toDateString());
+  const bdLbl=bdIdx>=0?'BD'+(bdIdx+1):'';
+
+  document.getElementById('dp-title').textContent=dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('dp-bd').textContent=bdLbl;
+
+  let h='';
+  const dayTasks=[];
+  tasks.forEach(t=>{
+    const subs=(t.subtasks||[]).filter(st=>st.scheduledDate&&st.scheduledDate.toDateString()===dt.toDateString());
+    const dueToday=t.due&&t.due.toDateString()===dt.toDateString();
+    const startToday=t.start&&t.start.toDateString()===dt.toDateString();
+    if(subs.length||((!t.subtasks||!t.subtasks.length)&&(dueToday||startToday))){
+      dayTasks.push({...t,daySubs:subs,dueToday,startToday});
+    }
+  });
+
+  if(!dayTasks.length){h=`<div class="dp-empty">No tasks or subtasks scheduled for this day.</div>`;}
+  else {
+    const withSubs=dayTasks.filter(t=>t.daySubs.length);
+    const withoutSubs=dayTasks.filter(t=>!t.daySubs.length);
+    if(withSubs.length){
+      h+=`<div class="dp-grp-lbl">Subtasks to complete</div>`;
+      withSubs.forEach(t=>{
+        const hrs=t.daySubs.reduce((a,s)=>a+s.hrs,0);
+        h+=`<div class="dp-block"><div class="dp-block-hdr">${t.name}<span style="font-family:var(--mono);font-size:10px;color:var(--text-muted);font-weight:400"> &nbsp;~${hrs}h today</span></div>`;
+        t.daySubs.forEach(st=>{
+          const isDn=st.isDone;
+          h+=`<div class="dp-st${isDn?' st-done':''}" onclick="dpToggleSt('${st.id}','${dateStr}')">
+            <div class="dp-st-ring" style="${isDn?'background:var(--green-bg);border-color:var(--green)':''}"><div class="dp-st-dot" style="${isDn?'background:var(--green)':''}"></div></div>
+            <div class="dp-st-name">${st.name}</div>
+            <div class="dp-st-hrs">~${st.hrs}h</div>
+          </div>`;
+        });
+        h+=`</div>`;
+      });
+    }
+    if(withoutSubs.length){
+      h+=`<div class="dp-grp-lbl">Other activity</div>`;
+      withoutSubs.forEach(t=>{
+        const isDn=isTaskDone(t);const lbl=t.dueToday?'Due today':t.startToday?'Starts today':'';
+        h+=`<div class="dp-block"><div class="dp-st${isDn?' st-done':''}" onclick="dpToggleTask('${t.id}','${dateStr}')">
+          <div class="dp-st-ring" style="${isDn?'background:var(--green-bg);border-color:var(--green)':''}"><div class="dp-st-dot" style="${isDn?'background:var(--green)':''}"></div></div>
+          <div class="dp-st-name">${t.name}</div>
+          <div class="dp-st-hrs" style="color:var(--text-muted)">${lbl}</div>
+        </div></div>`;
+      });
+    }
+  }
+  document.getElementById('dp-body').innerHTML=h;
+}
+
+function dpToggleSt(stId,dateStr){toggleSt(stId);_renderDayPanel(dateStr);}
+function dpToggleTask(tId,dateStr){toggleTask(tId);_renderDayPanel(dateStr);}
+function overlayClick(e){if(e.target===document.getElementById('day-overlay'))closeDayPanel();}
+function closeDayPanel(){document.getElementById('day-overlay').classList.remove('open');currentPanelDate=null;}
+
+// ── TOGGLE HELPERS ────────────────────────────────────────────────────────────
+function toggleTask(taskId){
+  // For tasks with subtasks, we don't toggle via parent ID — this shouldn't be called but guard anyway
+  const t=TASK_DEFS.find(x=>x.id===taskId);
+  if(t&&t.subtasks&&t.subtasks.length){
+    // Toggle all subtasks together
+    const allDone=t.subtasks.every(st=>!!done[taskDoneKey(st.id)]);
+    t.subtasks.forEach(st=>{
+      if(allDone)delete done[taskDoneKey(st.id)];
+      else done[taskDoneKey(st.id)]=true;
+    });
+  } else {
+    const k=taskDoneKey(taskId);
+    if(done[k])delete done[k];else done[k]=true;
+  }
+  debounceSave();render();
+}
+function toggleSt(stId){
+  const k=taskDoneKey(stId);
+  if(done[k])delete done[k];else done[k]=true;
+  debounceSave();render();
+}
+function toggleExpand(taskId){expanded[taskId]=!expanded[taskId];render();}
+function shiftMonth(dir){
+  if(dir===0){vY=now.getFullYear();vM=now.getMonth();}
+  else{vM+=dir;if(vM>11){vM=0;vY++;}if(vM<0){vM=11;vY--;}}
+  render();
+}
+function switchTab(t,el){
+  tab=t;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-today').style.display=t==='today'?'block':'none';
+  document.getElementById('pane-list').style.display=t==='list'?'block':'none';
+  const calEl=document.getElementById('pane-calendar');
+  calEl.style.display=t==='calendar'?'flex':'none';
+  render();
+}
+
+loadData();
+</script>
+</body>
+</html>

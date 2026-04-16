@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nick Leach — Python Learning Hub</title>
+<title>Nick Leach — Hub</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a1a; line-height: 1.7; overflow: hidden; width: 100vw; }
@@ -110,7 +110,21 @@
   .btn-danger:hover { border-color: #E24B4A; color: #E24B4A; }
   .btn-row { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
 
-  /* ── STATS ── */
+  /* ── DASHBOARD RESOURCE CARDS ── */
+  .dash-section { margin-top: 28px; }
+  .dash-section-label { font-size: 11px; font-weight: 500; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 600px) { .resource-grid { grid-template-columns: 1fr; } }
+  .resource-card { border: 1px solid #eee; border-radius: 10px; padding: 16px 18px; cursor: pointer; transition: all 0.15s; text-decoration: none; display: block; background: #fafafa; }
+  @media (prefers-color-scheme: dark) { .resource-card { border-color: #2a2a2a; background: #1a1a1a; } }
+  .resource-card:hover { border-color: #bbb; background: #f4f4f4; transform: translateY(-1px); }
+  @media (prefers-color-scheme: dark) { .resource-card:hover { border-color: #444; background: #222; } }
+  .resource-card-icon { font-size: 18px; margin-bottom: 8px; }
+  .resource-card-title { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 3px; }
+  @media (prefers-color-scheme: dark) { .resource-card-title { color: #e8e6e0; } }
+  .resource-card-desc { font-size: 11px; color: #888; line-height: 1.5; }
+
+
   .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
   .stat-card { padding: 14px; border: 1px solid #eee; border-radius: 10px; text-align: center; }
   @media (prefers-color-scheme: dark) { .stat-card { border-color: #2a2a2a; } }
@@ -231,7 +245,7 @@
 <!-- ══ SIDEBAR ══ -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <h2>Learning Hub</h2>
+    <h2>Hub</h2>
     <p>Nick Leach · 2026</p>
   </div>
   <div class="sync-status">
@@ -241,7 +255,7 @@
   <div class="nav-group">
     <div class="nav-group-label">Overview</div>
     <div class="nav-item active" onclick="navTo('dashboard')"><div class="nav-dot" style="background:#1D9E75"></div>Dashboard</div>
-    <div class="nav-item" onclick="navTo('syllabus')"><div class="nav-dot" style="background:#7F77DD"></div>Course Scope</div>
+    <div class="nav-item" onclick="navTo('syllabus')"><div class="nav-dot" style="background:#7F77DD"></div>Scope</div>
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Track</div>
@@ -256,6 +270,7 @@
   <div class="nav-group">
     <div class="nav-group-label">Additional Resources</div>
     <div class="nav-item" onclick="window.location.href='sbrm.html'"><div class="nav-dot" style="background:#E8A838"></div>Software Business Reading</div>
+    <div class="nav-item" onclick="window.location.href='tracker.html'"><div class="nav-dot" style="background:#185FA5"></div>Task Tracker</div>
   </div>
   <div class="nav-group">
     <div class="nav-group-label">Submit</div>
@@ -273,7 +288,7 @@
 <!-- DASHBOARD -->
 <div class="panel active" id="panel-dashboard">
   <div class="page-title">Good to have you back.</div>
-  <p class="page-sub">Everything syncs automatically across your Mac and work computer.</p>
+
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-num" id="d-concepts">0</div><div class="stat-label" id="d-concepts-label">Concepts checked off</div></div>
     <div class="stat-card"><div class="stat-num" id="d-milestones">0</div><div class="stat-label" id="d-milestones-label">Milestones hit</div></div>
@@ -284,8 +299,53 @@
     <div class="stat-card"><div class="stat-num" id="d-days">0</div><div class="stat-label">Days logged</div></div>
     <div class="stat-card"><div class="stat-num" id="d-streak">0</div><div class="stat-label">Current streak</div></div>
   </div>
-  <h2>Where you left off</h2>
-  <div id="d-recent-log"><p style="color:#aaa;font-size:13px">No log entries yet.</p></div>
+
+  <div class="dash-section">
+    <div class="dash-section-label">Quick Access</div>
+    <div class="resource-grid">
+      <a class="resource-card" onclick="navTo('syllabus')">
+        <div class="resource-card-icon">📋</div>
+        <div class="resource-card-title">Scope</div>
+        <div class="resource-card-desc">10-week curriculum — phases, daily breakdown, milestones.</div>
+      </a>
+      <a class="resource-card" onclick="navTo('concepts')">
+        <div class="resource-card-icon">🧠</div>
+        <div class="resource-card-title">Concepts</div>
+        <div class="resource-card-desc">Track what you know. Don't check it until you can do it from memory.</div>
+      </a>
+      <a class="resource-card" onclick="navTo('log')">
+        <div class="resource-card-icon">📝</div>
+        <div class="resource-card-title">Daily Log</div>
+        <div class="resource-card-desc">Log every session. Your proof of work over 10 weeks.</div>
+      </a>
+      <a class="resource-card" onclick="navTo('milestones')">
+        <div class="resource-card-icon">🏁</div>
+        <div class="resource-card-title">Milestones</div>
+        <div class="resource-card-desc">One deliverable per week. Ship it before moving on.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <div class="dash-section-label">Resources</div>
+    <div class="resource-grid">
+      <a class="resource-card" href="sbrm.html">
+        <div class="resource-card-icon">📊</div>
+        <div class="resource-card-title">Software Business Reading</div>
+        <div class="resource-card-desc">Institutional equity research — ARR, Rule of 40, LTV/CAC, SaaS transitions.</div>
+      </a>
+      <a class="resource-card" href="tracker.html">
+        <div class="resource-card-icon">📅</div>
+        <div class="resource-card-title">Task Tracker</div>
+        <div class="resource-card-desc">Mid-month and close BD task tracking across Today, All Tasks, and Calendar views.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="dash-section">
+    <h2>Where you left off</h2>
+    <div id="d-recent-log"><p style="color:#aaa;font-size:13px">No log entries yet.</p></div>
+  </div>
 </div>
 
 <!-- CONCEPTS -->
@@ -345,14 +405,8 @@
 
 <!-- SYLLABUS -->
 <div class="panel" id="panel-syllabus">
-  <div class="page-title">Course Scope</div>
-  <p class="page-sub">10 weeks · Mar 27 – Jun 5, 2026 · 30 hrs/week</p>
-  <div class="meta-pills">
-    <span class="meta-pill">Start: Fri Mar 27, 2026</span>
-    <span class="meta-pill">30 hrs/week Mon–Fri</span>
-    <span class="meta-pill">6 hrs/day</span>
-    <span class="meta-pill">10 weeks to AI automation</span>
-  </div>
+  <div class="page-title">Scope</div>
+  <p class="page-sub">AI Automation Crash Course · 10 Weeks</p>
   <div id="syllabus-content"></div>
 </div>
 
@@ -362,7 +416,7 @@
   <div class="page-title">Core Python and Data Structures</div>
   <p class="page-sub">Variables, strings, lists, dictionaries, and control flow — the foundation everything else is built on.</p>
   <div class="meta-pills">
-    <span class="meta-pill">Mar 27 – Apr 3</span>
+    <span class="meta-pill">Week 1</span>
     <span class="meta-pill">~30 hours</span>
     <span class="meta-pill">5 concepts</span>
     <span class="meta-pill">4 guided exercises</span>
@@ -951,25 +1005,25 @@ function renderSubmissions() {
 
 function renderSyllabus() {
   const SYLLABUS = [
-    {phase:'p1',title:'Foundations — Variables, Data, Control Flow',dates:'Mar 27 – Apr 10',weeks:[
-      {num:'Week 1',title:'Core Python + Data Types',date:'Mar 27 – Apr 3',goal:'Write Python from memory. Build the invoice script without help.',days:[['Fri Mar 27','Variables, strings, integers, floats, booleans. F-strings. Basic math. VS Code setup. Lists and dictionaries intro. ✓ Already completed.'],['Mon Mar 30','Lists deep dive — indexing, slicing, appending, looping. List comprehensions. Exercises 1–3.'],['Tue Mar 31','Dictionaries deep dive — creating, accessing, checking keys, the grouping pattern. Rebuild client totals from scratch.'],['Wed Apr 1','If/elif/else chains. Boolean logic. Comparison operators. Grade checker and FizzBuzz. Time entry report independently.'],['Thu Apr 2','For loops with range(). While loops. Break and continue. Nested loops. 3 original loop problems.'],['Fri Apr 3','Review day. Rebuild invoice script and time entry report from blank file, no reference.']],why:'Everything else is built on top of these patterns. The grouping dictionary pattern you\'ll use every single week for the rest of this course.',ms:'Rebuild time entry report from scratch, no notes',msc:'p1-label'},
-      {num:'Week 2',title:'Functions + Tuples, Sets, Nested Structures',date:'Apr 6 – Apr 10',goal:'Write modular code using functions. Handle any data shape.',days:[['Mon Apr 6','Defining functions with def. Parameters and return values. Rewrite last week\'s time entry report using at least 4 functions.'],['Tue Apr 7','Default parameter values. Functions calling functions. Build a reusable invoice summary function.'],['Wed Apr 8','Tuples vs lists. Sets — deduplication, membership testing. Find all unique consultants and projects.'],['Thu Apr 9','Nested data structures — lists of dicts, dicts of dicts. 3 progressively deeper nesting exercises.'],['Fri Apr 10','Build a mini reporting engine from scratch. Returns a nested summary dict by consultant and project.']],why:'Salesforce API responses come back as deeply nested dicts. Functions let you build automations that are reusable instead of one-off scripts.',ms:'Reusable reporting engine that handles any time entry dataset',msc:'p1-label'},
+    {phase:'p1',title:'Foundations — Variables, Data, Control Flow',dates:'Weeks 1–2',weeks:[
+      {num:'Week 1',title:'Core Python + Data Types',date:'Week 1',goal:'Write Python from memory. Build the invoice script without help.',days:[['Fri','Variables, strings, integers, floats, booleans. F-strings. Basic math. VS Code setup. Lists and dictionaries intro. ✓ Already completed.'],['Mon','Lists deep dive — indexing, slicing, appending, looping. List comprehensions. Exercises 1–3.'],['Tue','Dictionaries deep dive — creating, accessing, checking keys, the grouping pattern. Rebuild client totals from scratch.'],['Wed','If/elif/else chains. Boolean logic. Comparison operators. Grade checker and FizzBuzz. Time entry report independently.'],['Thu','For loops with range(). While loops. Break and continue. Nested loops. 3 original loop problems.'],['Fri','Review day. Rebuild invoice script and time entry report from blank file, no reference.']],why:'Everything else is built on top of these patterns. The grouping dictionary pattern you\'ll use every single week for the rest of this course.',ms:'Rebuild time entry report from scratch, no notes',msc:'p1-label'},
+      {num:'Week 2',title:'Functions + Tuples, Sets, Nested Structures',date:'Week 2',goal:'Write modular code using functions. Handle any data shape.',days:[['Mon','Defining functions with def. Parameters and return values. Rewrite last week\'s time entry report using at least 4 functions.'],['Tue','Default parameter values. Functions calling functions. Build a reusable invoice summary function.'],['Wed','Tuples vs lists. Sets — deduplication, membership testing. Find all unique consultants and projects.'],['Thu','Nested data structures — lists of dicts, dicts of dicts. 3 progressively deeper nesting exercises.'],['Fri','Build a mini reporting engine from scratch. Returns a nested summary dict by consultant and project.']],why:'Salesforce API responses come back as deeply nested dicts. Functions let you build automations that are reusable instead of one-off scripts.',ms:'Reusable reporting engine that handles any time entry dataset',msc:'p1-label'},
     ]},
-    {phase:'p2',title:'Files, Data, and the Real World',dates:'Apr 13 – Apr 24',weeks:[
-      {num:'Week 3',title:'Working With Files — CSV, JSON, Text',date:'Apr 13 – Apr 17',goal:'Replace hardcoded data with actual file inputs. Build things that persist output.',days:[['Mon Apr 13','Reading and writing text files. File paths. Read a list of names from a text file and output stats.'],['Tue Apr 14','CSV module — reading and writing. Fake Kantata export CSV → formatted summary.'],['Wed Apr 15','JSON — reading and writing. Convert a CSV to JSON and back.'],['Thu Apr 16','Error handling — try/except. Add error handling to everything this week so it never crashes silently.'],['Fri Apr 17','CSV pipeline: read, validate, flag bad data, write clean rows and flagged rows to separate files.']],why:'Your actual Kantata exports are CSVs. Every API call returns JSON. The error handling is what makes scripts trustworthy enough to run without babysitting.',ms:'CSV pipeline that validates, filters, and exports to multiple output files',msc:'p2-label'},
-      {num:'Week 4',title:'Pandas — Data Like a Professional',date:'Apr 20 – Apr 24',goal:'Replace manual loops with vectorized operations.',days:[['Mon Apr 20','Install pandas. DataFrames — creating, reading CSVs. Explore shape, columns, dtypes, head().'],['Tue Apr 21','Filtering rows, selecting columns, boolean indexing. Time entry report with pandas — no manual loops.'],['Wed Apr 22','GroupBy and aggregations — sum, mean, count. Full consultant/project summary with one groupby chain.'],['Thu Apr 23','Sorting, ranking, merging DataFrames. Join two CSVs on a shared column.'],['Fri Apr 24','Export to CSV and Excel. Raw Kantata-style export → formatted Excel report.']],why:'Pandas is how data professionals manipulate tabular data. Knowing it means processing thousands of rows in seconds and producing formatted reports automatically.',ms:'Automated Excel report generator from raw CSV input',msc:'p2-label'},
+    {phase:'p2',title:'Files, Data, and the Real World',dates:'Weeks 3–4',weeks:[
+      {num:'Week 3',title:'Working With Files — CSV, JSON, Text',date:'Week 3',goal:'Replace hardcoded data with actual file inputs. Build things that persist output.',days:[['Mon','Reading and writing text files. File paths. Read a list of names from a text file and output stats.'],['Tue','CSV module — reading and writing. Fake Kantata export CSV → formatted summary.'],['Wed','JSON — reading and writing. Convert a CSV to JSON and back.'],['Thu','Error handling — try/except. Add error handling to everything this week so it never crashes silently.'],['Fri','CSV pipeline: read, validate, flag bad data, write clean rows and flagged rows to separate files.']],why:'Your actual Kantata exports are CSVs. Every API call returns JSON. The error handling is what makes scripts trustworthy enough to run without babysitting.',ms:'CSV pipeline that validates, filters, and exports to multiple output files',msc:'p2-label'},
+      {num:'Week 4',title:'Pandas — Data Like a Professional',date:'Week 4',goal:'Replace manual loops with vectorized operations.',days:[['Mon','Install pandas. DataFrames — creating, reading CSVs. Explore shape, columns, dtypes, head().'],['Tue','Filtering rows, selecting columns, boolean indexing. Time entry report with pandas — no manual loops.'],['Wed','GroupBy and aggregations — sum, mean, count. Full consultant/project summary with one groupby chain.'],['Thu','Sorting, ranking, merging DataFrames. Join two CSVs on a shared column.'],['Fri','Export to CSV and Excel. Raw Kantata-style export → formatted Excel report.']],why:'Pandas is how data professionals manipulate tabular data. Knowing it means processing thousands of rows in seconds and producing formatted reports automatically.',ms:'Automated Excel report generator from raw CSV input',msc:'p2-label'},
     ]},
-    {phase:'p3',title:'APIs — Connecting to Real Systems',dates:'Apr 27 – May 8',weeks:[
-      {num:'Week 5',title:'HTTP and the Requests Library',date:'Apr 27 – May 1',goal:'Make your first real API calls. Pull live data into Python.',days:[['Mon Apr 27','What is an API. HTTP — GET vs POST, status codes, headers. Call a free public API and print the response.'],['Tue Apr 28','Parsing JSON API responses. Navigate nested objects. Extract 5 fields from an API response.'],['Wed Apr 29','Authentication — API keys, Bearer tokens, headers. First authenticated Salesforce API call.'],['Thu Apr 30','SOQL via Salesforce API. Pull Kantata time entries directly into Python without exporting a CSV.'],['Fri May 1','Handle API errors and rate limits. Paginate through large results. Full month time entry summary automatically.']],why:'This is where scripts stop touching fake data and start touching your real job. Pulling live Kantata data via API instead of manually exporting CSVs is your first real automation.',ms:'Script that pulls live Kantata time entries and produces a summary automatically',msc:'p3-label'},
-      {num:'Week 6',title:'Salesforce API Deep Dive + Intacct',date:'May 4 – May 8',goal:'Automate at least one real job task end to end.',days:[['Mon May 4','Salesforce object model from Python. Pull Opportunities, Time Entries, Accounts. Compare to UI.'],['Tue May 5','Consultant utilization report — pull from Kantata via API, calculate hours vs target, output to Excel.'],['Wed May 6','Intacct API basics. Authenticate and query. Pull invoice records and cross-reference with Kantata.'],['Thu May 7','Cross-system reconciliation script. Flag time entries with no corresponding invoice.'],['Fri May 8','Document everything this week. One-page summary per automation. Start of August portfolio.']],why:'Your first documented proof of concept. Real automation, real systems, real output that saves real time. This is your first real proof of concept — a working automation you can demonstrate.',ms:'First documented automation — real data, real output, time savings quantified',msc:'p3-label'},
+    {phase:'p3',title:'APIs — Connecting to Real Systems',dates:'Weeks 5–6',weeks:[
+      {num:'Week 5',title:'HTTP and the Requests Library',date:'Week 5',goal:'Make your first real API calls. Pull live data into Python.',days:[['Mon','What is an API. HTTP — GET vs POST, status codes, headers. Call a free public API and print the response.'],['Tue','Parsing JSON API responses. Navigate nested objects. Extract 5 fields from an API response.'],['Wed','Authentication — API keys, Bearer tokens, headers. First authenticated Salesforce API call.'],['Thu','SOQL via Salesforce API. Pull Kantata time entries directly into Python without exporting a CSV.'],['Fri','Handle API errors and rate limits. Paginate through large results. Full month time entry summary automatically.']],why:'This is where scripts stop touching fake data and start touching your real job. Pulling live Kantata data via API instead of manually exporting CSVs is your first real automation.',ms:'Script that pulls live Kantata time entries and produces a summary automatically',msc:'p3-label'},
+      {num:'Week 6',title:'Salesforce API Deep Dive + Intacct',date:'Week 6',goal:'Automate at least one real job task end to end.',days:[['Mon','Salesforce object model from Python. Pull Opportunities, Time Entries, Accounts. Compare to UI.'],['Tue','Consultant utilization report — pull from Kantata via API, calculate hours vs target, output to Excel.'],['Wed','Intacct API basics. Authenticate and query. Pull invoice records and cross-reference with Kantata.'],['Thu','Cross-system reconciliation script. Flag time entries with no corresponding invoice.'],['Fri','Document everything this week. One-page summary per automation. Start of August portfolio.']],why:'Your first documented proof of concept. Real automation, real systems, real output that saves real time. This is your first real proof of concept — a working automation you can demonstrate.',ms:'First documented automation — real data, real output, time savings quantified',msc:'p3-label'},
     ]},
-    {phase:'p4',title:'AI Integration — Claude API + Prompt Engineering',dates:'May 11 – May 22',weeks:[
-      {num:'Week 7',title:'Claude API + Prompt Engineering',date:'May 11 – May 15',goal:'Make your first AI-powered automation.',days:[['Mon May 11','Install Anthropic Python SDK. First Claude API call from code. Understand tokens, max_tokens, cost.'],['Tue May 12','Prompt engineering — role, context, task, format. Take a time entry exception and have Claude explain it.'],['Wed May 13','Structured outputs — ask Claude to respond in JSON. Parse the response back into Python.'],['Thu May 14','Build prompts dynamically from real data using f-strings. The AI sees real Kantata data.'],['Fri May 15','Anomaly detection script — pull entries from Kantata, pass unusual ones to Claude, get explanations.']],why:'This is where everything compounds. Real data from your real job, passed to an AI model, intelligent output back — automatically. The core of every AI automation you will ever build.',ms:'AI-powered anomaly detection report using live Kantata data',msc:'p4-label'},
-      {num:'Week 8',title:'Chaining AI Calls + Complex Workflows',date:'May 18 – May 22',goal:'Build multi-step AI workflows.',days:[['Mon May 18','Chain API calls — output of one Claude call as input to next. Classify entries then generate commentary.'],['Tue May 19','Token limits and large datasets — chunking, batching, rate limits. Handle a full month without hitting limits.'],['Wed May 20','Invoice narrative generator — plain English summary of monthly billing activity per client.'],['Thu May 21','Email delivery via smtplib. Anomaly report now runs, generates, and emails itself. Zero human involvement.'],['Fri May 22','Document and package weeks 7 and 8 as clean production-ready scripts with README files.']],why:'A script that emails itself is a real automation. The invoice narrative generator demonstrates real AI intelligence applied to a real finance workflow — not just data processing.',ms:'Self-running report that pulls data, generates AI commentary, and emails itself',msc:'p4-label'},
+    {phase:'p4',title:'AI Integration — Claude API + Prompt Engineering',dates:'Weeks 7–8',weeks:[
+      {num:'Week 7',title:'Claude API + Prompt Engineering',date:'Week 7',goal:'Make your first AI-powered automation.',days:[['Mon','Install Anthropic Python SDK. First Claude API call from code. Understand tokens, max_tokens, cost.'],['Tue','Prompt engineering — role, context, task, format. Take a time entry exception and have Claude explain it.'],['Wed','Structured outputs — ask Claude to respond in JSON. Parse the response back into Python.'],['Thu','Build prompts dynamically from real data using f-strings. The AI sees real Kantata data.'],['Fri','Anomaly detection script — pull entries from Kantata, pass unusual ones to Claude, get explanations.']],why:'This is where everything compounds. Real data from your real job, passed to an AI model, intelligent output back — automatically. The core of every AI automation you will ever build.',ms:'AI-powered anomaly detection report using live Kantata data',msc:'p4-label'},
+      {num:'Week 8',title:'Chaining AI Calls + Complex Workflows',date:'Week 8',goal:'Build multi-step AI workflows.',days:[['Mon','Chain API calls — output of one Claude call as input to next. Classify entries then generate commentary.'],['Tue','Token limits and large datasets — chunking, batching, rate limits. Handle a full month without hitting limits.'],['Wed','Invoice narrative generator — plain English summary of monthly billing activity per client.'],['Thu','Email delivery via smtplib. Anomaly report now runs, generates, and emails itself. Zero human involvement.'],['Fri','Document and package weeks 7 and 8 as clean production-ready scripts with README files.']],why:'A script that emails itself is a real automation. The invoice narrative generator demonstrates real AI intelligence applied to a real finance workflow — not just data processing.',ms:'Self-running report that pulls data, generates AI commentary, and emails itself',msc:'p4-label'},
     ]},
-    {phase:'p5',title:'Automation, Scheduling, and August Prep',dates:'May 25 – Jun 5',weeks:[
-      {num:'Week 9',title:'Scheduling, Logging, and Production Readiness',date:'May 25 – May 29',goal:'Make your automations run themselves.',days:[['Mon May 25','Cron jobs on Mac — schedule monthly time entry report to run on the 1st at 8am automatically.'],['Tue May 26','Logging — write script run results, errors, timestamps to a log file. Every automation logs now.'],['Wed May 27','Environment variables — store API keys securely. Refactor all scripts. Required before showing anyone.'],['Thu May 28','Workato deep dive — documentation, YouTube walkthroughs. Map Python automations to Workato recipes.'],['Fri May 29','Prepare a specific, informed case for Workato access using the vocabulary you learned this week.']],why:'Scripts that run manually are tools. Scripts that run themselves are automations. A real automation runs on a schedule and logs its own results without you touching it.',ms:'At least one automation running on a schedule with logging, zero manual involvement',msc:'p5-label'},
-      {num:'Week 10',title:'Portfolio, Documentation, and August Prep',date:'Jun 1 – Jun 5',goal:'Package everything into a demonstrable portfolio.',days:[['Mon Jun 1','Inventory everything built. One-paragraph description per automation — what it does, what it replaced, time saved.'],['Tue Jun 2','Quantify time savings — hours per month, hours per year, dollar value. Build the business case.'],['Wed Jun 3','Build a 90-day roadmap — specific automations, systems, and outcomes for when you transition into full-time automation work.'],['Thu Jun 4','Review your portfolio and roadmap. Identify the right moment to propose a formal role transition.'],['Fri Jun 5','Free day. Build anything you want. Explore, break something, extend beyond scope.']],why:'The portfolio is what turns 10 weeks of learning into a career inflection point. The portfolio is what turns 10 weeks of learning into a career inflection point. Concrete work, documented outcomes, a clear roadmap for what comes next.',ms:'Portfolio complete — automations documented, business case written, roadmap built',msc:'p5-label'},
+    {phase:'p5',title:'Automation, Scheduling, and August Prep',dates:'Weeks 9–10',weeks:[
+      {num:'Week 9',title:'Scheduling, Logging, and Production Readiness',date:'Week 9',goal:'Make your automations run themselves.',days:[['Mon','Cron jobs on Mac — schedule monthly time entry report to run on the 1st at 8am automatically.'],['Tue','Logging — write script run results, errors, timestamps to a log file. Every automation logs now.'],['Wed','Environment variables — store API keys securely. Refactor all scripts. Required before showing anyone.'],['Thu','Workato deep dive — documentation, YouTube walkthroughs. Map Python automations to Workato recipes.'],['Fri','Prepare a specific, informed case for Workato access using the vocabulary you learned this week.']],why:'Scripts that run manually are tools. Scripts that run themselves are automations. A real automation runs on a schedule and logs its own results without you touching it.',ms:'At least one automation running on a schedule with logging, zero manual involvement',msc:'p5-label'},
+      {num:'Week 10',title:'Portfolio, Documentation, and August Prep',date:'Week 10',goal:'Package everything into a demonstrable portfolio.',days:[['Mon','Inventory everything built. One-paragraph description per automation — what it does, what it replaced, time saved.'],['Tue','Quantify time savings — hours per month, hours per year, dollar value. Build the business case.'],['Wed','Build a 90-day roadmap — specific automations, systems, and outcomes for when you transition into full-time automation work.'],['Thu','Review your portfolio and roadmap. Identify the right moment to propose a formal role transition.'],['Fri','Free day. Build anything you want. Explore, break something, extend beyond scope.']],why:'The portfolio is what turns 10 weeks of learning into a career inflection point. The portfolio is what turns 10 weeks of learning into a career inflection point. Concrete work, documented outcomes, a clear roadmap for what comes next.',ms:'Portfolio complete — automations documented, business case written, roadmap built',msc:'p5-label'},
     ]},
   ];
 
@@ -977,11 +1031,11 @@ function renderSyllabus() {
   container.innerHTML = '';
   SYLLABUS.forEach(phase => {
     const ph = document.createElement('div'); ph.className = 'syl-phase';
-    ph.innerHTML = `<div class="syl-phase-hdr"><span class="section-label ${phase.phase}-label">${'Phase '+(Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5})[Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5}).indexOf(phase.phase)])}</span><span class="syl-phase-title">${phase.title}</span><span class="syl-phase-dates">${phase.dates}</span></div>`;
+    ph.innerHTML = `<div class="syl-phase-hdr"><span class="section-label ${phase.phase}-label">${'Phase '+(Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5})[Object.keys({p1:1,p2:2,p3:3,p4:4,p5:5}).indexOf(phase.phase)])}</span><span class="syl-phase-title">${phase.title}</span></div>`;
     phase.weeks.forEach(w => {
       const wk = document.createElement('div'); wk.className = 'card';
       const isFirst = w.num === 'Week 1';
-      wk.innerHTML = `<div class="card-header" onclick="toggleCard(this)"><span style="font-size:11px;font-weight:500;color:#aaa;min-width:52px">${w.num}</span><span class="card-title">${w.title}</span><span class="card-meta">${w.date}</span><span class="chevron">▼</span></div>`;
+      wk.innerHTML = `<div class="card-header" onclick="toggleCard(this)"><span style="font-size:11px;font-weight:500;color:#aaa;min-width:52px">${w.num}</span><span class="card-title">${w.title}</span><span class="chevron">▼</span></div>`;
       const body = document.createElement('div');
       body.className = 'card-body' + (isFirst?' open':'');
       let inner = `<p class="syl-goal">${w.goal}</p>`;
